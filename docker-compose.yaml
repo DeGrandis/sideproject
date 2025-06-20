@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    image: degrandis/frontend:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+    image: degrandis/backend:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - CORS_ORIGIN=http://sideproject.biblestudycraft.com
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./nginx
+    image: degrandis/nginx:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
