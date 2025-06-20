@@ -9,7 +9,7 @@ interface helloResponse {
   }
 }
 
-const backendUrl = import.meta.env.BACKEND_API_URL || "http://sideproject.biblestudycraft.com/api/"
+const backendUrl =  "http://sideproject.biblestudycraft.com/api/"
 
 function App() {
   const [count, setCount] = useState(0)
