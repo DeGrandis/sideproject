@@ -12,6 +12,10 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+ARG ENV_FILE=.env.prod
+COPY ${ENV_FILE} .env
+
+
 # Build the application
 RUN npm run build
 

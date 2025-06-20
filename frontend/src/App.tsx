@@ -9,12 +9,14 @@ interface helloResponse {
   }
 }
 
+const backendUrl = import.meta.env.BACKEND_API_URL || "http://sideproject.biblestudycraft.com/api/"
+
 function App() {
   const [count, setCount] = useState(0)
   const [response, setData] = useState<helloResponse | null>(null)
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('http://127.0.0.1/api/hello')
+      const response = await fetch(backendUrl+ 'hello')
       const data = await response.json()
       console.log(data)
       setData(data)
