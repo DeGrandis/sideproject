@@ -1,0 +1,115 @@
+:root {
+    line-height: 1.5;
+    font-weight: 400;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    --custom-black: #050505;
+    --custom-silver: #bfc0c0;
+    --custom-white: #ffffff;
+    --custom-orange: #ef8354;
+    --custom-red: #dd0000;
+
+    --slow-transition: 1s;
+    --fast-transition: .5s;
+    /* color-scheme: dark light ; */
+    color: var(--custom-black);
+    background-color: var(--custom-white)
+}
+
+body {
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+    font-family: Custom, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+::selection {
+    color: var(--custom-white);
+    background: var(--custom-black);
+}
+
+
+input {
+    width: 96%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 0px solid var(--custom-black);
+    border-bottom: 2px solid var(--custom-black);
+    font-size: 16px;
+    font-weight: 500;
+    transition: linear 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--custom-red);
+    transition: linear 0.2s;
+    background-color: var(--custom-red);
+    color: var(--custom-white);
+}
+
+input::placeholder {
+    color: var(--custom-silver);
+}
+
+
+input:focus::placeholder {
+    color: var(--custom-white);
+}
+
+input {
+    font-family: Custom-light;
+}
+
+button {
+    font-family: inherit
+}
+
+.logo-text {
+    font-family: Custom-light;
+    font-size: 1.25rem;
+    color: var(--custom-black);
+    text-align: center;
+}
+
+a {
+    color: var(--custom-black);
+    text-decoration: none;
+    font-weight: 500;
+    transition: linear 0.25s;
+}
+
+a:hover {
+    color: var(--custom-red);
+    transition: linear 0.25s;
+} 
+
+@media (max-width: 600px) {
+    
+}
+
+@font-face {
+  font-family: 'Custom-light';
+  /* Define your font family name */
+  src: url('JosefinSans-Regular.ttf') format('truetype');
+  /* Path to your font file */
+  font-weight: 00;
+  /* Normal weight */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Custom';
+  /* Define your font family name */
+  src: url('JosefinSans-Bold.ttf') format('truetype');
+  /* Path to your font file */
+  font-weight: 700;
+  /* Normal weight */
+  font-style: normal;
+}

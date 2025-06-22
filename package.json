@@ -1,0 +1,19 @@
+{
+  "name": "monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "./*"
+  ],
+  "scripts": {
+    "dev:auth_frontend": "npm run dev -w auth_frontend",
+    "dev:app2": "npm run dev -w app2",
+    "build:shared-packages": "npm run build -w shared-packages",
+    "build:auth_frontend": "npm run build -w auth_frontend",
+    "build:app2": "npm run build -w app2"
+    
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

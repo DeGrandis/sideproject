@@ -1,0 +1,13 @@
+.footer {
+  font-family: Custom-light;
+  font-size: 0.8rem;
+  color: var(--custom-silver);
+  text-align: center;
+}
+
+.usaicon {
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}

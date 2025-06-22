@@ -9,14 +9,14 @@ interface helloResponse {
   }
 }
 
-const backendUrl =  "http://sideproject.biblestudycraft.com/api/"
+// const backendUrl =  "http://sideproject.biblestudycraft.com/api/"
 
 function App() {
   const [count, setCount] = useState(0)
   const [response, setData] = useState<helloResponse | null>(null)
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(backendUrl+ 'hello')
+      const response = await fetch('http://sideproject.biblestudycraft.com/api/hello')
       const data = await response.json()
       console.log(data)
       setData(data)

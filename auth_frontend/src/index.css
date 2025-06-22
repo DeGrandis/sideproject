@@ -1,0 +1,119 @@
+
+
+
+/* .auth-box {
+  width: 100%;
+  max-width: 400px;
+  min-width: 300px;
+  margin: 0 auto;
+  padding: 2rem;
+  border: var(--custom-black) 4px solid;
+  border-radius: 8px; */
+/* box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+} 
+*/
+
+.action-button {
+  width: 100%;
+  padding: 0.5rem;
+  border: var(--custom-black) 2px solid;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: linear 0.2s;
+  background: linear-gradient(to right, var(--custom-black) 50%, var(--custom-white) 50%);
+  /* Gradient: White 50%, Black 50% */
+  background-size: 200% 100%;
+  /* Background size: 2x width */
+  background-position: right bottom;
+  /* Initial position: White is visible */
+}
+
+.auth-box {
+  max-width: 400px;
+  width: 90vw;
+  margin: 5vh auto;
+  /* Vertically and horizontally center */
+  padding: 2rem;
+  border: var(--custom-black) 3px solid;
+
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+
+}
+
+.action-button:hover {
+  /* You can still add hover effects here if you wish */
+}
+
+.action-button:focus {
+  animation: fill-background var(--slow-transition) ease forwards;
+}
+
+.action-button:active {
+  animation: none;
+  /* Disable animation while active */
+}
+
+@keyframes fill-background {
+  0% {
+    background-position: right bottom;
+    /* Start state: White visible */
+    color: var(--custom-black);
+    /* Text color remains black initially */
+  }
+
+  100% {
+    background-position: left bottom;
+    /* End state: Black fills from left */
+    color: var(--custom-white);
+    /* Text color changes to white at the end */
+  }
+}
+
+.app-container {
+  min-height: 95vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-top {
+  flex: 0.4;
+}
+
+.app-middle {
+  flex: .5;
+}
+
+.app-footer {
+  flex: .5;
+}
+
+
+@media (max-width: 600px) {
+  .auth-box {
+    max-width: 95vw;
+    padding: 1rem;
+    margin: 2vh auto;
+  }
+
+  .app-top {
+    flex: 0.2;
+    /* Optional: border-bottom: 1px solid #ddd; */
+  }
+
+  .app-middle {
+    flex: .45
+    /* Optional: add padding or styles here */
+  }
+}
+
+/*
+
+black: 050505
+silver: bfc0c0
+white: ffffff
+orange: ef8354
+red: Ca2b50
+*/
