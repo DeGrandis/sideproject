@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import '@shared/react/styles/degrandis.css';
+import './degrandis.css';
 import { login, type LoginCredentials } from './services/apicalls';
-import { SharedFooter } from '@shared/react/components/footer'; // Adjust the import path as needed
+import { SharedFooter } from 'src/footer'; // Adjust the import path as needed
 
 function App() {
 

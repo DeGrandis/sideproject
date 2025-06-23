@@ -15,10 +15,6 @@ export default defineConfig({
   },
 
   resolve: {
-    alias: {
-      '@shared': resolvedPath,
-      // 'node_modules/react/jsx-runtime': 'node_modules/react/jsx-runtime.js',
-    },
     preserveSymlinks: true
   },
 

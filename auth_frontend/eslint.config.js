@@ -23,9 +23,6 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-    },
-    aliases: {
-      '@shared': '../shared-packages', // Adjust the path as needed
-    },
+    }
   },
 )
