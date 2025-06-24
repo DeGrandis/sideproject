@@ -16,12 +16,5 @@ export default defineConfig({
 
   resolve: {
     preserveSymlinks: true
-  },
-
-  build: {
-    outDir: 'dist',
-    commonjsOptions: {
-      include: ["../shared-packages/", "/node_modules/"], // Ensure paths are correct
-    },
   }
 })
