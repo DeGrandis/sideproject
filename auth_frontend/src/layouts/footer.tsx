@@ -1,7 +1,7 @@
-import './footer.css';
+import '../assets/styles/footer.css'
 import { type FC } from 'react';
 
-import unitedStatesIcon from './united-states.png'; // Adjust the path as needed
+import unitedStatesIcon from '../assets/united-states.png'; // Adjust the path as needed
 
 export const SharedFooter: FC = () => {
   return (
