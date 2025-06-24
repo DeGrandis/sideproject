@@ -40,6 +40,14 @@ services:
       - CORS_ORIGIN=http://degrand.is,http://auth.degrand.is
     networks:
       - app-network
+    volumes:
+      - ./logs:/app/logs  # Bind mount ./logs on the host to /app/logs in the container
+    logging:
+      driver: json-file # Still use a logging driver if you want to view logs with docker compose logs
+      options:
+        max-size: 10m
+        max-file: 3
+    
 
   nginx:
     build:

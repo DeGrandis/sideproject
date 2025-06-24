@@ -12,12 +12,13 @@ from fastapi import status
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-origins = os.environ.get("CORS_ORIGIN", "http://localhost:5173,http://10.0.0.49:5173").split(",")
+# origins = os.environ.get("CORS_ORIGIN", "http://localhost:5173,http://10.0.0.49:5173").split(",")
+origins = os.environ.get("CORS_ORIGIN", "http://degrand.is,http://auth.degrand.is").split(",")
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Frontend origin
+    allow_origins=["*"],  # Frontend origin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
