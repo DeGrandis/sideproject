@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # frontend:
   #   build:
@@ -28,7 +26,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - app-network
+      - client-side
 
   auth_backend:
     build:
@@ -39,7 +37,8 @@ services:
     environment:
       - CORS_ORIGIN=http://degrand.is,http://auth.degrand.is
     networks:
-      - app-network
+      - client-side
+      - server-side
     volumes:
       - ./logs:/app/logs  # Bind mount ./logs on the host to /app/logs in the container
     logging:
@@ -47,7 +46,21 @@ services:
       options:
         max-size: 10m
         max-file: 3
-    
+
+
+  db:
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      - server-side
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres/init-scripts:/docker-entrypoint-initdb.d/ # Mount your local scripts directory
+      - ./postgres/data:/var/lib/postgresql/data # Bind mount to a local folder
+
 
   nginx:
     build:
@@ -59,8 +72,10 @@ services:
       - frontend
       - auth_backend
     networks:
-      - app-network
+      - client-side
 
 networks:
-  app-network:
+  client-side:
     driver: bridge
+  server-side: {}
+
