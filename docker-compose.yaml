@@ -81,7 +81,6 @@ services:
     depends_on:
       - frontend
       - auth_backend
-      - certbot
     networks:
       - client-side
     volumes:

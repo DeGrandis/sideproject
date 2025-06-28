@@ -32,12 +32,12 @@ jobs:
           echo "RUNNING_ENV=production" >> .env
           # Add other env vars as needed
 
-      - name: put aws credentials in place
-        run: |
-          mkdir -p ~/.aws
-          echo "[default]" > ~/.aws/credentials
-          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> credentials
-          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> credentials
+      # - name: put aws credentials in place
+      #   run: |
+      #     mkdir -p ~/.aws
+      #     echo "[default]" > ~/.aws/credentials
+      #     echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> credentials
+      #     echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> credentials
 
 
       - name: Copy docker-compose and .env to EC2
@@ -50,7 +50,6 @@ jobs:
             docker-compose.yaml,
             .env,
             postgres/*,
-            .aws/credentials
           target: /home/${{ secrets.EC2_USER }}/docker
       
 
