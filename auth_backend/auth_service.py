@@ -166,3 +166,7 @@ async def create_account(request: Request):
 async def read_protected(current_user: dict = Depends(get_current_user)):
     logging.info("Current user:", current_user)
     return {"message": f"Hello {current_user['username']}, this is a protected resource."}
+
+@app.get("/healthcheck")
+async def healthcheck():
+    return 200
