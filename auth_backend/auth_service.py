@@ -15,11 +15,12 @@ from dotenv import load_dotenv
 if os.getenv("RUNNING_ENV") != "production":
     load_dotenv()
 
-from db_connection import create_new_user, does_user_field_exist, authenticate_user, increment_login_count
+from db_connection import DATABASE_URL, create_new_user, does_user_field_exist, authenticate_user, increment_login_count
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 origins = os.environ.get("CORS_ORIGIN", "").split(",")
 
+print("Database URL:", DATABASE_URL)
 print("CORS origins:", origins)
 app = FastAPI()
 app.add_middleware(
