@@ -2,25 +2,16 @@ import bcrypt
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
 from .sqlalchemy_base import Base  
-
-
+import os
 
 from .UserModel import User  # Import the User model from UserModel.py
 
-# SQLAlchemy database URL format: postgresql://user:password@host:port/database
-DATABASE_URL = "postgresql://postgres:mysecretpassword@localhost:5432/postgres"
+DATABASE_URL = f"postgresql://postgres:${os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST', 'localhost')}:5432/postgres"
 
-
-# Create the SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
 
 # Create a configured "Session" class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-
-# Define a User model
-
 
 # Example usage: get a user by id
 def get_user_by_id(user_id: int):

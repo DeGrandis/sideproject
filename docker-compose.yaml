@@ -25,6 +25,8 @@ services:
     image: degrandis/auth_frontend:latest
     ports:
       - "3000:3000"
+    environment:
+      - REACT_APP_API_BASE_URL=http://degrand.is/api
     networks:
       - client-side
 
@@ -36,6 +38,11 @@ services:
       - "8000:8000"
     environment:
       - CORS_ORIGIN=http://degrand.is,http://auth.degrand.is
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db
+      - JWT_SECRET=${JWT_SECRET}
+      - COOKIE_DOMAIN=.degrand.is
+      - RUNNING_ENV=production
     networks:
       - client-side
       - server-side
@@ -52,15 +59,14 @@ services:
     image: postgres:12-alpine
     restart: always
     environment:
-      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - server-side
     ports:
       - 5432:5432
     volumes:
-      - ./postgres/init-scripts:/docker-entrypoint-initdb.d/ # Mount your local scripts directory
-      - ./postgres/data:/var/lib/postgresql/data # Bind mount to a local folder
-
+      - ./postgres/init-scripts:/docker-entrypoint-initdb.d/ 
+      - ${PGDATA_VOLUME:-postgres_data}:/var/lib/postgresql/data 
 
   nginx:
     build:
@@ -68,6 +74,7 @@ services:
     image: degrandis/nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - frontend
       - auth_backend
@@ -79,3 +86,5 @@ networks:
     driver: bridge
   server-side: {}
 
+volumes:
+  postgres_data:

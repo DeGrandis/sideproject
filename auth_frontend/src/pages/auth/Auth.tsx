@@ -12,7 +12,7 @@ function Auth() {
   const [password, setPassword] = useState('');
   const [authMode, setAuthMode] = useState<'login' | 'create'>('login'); // State to toggle between login and create modes
   const buttonRef = useRef<HTMLButtonElement>(null); // Create a ref to access the button element
-  const [authErrors, setAuthErrors] = useState<string[]>([]); // State to hold authentication errors
+  // const [authErrors, setAuthErrors] = useState<string[]>([]); // State to hold authentication errors
 
 
   const handleLogin = async (e: React.FormEvent) => {

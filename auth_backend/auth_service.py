@@ -10,13 +10,16 @@ from typing import List
 import jwt
 import datetime
 from fastapi import status
+from dotenv import load_dotenv
+
+if os.getenv("RUNNING_ENV") != "production":
+    load_dotenv()
 
 from auth_backend.db_connection import create_new_user, does_user_field_exist, authenticate_user, increment_login_count
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-origins = os.environ.get("CORS_ORIGIN", "http://localhost:5173,http://10.0.0.49:5173,http://127.0.0.1:5173").split(",")
-# origins = os.environ.get("CORS_ORIGIN", "http://degrand.is,http://auth.degrand.is").split(",")
+origins = os.environ.get("CORS_ORIGIN", "").split(",")
+
 print("CORS origins:", origins)
 app = FastAPI()
 app.add_middleware(
@@ -28,9 +31,9 @@ app.add_middleware(
 )
 
 
-SECRET_KEY = "your-secret-key"
+SECRET_KEY = os.getenv("JWT_SECRET")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1
+ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)  # Default to 30 minutes if not set
 
 class TokenResponse(BaseModel):
     access_token: str
@@ -84,14 +87,14 @@ async def  login(response: Response, request: Request):
     }
     
     access_token_expires = datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(token_data)
+    access_token = create_access_token(token_data, expires_delta=access_token_expires)
     response.set_cookie(
         key="access_token",
         value=access_token,
         httponly=True,  # Prevents client-side JS access
-        secure=False,    # Only send over HTTPS (use False for local testing if not using HTTPS)
+        secure=os.getenv("RUNNING_ENV") == "production",    # Only send over HTTPS (use False for local testing if not using HTTPS)
         samesite="Lax", # or "Lax" for CSRF protection
-        domain=".127.0.0.1",  # Set your domain her
+        domain=os.getenv("COOKIE_DOMAIN", ".127.0.0.1"),  # Set your domain here
         expires=access_token_expires # Optional: Set cookie expiration
     )
     print("Access token created:", access_token)
