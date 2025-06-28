@@ -90,7 +90,7 @@ async def  login(response: Response, request: Request):
     body_bytes = await request.body()  # Raw bytes of the request body
     headers = request.headers    # Headers as a dictionary-like object
     body = json.loads(body_bytes)
-    logging.info("Raw body:", body)
+    logging.info(f"Raw body: {body}")
     user = authenticate_user(body.get("email"), body.get("password"))
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
@@ -111,7 +111,7 @@ async def  login(response: Response, request: Request):
         domain=os.getenv("COOKIE_DOMAIN", ".127.0.0.1"),  # Set your domain here
         expires=access_token_expires # Optional: Set cookie expiration
     )
-    logging.info("Access token created:", access_token)
+    logging.info(f"Access token created: {access_token}")
 
     increment_login_count(user.id) 
     return {"access_token": access_token , "token_type": "bearer"}
@@ -164,9 +164,10 @@ async def create_account(request: Request):
 
 @app.get("/protected")
 async def read_protected(current_user: dict = Depends(get_current_user)):
-    logging.info("Current user:", current_user)
+    logging.info(f"Current user: {current_user}")
     return {"message": f"Hello {current_user['username']}, this is a protected resource."}
 
 @app.get("/healthcheck")
 async def healthcheck():
+    logging.info("Healthcheck hit")
     return 200
