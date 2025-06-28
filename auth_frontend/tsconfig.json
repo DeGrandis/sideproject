@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.json",
+
   "files": [],
   "references": [
     {
@@ -12,11 +12,6 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "baseUrl": ".",
-    "paths": {
-      "@shared/": [
-        "../shared-packages/"
-      ] // Check if this path is correct
-    }
   }
   // Remove the second "paths" definition here
 }

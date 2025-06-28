@@ -97,7 +97,7 @@ a:hover {
 @font-face {
   font-family: 'Custom-light';
   /* Define your font family name */
-  src: url('JosefinSans-Regular.ttf') format('truetype');
+  src: url('/fonts/JosefinSans-Regular.ttf') format('truetype');
   /* Path to your font file */
   font-weight: 00;
   /* Normal weight */
@@ -107,7 +107,7 @@ a:hover {
 @font-face {
   font-family: 'Custom';
   /* Define your font family name */
-  src: url('JosefinSans-Bold.ttf') format('truetype');
+  src: url('/fonts/JosefinSans-Bold.ttf') format('truetype');
   /* Path to your font file */
   font-weight: 700;
   /* Normal weight */

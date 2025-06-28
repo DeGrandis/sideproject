@@ -1,4 +1,4 @@
-FROM python:3.13-slim
+FROM python:3.13-bookworm
 
 # Set the working directory
 WORKDIR /auth_backend
@@ -16,4 +16,4 @@ EXPOSE 8000
 
 # Start the application
 # Example Dockerfile snippet
-CMD ["uvicorn", "auht_service:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "auth_service:app", "--host", "0.0.0.0", "--port", "8000"]

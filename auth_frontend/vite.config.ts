@@ -15,17 +15,6 @@ export default defineConfig({
   },
 
   resolve: {
-    alias: {
-      '@shared': resolvedPath,
-      // 'node_modules/react/jsx-runtime': 'node_modules/react/jsx-runtime.js',
-    },
     preserveSymlinks: true
-  },
-
-  build: {
-    outDir: 'dist',
-    commonjsOptions: {
-      include: ["../shared-packages/", "/node_modules/"], // Ensure paths are correct
-    },
   }
 })

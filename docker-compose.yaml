@@ -1,25 +1,72 @@
-version: '3.8'
-
 services:
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   image: degrandis/frontend:latest
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - app-network
+
+  # backend:
+  #   build:
+  #     context: ./backend
+  #   image: degrandis/backend:latest
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - CORS_ORIGIN=http://sideproject.biblestudycraft.com
+  #   networks:
+  #     - app-network
+
   frontend:
     build:
-      context: ./frontend
-    image: degrandis/frontend:latest
+      context: ./auth_frontend
+    image: degrandis/auth_frontend:latest
     ports:
       - "3000:3000"
+    environment:
+      - REACT_APP_API_BASE_URL=http://degrand.is/api
     networks:
-      - app-network
+      - client-side
 
-  backend:
+  auth_backend:
     build:
-      context: ./backend
-    image: degrandis/backend:latest
+      context: ./auth_backend
+    image: degrandis/auth_backend:latest
     ports:
       - "8000:8000"
     environment:
-      - CORS_ORIGIN=http://sideproject.biblestudycraft.com
+      - CORS_ORIGIN=http://degrand.is,http://auth.degrand.is
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db
+      - JWT_SECRET=${JWT_SECRET}
+      - COOKIE_DOMAIN=.degrand.is
+      - RUNNING_ENV=production
     networks:
-      - app-network
+      - client-side
+      - server-side
+    volumes:
+      - ./logs:/app/logs  # Bind mount ./logs on the host to /app/logs in the container
+    logging:
+      driver: json-file # Still use a logging driver if you want to view logs with docker compose logs
+      options:
+        max-size: 10m
+        max-file: 3
+
+
+  db:
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - server-side
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres/init-scripts:/docker-entrypoint-initdb.d/ 
+      - ${PGDATA_VOLUME:-postgres_data}:/var/lib/postgresql/data 
 
   nginx:
     build:
@@ -27,12 +74,17 @@ services:
     image: degrandis/nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - frontend
-      - backend
+      - auth_backend
     networks:
-      - app-network
+      - client-side
 
 networks:
-  app-network:
+  client-side:
     driver: bridge
+  server-side: {}
+
+volumes:
+  postgres_data:
