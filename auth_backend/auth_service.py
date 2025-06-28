@@ -13,8 +13,15 @@ from fastapi import status
 from dotenv import load_dotenv
 import logging
 
+log_dir = '/app/logs' if os.getenv("RUNNING_ENV") == 'production' else "./logs"
+log_file = os.path.join(log_dir, "app.log")
+
+os.makedirs(log_dir, exist_ok=True)
+with open(log_file, "a"):
+    pass  
+
 logging.basicConfig(
-    filename='/app/logs/app.log',
+    filename=log_file,
     level=logging.INFO,
     format='%(asctime)s %(levelname)s %(message)s'
 )
@@ -22,12 +29,11 @@ logging.basicConfig(
 if os.getenv("RUNNING_ENV") != "production":
     load_dotenv()
 
-from db_connection import DATABASE_URL, create_new_user, does_user_field_exist, authenticate_user, increment_login_count
+from .db_connection import create_new_user, does_user_field_exist, authenticate_user, increment_login_count
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 origins = os.environ.get("CORS_ORIGIN", "").split(",")
 
-logging.info("Database URL: %s", DATABASE_URL)
 logging.info("CORS origins: %s", origins)
 app = FastAPI()
 app.add_middleware(
@@ -48,13 +54,13 @@ class TokenResponse(BaseModel):
     token_type: str
 
 async def get_current_user(access_token: Optional[str] = Cookie(None)):
-    print("get_current_user called with token:", access_token)
+    logging.info("get_current_user called with token:", access_token)
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    print("Token received:", access_token)
+    logging.info("Token received:", access_token)
     try:
         payload = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("username")
@@ -84,7 +90,7 @@ async def  login(response: Response, request: Request):
     body_bytes = await request.body()  # Raw bytes of the request body
     headers = request.headers    # Headers as a dictionary-like object
     body = json.loads(body_bytes)
-    print("Raw body:", body)
+    logging.info("Raw body:", body)
     user = authenticate_user(body.get("email"), body.get("password"))
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
@@ -105,7 +111,7 @@ async def  login(response: Response, request: Request):
         domain=os.getenv("COOKIE_DOMAIN", ".127.0.0.1"),  # Set your domain here
         expires=access_token_expires # Optional: Set cookie expiration
     )
-    print("Access token created:", access_token)
+    logging.info("Access token created:", access_token)
 
     increment_login_count(user.id) 
     return {"access_token": access_token , "token_type": "bearer"}
@@ -118,7 +124,7 @@ def verify_jwt_token(token: str = Depends(oauth2_scheme)):
     """
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print(payload)
+        logging.info(payload)
         return payload
     except jwt.PyJWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
@@ -146,11 +152,11 @@ async def create_account(request: Request):
     if does_user_field_exist("username", username):
         raise HTTPException(status_code=400, detail="Username already exists")
 
-    print("Creating account with email:", email)
+    logging.info("Creating account with email:", email)
     try:
         create_new_user(username=username, email=email, password=password)
     except Exception as e:
-        print(f"Error creating user: {str(e)}")
+        logging.info(f"Error creating user: {str(e)}")
         raise HTTPException(status_code=400, detail=f"Error creating user")
 
     return {"message": "User created successfully"}
@@ -158,5 +164,5 @@ async def create_account(request: Request):
 
 @app.get("/protected")
 async def read_protected(current_user: dict = Depends(get_current_user)):
-    print("Current user:", current_user)
+    logging.info("Current user:", current_user)
     return {"message": f"Hello {current_user['username']}, this is a protected resource."}

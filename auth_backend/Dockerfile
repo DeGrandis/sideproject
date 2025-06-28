@@ -19,4 +19,4 @@ EXPOSE 8000
 
 # Start the application
 # Example Dockerfile snippet
-CMD ["uvicorn", "auth_service:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "auth_backend.auth_service:app", "--host", "0.0.0.0", "--port", "8000"]
