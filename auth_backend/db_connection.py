@@ -1,10 +1,10 @@
 import bcrypt
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
-from .sqlalchemy_base import Base  
+from sqlalchemy_base import Base  
 import os
 
-from .UserModel import User  # Import the User model from UserModel.py
+from UserModel import User  # Import the User model from UserModel.py
 
 DATABASE_URL = f"postgresql://postgres:${os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST', 'localhost')}:5432/postgres"
 
