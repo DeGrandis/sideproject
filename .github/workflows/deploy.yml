@@ -39,15 +39,6 @@ jobs:
           echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
           echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
 
-      - name: SCP credentials to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: ~/.aws/credentials
-          target: /home/${{ secrets.EC2_USER }}/docker/.aws/credentials  
-
 
       - name: Copy docker-compose and .env to EC2
         uses: appleboy/scp-action@v0.1.7
@@ -58,7 +49,8 @@ jobs:
           source: |
             docker-compose.yaml,
             .env,
-            postgres/*
+            postgres/*,
+            ~/.aws/credentials
           target: /home/${{ secrets.EC2_USER }}/docker
       
 
