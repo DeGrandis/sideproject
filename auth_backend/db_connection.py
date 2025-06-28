@@ -6,8 +6,7 @@ import os
 
 from UserModel import User  # Import the User model from UserModel.py
 
-DATABASE_URL = f"postgresql://postgres:${os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST', 'localhost')}:5432/postgres"
-print(f"Connecting to database at {DATABASE_URL}")
+DATABASE_URL = f"postgresql://postgres:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST', 'localhost')}:5432/postgres"
 engine = create_engine(DATABASE_URL)
 
 # Create a configured "Session" class

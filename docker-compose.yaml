@@ -46,6 +46,8 @@ services:
     networks:
       - client-side
       - server-side
+    depends_on:
+      - db
     volumes:
       - ./logs:/app/logs  # Bind mount ./logs on the host to /app/logs in the container
     logging:

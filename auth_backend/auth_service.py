@@ -11,6 +11,13 @@ import jwt
 import datetime
 from fastapi import status
 from dotenv import load_dotenv
+import logging
+
+logging.basicConfig(
+    filename='/app/logs/app.log',
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(message)s'
+)
 
 if os.getenv("RUNNING_ENV") != "production":
     load_dotenv()
@@ -20,8 +27,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 origins = os.environ.get("CORS_ORIGIN", "").split(",")
 
-print("Database URL:", DATABASE_URL)
-print("CORS origins:", origins)
+logging.info("Database URL: %s", DATABASE_URL)
+logging.info("CORS origins: %s", origins)
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
