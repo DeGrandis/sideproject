@@ -29,8 +29,6 @@ jobs:
         run: |
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" > .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-          echo "CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" >> .env
-          echo "COOKIE_DOMAIN=${{ secrets.COOKIE_DOMAIN }}" >> .env
           echo "RUNNING_ENV=production" >> .env
           # Add other env vars as needed
 
