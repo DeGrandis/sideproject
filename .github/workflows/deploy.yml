@@ -55,4 +55,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/${{ secrets.EC2_USER }}/docker
-            docker-compose down && docker-compose up --pull always -d
+            docker-compose down 
+            docker-compose up --pull always -d
