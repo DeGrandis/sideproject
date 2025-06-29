@@ -193,7 +193,8 @@
 }
 
 .app-container {
-  min-height: 95vh;
+  min-height: 95vh; /* fallback */
+  min-height: var(--app-height, 95vh);
   display: flex;
   flex-direction: column;
 }
@@ -203,11 +204,18 @@
 }
 
 .app-middle {
-  flex: .5;
+  flex: 0;
+
 }
 
 .app-footer {
   flex: .5;
+}
+
+.app-bottom {
+  border-top: 1px solid #ddd; 
+  padding-top: 1vh;
+  margin-top: auto;
 }
 
 
@@ -219,12 +227,12 @@
   }
 
   .app-top {
-    flex: 0.2;
+    flex: 0.3;
     /* Optional: border-bottom: 1px solid #ddd; */
   }
 
   .app-middle {
-    flex: .45
+    flex: .45;
     /* Optional: add padding or styles here */
   }
 }

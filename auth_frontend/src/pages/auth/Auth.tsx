@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import '../../assets/styles/App.css'
 import '../../assets/styles/degrandis.css'
-import { createAccount, login, testprotected, type LoginCredentials } from '../../services/apicalls';
+import { createAccount, login, type LoginCredentials } from '../../services/apicalls';
 import { SharedFooter } from '../../layouts/footer'; // Adjust the import path as needed
 
 function Auth() {
@@ -10,13 +10,13 @@ function Auth() {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [authMode, setAuthMode] = useState<'login' | 'create'>('login'); // State to toggle between login and create modes
-  const buttonRef = useRef<HTMLButtonElement>(null); // Create a ref to access the button element
-  const [authError, setAuthError] = useState(''); // State to hold authentication errors
+  const [authMode, setAuthMode] = useState<'login' | 'create'>('login'); 
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [authError, setAuthError] = useState(''); 
 
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); 
 
     setAuthError("");
     console.log('Email:', email);
@@ -89,10 +89,8 @@ function Auth() {
     };
 
     try {
-      // Replace with your actual create account API call
-      const response = await createAccount(credentials); // You likely want a register function here
+      const response = await createAccount(credentials); 
       console.log('Account created:', response);
-      // Optionally switch to login mode or auto-login
       setAuthMode('login');
     } catch (error: any) {
       console.log(error.response?.data || error.message);
@@ -105,17 +103,17 @@ function Auth() {
     }
   };
 
-  const handleTestProtected = async () => {
+  // const handleTestProtected = async () => {
 
 
-    try {
-      const response = await testprotected();
-      console.log('Protected resource accessed:', response);
-    } catch (error: any) {
-      console.log(error.response?.data || error.message);
-      console.error('Failed to access protected resource:', error);
-    }
-  };
+  //   try {
+  //     const response = await testprotected();
+  //     console.log('Protected resource accessed:', response);
+  //   } catch (error: any) {
+  //     console.log(error.response?.data || error.message);
+  //     console.error('Failed to access protected resource:', error);
+  //   }
+  // };
 
   return (
     <>
@@ -235,9 +233,7 @@ function Auth() {
             </div>
           )}
         </div>
-        <button onClick={handleTestProtected}>
-          TEST PROTECTED
-        </button>
+
         <div className='app-bottom'>
           <SharedFooter />
         </div>

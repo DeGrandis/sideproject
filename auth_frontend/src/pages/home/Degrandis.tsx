@@ -4,7 +4,7 @@ import '../../assets/styles/App.css'
 import '../../assets/styles/degrandis.css'
 import { SharedFooter } from '../../layouts/footer'; // Adjust the import path as needed
 import Header from 'src/layouts/header';
-const texts = ["auth", "api", "budget", "invoices", "mempool", "video", "anything", "everything"];
+const texts = ["auth", "api", "budget", "invoice", "mempool", "video", "anything", "everything"];
 
 
 function Degrandis() {
@@ -25,6 +25,7 @@ function Degrandis() {
   return (
     <>
       <div className='app-container'>
+        
         <div className='app-top'>
           <Header></Header>
         </div>

@@ -15,18 +15,18 @@ const Header: React.FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        fontSize: "2rem",
+        fontSize: "1rem",
         letterSpacing: "0.05em",
         boxSizing: "border-box",
         paddingLeft: "2rem",
         paddingRight: "1rem"
       }}
     >
-      <span style={{ color: "var(--custom-red, #b00020)", fontWeight: 900, fontSize: "2.2rem" }}></span>
+      <span style={{ color: "var(--custom-red, #b00020)", fontWeight: 900, fontSize: "2rem" }}></span>
       <span
         style={{
           color: "var(--custom-gray, #222)",
-          fontSize: "1.1rem",
+          fontSize: "1rem",
           fontWeight: 500,
           cursor: "pointer"
         }}
@@ -34,7 +34,7 @@ const Header: React.FC = () => {
         role="button"
         onClick={() => navigate("/auth")}
       >
-        Login
+        login
       </span>
     </header>
   );

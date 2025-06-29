@@ -6,6 +6,14 @@ import NotFoundPage from './pages/NotFoundPage';
 function App() {
 
 
+  function setAppHeight() {
+    document.documentElement.style.setProperty('--app-height', `${window.innerHeight-80}px`);
+    console.log(window.innerHeight)
+  }
+
+  window.addEventListener('resize', setAppHeight);
+  setAppHeight();
+
   return (
     <BrowserRouter>
       <Routes>
