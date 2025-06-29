@@ -40,7 +40,39 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+}
 
+@keyframes fadeSlideDownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.form-animated2 {
+  opacity: 0;
+  animation: fadeSlideDownIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-delay: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.form-animated {
+  animation: fadeSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .action-button:hover {
@@ -70,6 +102,94 @@
     color: var(--custom-white);
     /* Text color changes to white at the end */
   }
+}
+
+@keyframes auth-switch {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.scroll-domain-center-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.scroll-wheel-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 8ch; /* Adjust this to fit your longest subdomain */
+  height: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-wheel-text {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  opacity: 1;
+  line-height: 2.5rem;
+  text-align: right;
+  white-space: pre;
+  min-width: 0;
+  transition: none;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  color: var(--custom-red);
+}
+
+.scroll-wheel-in {
+  animation: scrollInFromTop 0.5s forwards;
+  z-index: 2;
+}
+
+.scroll-wheel-out {
+  animation: scrollOutToBottom 0.5s forwards;
+  z-index: 1;
+}
+
+@keyframes scrollInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scrollOutToBottom {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+.static-domain-center {
+  position: relative;
+  z-index: 2;
+  background: white;
+  padding-right: 0.25em;
 }
 
 .app-container {

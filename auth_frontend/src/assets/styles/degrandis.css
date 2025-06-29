@@ -34,6 +34,31 @@ body {
     background: var(--custom-black);
 }
 
+.errorbox {
+    max-width: 400px;
+    width: 90vw;
+   
+    padding: .5rem;
+    border: var(--custom-black) 2px solid;
+    background-color: var(--custom-red);
+    color: var(--custom-white);
+    text-align: center;
+    box-sizing: border-box;
+    font-family: Custom-light;
+    animation: errorFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+}
+
+@keyframes errorFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
 input {
     width: 96%;

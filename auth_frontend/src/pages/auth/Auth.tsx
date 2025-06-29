@@ -8,16 +8,17 @@ function Auth() {
 
   // const [authstate, setAuthState] = useState('prelogin')
   const [email, setEmail] = useState('');
-  const [ username, setUsername] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [authMode, setAuthMode] = useState<'login' | 'create'>('login'); // State to toggle between login and create modes
   const buttonRef = useRef<HTMLButtonElement>(null); // Create a ref to access the button element
-  // const [authErrors, setAuthErrors] = useState<string[]>([]); // State to hold authentication errors
+  const [authError, setAuthError] = useState(''); // State to hold authentication errors
 
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission behavior
 
+    setAuthError("");
     console.log('Email:', email);
     console.log('Password:', password);
 
@@ -35,7 +36,11 @@ function Auth() {
         console.log(error.response?.data || error.message);
 
         console.error('Login failed:', error);
-        // Handle login error, e.g., show error message
+        setAuthError(
+          error?.response?.data?.detail ||
+          error?.message ||
+          "Login failed."
+        );
       });
 
     // setAuthState('postlogin');
@@ -60,11 +65,16 @@ function Auth() {
     };
   }, []);
 
+  useEffect(() => {
+    setAuthError('')
+  }, [email, password])
+
 
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  
+
   const handleCreateAccount = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setAuthError("");
 
     if (password !== passwordConfirm) {
       alert('Passwords do not match.');
@@ -74,7 +84,7 @@ function Auth() {
     const credentials: LoginCredentials = {
       email: email,
       password: password,
-      confirmedPassword: passwordConfirm, 
+      confirmedPassword: passwordConfirm,
       username: username
     };
 
@@ -87,6 +97,11 @@ function Auth() {
     } catch (error: any) {
       console.log(error.response?.data || error.message);
       console.error('Account creation failed:', error);
+      setAuthError(
+        error?.response?.data?.detail ||
+        error?.message ||
+        "Login failed."
+      );
     }
   };
 
@@ -108,11 +123,11 @@ function Auth() {
         <div className='app-top'>
           SSO
         </div>
-        <div className='app-middle'>
-          <div className='logo-text'>
+        <div className='app-middle '>
+          <div className='logo-text form-animated2 '>
             <h1>DEGRAND.IS</h1>
           </div>
-          <div className='auth-box'>
+          <div className='auth-box form-animated'>
             <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0 1rem' }}>
               <h3
                 style={{
@@ -142,29 +157,30 @@ function Auth() {
             </div>
 
             {authMode === 'login' && (
-              
-            <form noValidate onSubmit={handleLogin}>
-              <div>
+              <div className=' '>
+              <form noValidate onSubmit={handleLogin}>
+                <div>
 
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder='Email'
-                />
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder='Email'
+                  />
+                </div>
+                <div>
+                  <input
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder='Password'
+                  />
+                </div>
+                <button ref={buttonRef} type="submit" className='action-button'>ENTER</button>
+              </form>
               </div>
-              <div>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder='Password'
-                />
-              </div>
-              <button ref={buttonRef} type="submit" className='action-button'>ENTER</button>
-            </form>
             )}
 
             {authMode === 'create' && (
@@ -197,7 +213,7 @@ function Auth() {
                       placeholder='Password'
                     />
                   </div>
-                                    <div>
+                  <div>
                     <input
                       type="password"
                       id="passwordconfirm"
@@ -210,7 +226,14 @@ function Auth() {
                 </form>
               </div>
             )}
+
+
           </div>
+          {authError && (
+            <div className='errorbox'>
+              {authError}
+            </div>
+          )}
         </div>
         <button onClick={handleTestProtected}>
           TEST PROTECTED

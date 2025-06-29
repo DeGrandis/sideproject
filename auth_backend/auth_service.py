@@ -13,6 +13,9 @@ from fastapi import status
 from dotenv import load_dotenv
 import logging
 
+if os.getenv("RUNNING_ENV") != "production":
+    load_dotenv("./.env.local")
+
 log_dir = '/app/logs' if os.getenv("RUNNING_ENV") == 'production' else "./logs"
 log_file = os.path.join(log_dir, "app.log")
 
@@ -26,8 +29,7 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s'
 )
 
-if os.getenv("RUNNING_ENV") != "production":
-    load_dotenv()
+
 
 from .db_connection import create_new_user, does_user_field_exist, authenticate_user, increment_login_count
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
@@ -47,7 +49,7 @@ app.add_middleware(
 
 SECRET_KEY = os.getenv("JWT_SECRET")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)  # Default to 30 minutes if not set
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))  # Default to 30 minutes if not set
 
 class TokenResponse(BaseModel):
     access_token: str
