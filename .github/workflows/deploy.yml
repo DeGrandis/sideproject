@@ -28,7 +28,8 @@ jobs:
       - name: Create .env file
         run: |
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" > .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          printf "JWT_SECRET=%s\n" "${{ secrets.JWT_SECRET }}" >> .env
+          printf "JWT_PUBLIC_KEY=%s\n" "${{ secrets.JWT_PUBLIC_KEY }}" >> .env
           echo "RUNNING_ENV=production" >> .env
           # Add other env vars as needed
 
