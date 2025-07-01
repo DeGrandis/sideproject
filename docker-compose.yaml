@@ -41,6 +41,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=db
       - JWT_SECRET=${JWT_SECRET}
+      - JWT_PUBLIC_KEY=${JWT_PUBLIC_KEY}
       - COOKIE_DOMAIN=.degrand.is
       - RUNNING_ENV=production
     networks:
