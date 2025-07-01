@@ -19,7 +19,6 @@ export interface LoginResponse {
     user: {
         id: string;
         email: string;
-        // add other user fields as needed
     };
 }
 
@@ -76,4 +75,25 @@ export async function testprotected(): Promise<any> {
     return response.data;
 }
 
-// Add more API call functions as needed, e.g., register, logout, etc.
+export async function verifyCurrentToken(): Promise<any> {
+    const response = await axios.get<any>(`${API_BASE_URL}/verify-token`, {
+        
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Include credentials for CORS requests
+    });
+    return response.data;
+}
+
+export async function getTemporaryAuthorizationCode(): Promise<any> {
+
+    const response = await axios.get<any>(`${API_BASE_URL}/issue-authorization-code`, {
+
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Include credentials for CORS requests
+    });
+    return response.data;
+}

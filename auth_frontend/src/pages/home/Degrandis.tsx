@@ -25,12 +25,11 @@ function Degrandis() {
   return (
     <>
       <div className='app-container'>
-        
-        <div className='app-top'>
+        <div className='app-top scroll-wheel-in'>
           <Header></Header>
         </div>
 
-        <div className='app-middle'>
+        <div className='app-middle scroll-wheel-in-bottom'>
           <div className='logo-text'>
             <div className="scroll-domain-center-row">
               <span className="scroll-wheel-container">
@@ -53,7 +52,7 @@ function Degrandis() {
             </div>
           </div>
         </div>
-        <div className='app-bottom'>
+        <div className='app-bottom fade-in-after'>
           <SharedFooter />
         </div>
       </div>

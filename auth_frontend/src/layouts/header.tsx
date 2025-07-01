@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/App.css";
 import "../assets/styles/degrandis.css";
+import "../index.css"
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -30,9 +31,10 @@ const Header: React.FC = () => {
           fontWeight: 500,
           cursor: "pointer"
         }}
+
         tabIndex={0}
         role="button"
-        onClick={() => navigate("/auth")}
+        onClick={() => navigate("/login")}
       >
         login
       </span>

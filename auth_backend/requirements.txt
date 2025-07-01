@@ -4,3 +4,4 @@ PyJWT
 bcrypt
 sqlalchemy
 psycopg2
+cryptography

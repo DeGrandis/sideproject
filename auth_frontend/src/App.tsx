@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Degrandis from './pages/home/Degrandis';
-import Auth from './pages/auth/Auth';
+import Login from './pages/auth/Login';
 import NotFoundPage from './pages/NotFoundPage';
+import Auth from './pages/auth/Auth';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Degrandis />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="*" element={<NotFoundPage />} />
 
