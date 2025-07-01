@@ -1,4 +1,3 @@
-import { debug } from "node:console";
 import { getTemporaryAuthorizationCode, verifyCurrentToken } from "./apicalls";
 
 const servicesMap: Record<string, string> = {
