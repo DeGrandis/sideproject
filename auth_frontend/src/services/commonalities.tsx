@@ -1,3 +1,4 @@
+import { debug } from "node:console";
 import { getTemporaryAuthorizationCode, verifyCurrentToken } from "./apicalls";
 
 const servicesMap: Record<string, string> = {
@@ -21,7 +22,9 @@ const handleCommonRedirects = async (redirectTo: string) => {
         } catch (error) {
             console.error('Token verification failed:', error);
             console.log('Redirecting to login page due to token verification failure.');
-            window.location.href = '/login';
+            const redirectingTo = `https://degrand.is/login?redirectTo=${redirectTo}`;
+            console.log('Redirecting to:', redirectingTo);
+            window.location.href = redirectingTo;
             return;
         }
 
