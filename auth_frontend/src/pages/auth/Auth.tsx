@@ -17,11 +17,11 @@ function Auth() {
         try {
             const response = await verifyCurrentToken();
             console.log('Token verification successful:', response);
-            await handleCommonRedirects(redirectTo);
-
         } catch (error) {
             console.error('Token verification failed1:', error);
+
         }
+        await handleCommonRedirects(redirectTo);
     };
 
     useEffect(() => {
