@@ -30,6 +30,17 @@ services:
     networks:
       - client-side
 
+  budget_frontend:
+    build:
+      context: ./budget_frontend
+    image: degrandis/budget_frontend:latest
+    ports:
+      - "3001:3001"
+    environment:
+      - REACT_APP_API_BASE_URL=https://api.degrand.is
+    networks:
+      - client-side
+
   auth_backend:
     build:
       context: ./auth_backend

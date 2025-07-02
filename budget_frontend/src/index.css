@@ -1,0 +1,94 @@
+:root {
+  font-family: "Microsoft Sans Serif",system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+
+  --light-gray: #c3c3c3;
+  --win95-blue: #008080;
+  --dark-gray: #818181;
+  --black: #000;
+  --white: #fdffff;
+
+  color-scheme: light;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: var(--win95-blue);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+body {
+  margin: 0;
+  /* display: flex;
+  place-items: center; */
+}
+
+
+
+/* windows 95 themed button */
+button {
+  background-color: var(--light-gray);
+  color: var(--black);
+  padding: 0.25rem .75rem;
+  border-radius: 3px;
+  
+  cursor: pointer;
+  /* left and top border white, right and bottom border dark gray */
+  border: 2px solid transparent;
+  border-radius: 0;
+  border-top-color: var(--white);
+  border-left-color: var(--white);
+  border-bottom-color: var(--dark-gray);
+  border-right-color: var(--dark-gray);
+}
+
+button:active {
+  /* simulate button press */
+  transform: translateY(2px);
+  border-top-color: var(--dark-gray);
+  border-left-color: var(--dark-gray);
+  border-bottom-color: var(--white);
+  border-right-color: var(--white);
+}
+
+.app-container { /*center this*/
+  min-height: 95vh; /* fallback */
+  min-height: var(--app-height, 95vh);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.construction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 30%;
+}
+.flash {
+  color: var(--black);
+  transition: color 0.2s
+}
+
+@media (max-width: 600px) {
+  .construction {
+  width: 90%;
+  }
+}
+
+@font-face {
+  font-family: 'MSSANS';
+  /* Define your font family name */
+  src: url('/fonts/SSERIFE.FON') format('truetype');
+  /* Path to your font file */
+  font-weight: 700;
+  /* Normal weight */
+  font-style: normal;
+}
