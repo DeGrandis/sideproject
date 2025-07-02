@@ -120,10 +120,11 @@ async def  login(response: Response, request: Request):
     user = authenticate_user(body.get("email"), body.get("password"))
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
+    logging.info(f"User authenticated: {str(user.__dict__)}")
     token_data = {
         "username": user.username,
         "email": user.email,
-        "roles": "user.roles" if hasattr(user, 'roles') else "user",  # Assuming user has a roles attribute
+        "roles": "user",  # Assuming user has a roles attribute
     }
     
     access_token_expires = datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -216,6 +217,7 @@ async def verify_token(access_token: str = Cookie(None)):
     """
     try:
         payload = jwt.decode(access_token, PUBLIC_KEY, algorithms=[ALGORITHM])
+        logging.info(f"Token payload: {payload}")
         return {"message": "Token is valid", "payload": payload}
     except jwt.PyJWTError as e:
         logging.error(f"Token verification failed: {str(e)}")

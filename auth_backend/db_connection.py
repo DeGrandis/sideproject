@@ -4,9 +4,10 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from .sqlalchemy_base import Base  
 import os
 
-from .UserModel import User  # Import the User model from UserModel.py
+from .UserModel import Role, User  # Import the User model from UserModel.py
 
 DATABASE_URL = f"postgresql://postgres:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST', 'localhost')}:5432/postgres"
+print(f"Connecting to database at {DATABASE_URL}")
 engine = create_engine(DATABASE_URL)
 
 # Create a configured "Session" class
@@ -121,3 +122,15 @@ def authenticate_user(email: str, password: str):
         return None
     finally:
         db.close()
+
+
+def get_all_users():
+    db = SessionLocal()
+    user = db.query(User).filter_by(email="rob@rob.com").first()
+    if user:
+        print([role.name for role in user.roles])
+
+def get_all_roles():
+    db = SessionLocal()
+    roles = db.query(Role).all()
+    return roles
