@@ -41,6 +41,17 @@ services:
     networks:
       - client-side
 
+  trivia:
+    build:
+      context: ./trivia
+    image: degrandis/trivia:latest
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - client-side
+
   auth_backend:
     build:
       context: ./auth_backend
@@ -92,6 +103,8 @@ services:
       - "443:443"
     depends_on:
       - frontend
+      - budget_frontend
+      - trivia
       - auth_backend
     networks:
       - client-side
