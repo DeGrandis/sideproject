@@ -97,8 +97,19 @@ services:
       - client-side
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d # Mount your Nginx configuration
-      - ./certbot/www:/var/www/certbot # Shared directory for ACME challenge
-      - ./certbot/conf:/etc/letsencrypt # Shared directory for certificates
+      - ./certbot/www:/var/www/certbot:ro # Shared directory for ACME challenge (read-only)
+      - ./certbot/conf:/etc/letsencrypt:ro # Shared directory for certificates (read-only)
+    restart: unless-stopped
+
+  certbot:
+    image: certbot/dns-route53:latest
+    volumes:
+      - ./certbot/www:/var/www/certbot:rw # Read-write for ACME challenge
+      - ./certbot/conf:/etc/letsencrypt:rw # Read-write for certificates
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --dns-route53 --quiet; sleep 12h & wait $${!}; done;'"
+    networks:
+      - client-side
+
 networks:
   client-side:
     driver: bridge
