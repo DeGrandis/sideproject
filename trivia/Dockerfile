@@ -5,10 +5,10 @@ FROM node:22
 WORKDIR /trivia
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json ./
 
 # Clean install dependencies
-RUN npm i
+RUN npm ci
 
 # Copy the rest of the application code
 COPY . .
