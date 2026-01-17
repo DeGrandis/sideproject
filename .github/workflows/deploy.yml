@@ -4,6 +4,13 @@ name: Build and Deploy to EC2
 on:
   push:
     branches: [master]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        type: string
+        default: 'master'
 
 jobs:
   build-and-deploy:
@@ -12,6 +19,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
