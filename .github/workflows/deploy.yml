@@ -66,4 +66,5 @@ jobs:
             cd /home/${{ secrets.EC2_USER }}/docker
             docker-compose down 
             docker image prune -f
-            docker-compose up --pull always -d
+            docker-compose pull
+            docker-compose up -d
