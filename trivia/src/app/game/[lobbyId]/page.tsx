@@ -1,19 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { GameState, Question } from '@/lib/types';
-import { useSocket } from './SocketProvider';
+import { useRouter, useParams } from 'next/navigation';
+import { useSocket } from '@/components/SocketProvider';
+import { GameState, Question, Player } from '@/lib/types';
 
-interface GameProps {
-  game: GameState;
-  currentPlayerId?: string;
-}
-
-export default function Game({ game, currentPlayerId }: GameProps) {
+export default function GamePage() {
   const socket = useSocket();
   const router = useRouter();
-  const [players, setPlayers] = useState(game.players);
+  const params = useParams();
+  const lobbyId = params.lobbyId as string;
+
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [currentPlayerId, setCurrentPlayerId] = useState<string | undefined>();
   const [currentQuestion, setCurrentQuestion] = useState<Omit<Question, 'correctAnswer'> | null>(null);
   const [questionNumber, setQuestionNumber] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -23,24 +22,43 @@ export default function Game({ game, currentPlayerId }: GameProps) {
   const TOTAL_TIME = 10000; // 10 seconds in milliseconds
   const [isFinished, setIsFinished] = useState(false);
   const [finalScores, setFinalScores] = useState<{ playerId: string; nickname: string; score: number }[]>([]);
+  const [reviewQuestions, setReviewQuestions] = useState<Question[]>([]);
 
   useEffect(() => {
     if (!socket) return;
 
-    socket.on('game:question', (question, qNum, total) => {
+    // Request game data on mount
+    console.log('Requesting game data for lobby:', lobbyId);
+    socket.emit('game:get', lobbyId);
+
+    const handleGameData = (game: GameState) => {
+      console.log('Game data received:', game);
+      setPlayers(game.players);
+      setTotalQuestions(game.questions.length);
+      
+      // Find current player ID from socket data
+      const myPlayer = game.players.find(p => p.socketId === socket.id);
+      if (myPlayer) {
+        setCurrentPlayerId(myPlayer.id);
+        console.log('Current player ID:', myPlayer.id);
+      }
+    };
+
+    const handleGameQuestion = (question: Omit<Question, 'correctAnswer'>, qNum: number, total: number) => {
       setCurrentQuestion(question);
       setQuestionNumber(qNum);
       setTotalQuestions(total);
       setSelectedAnswer(null);
       setAnswerResult(null);
       setTimeLeft(10000); // Reset to 10 seconds in milliseconds
-    });
+    };
 
-    socket.on('game:answer-result', (correct, correctAnswer) => {
+    const handleAnswerResult = (correct: boolean, correctAnswer: number) => {
       setAnswerResult({ correct, correctAnswer });
-    });
+    };
 
-    socket.on('game:round-end', (scores) => {
+    const handleRoundEnd = (scores: { playerId: string; score: number }[]) => {
+      console.log('Round end, updating scores:', scores);
       // Update player scores in real-time
       setPlayers(prevPlayers => 
         prevPlayers.map(player => {
@@ -48,21 +66,47 @@ export default function Game({ game, currentPlayerId }: GameProps) {
           return updatedScore ? { ...player, score: updatedScore.score } : player;
         })
       );
-    });
+    };
 
-    socket.on('game:finished', (scores) => {
+    const handleGameFinished = (scores: { playerId: string; nickname: string; score: number }[], questions?: Question[]) => {
       setIsFinished(true);
       setFinalScores(scores);
-    });
+      if (questions) {
+        setReviewQuestions(questions);
+      }
+    };
+
+    const handleGameStarted = (game: GameState) => {
+      console.log('Game started event:', game);
+      setPlayers(game.players);
+      setTotalQuestions(game.questions.length);
+      
+      // Find current player ID
+      const myPlayer = game.players.find(p => p.socketId === socket.id);
+      if (myPlayer) {
+        setCurrentPlayerId(myPlayer.id);
+      }
+    };
+
+    // Register event listeners
+    socket.on('game:data', handleGameData);
+    socket.on('game:started', handleGameStarted);
+    socket.on('game:question', handleGameQuestion);
+    socket.on('game:answer-result', handleAnswerResult);
+    socket.on('game:round-end', handleRoundEnd);
+    socket.on('game:finished', handleGameFinished);
 
     return () => {
-      socket.off('game:question');
-      socket.off('game:answer-result');
-      socket.off('game:round-end');
-      socket.off('game:finished');
+      socket.off('game:data', handleGameData);
+      socket.off('game:started', handleGameStarted);
+      socket.off('game:question', handleGameQuestion);
+      socket.off('game:answer-result', handleAnswerResult);
+      socket.off('game:round-end', handleRoundEnd);
+      socket.off('game:finished', handleGameFinished);
     };
-  }, [socket]);
+  }, [socket, lobbyId]);
 
+  // Timer countdown
   useEffect(() => {
     if (timeLeft <= 0 || !currentQuestion) return;
 
@@ -80,7 +124,22 @@ export default function Game({ game, currentPlayerId }: GameProps) {
     socket.emit('game:answer', currentQuestion.id, answerIndex);
   };
 
+  const handleReturnHome = () => {
+    if (socket) {
+      socket.emit('lobby:leave');
+    }
+    router.push('/');
+  };
+
   const currentPlayer = players.find((p) => p.id === currentPlayerId);
+
+  if (!socket) {
+    return (
+      <div className="loading">
+        <p>Connecting to server...</p>
+      </div>
+    );
+  }
 
   if (isFinished) {
     return (
@@ -97,35 +156,66 @@ export default function Game({ game, currentPlayerId }: GameProps) {
               </div>
             ))}
           </div>
-          <button onClick={() => socket?.emit('lobby:leave')} className="btn-home">
+          
+          {reviewQuestions.length > 0 && (
+            <div className="question-review">
+              <h3>Question Review</h3>
+              {reviewQuestions.map((q, index) => (
+                <div key={q.id} className="review-item">
+                  <div className="review-question">
+                    <strong>Q{index + 1}:</strong> {q.question}
+                  </div>
+                  <div className="review-options">
+                    {q.options.map((option, optIndex) => (
+                      <div
+                        key={optIndex}
+                        className={`review-option ${optIndex === q.correctAnswer ? 'correct-answer' : ''}`}
+                      >
+                        {optIndex === q.correctAnswer && '✓ '}{option}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          <button onClick={handleReturnHome} className="btn-home">
             Return to Home
           </button>
         </div>
 
         <style jsx>{`
           .game-container {
-            max-width: 800px;
-            margin: 0 auto;
+            min-height: 100vh;
             padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-primary);
           }
 
           .game-finished {
             background: var(--card-bg);
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px var(--shadow);
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px var(--shadow);
             text-align: center;
             transition: background-color 0.3s ease;
+            max-width: 600px;
+            width: 100%;
           }
 
           .game-finished h2 {
             color: var(--text-primary);
             margin-bottom: 2rem;
+            font-size: 2rem;
           }
 
           .final-scores h3 {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             color: var(--text-secondary);
+            font-size: 1.2rem;
           }
 
           .score-item {
@@ -133,17 +223,17 @@ export default function Game({ game, currentPlayerId }: GameProps) {
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             background: var(--card-hover);
-            border-radius: 4px;
+            border-radius: 8px;
             border: 1px solid var(--border);
           }
 
           .rank {
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--primary);
-            min-width: 40px;
+            min-width: 50px;
           }
 
           .nickname {
@@ -151,11 +241,13 @@ export default function Game({ game, currentPlayerId }: GameProps) {
             text-align: left;
             margin-left: 1rem;
             color: var(--text-primary);
+            font-size: 1.1rem;
           }
 
           .score {
             font-weight: 600;
             color: var(--success);
+            font-size: 1.1rem;
           }
 
           .btn-home {
@@ -176,6 +268,77 @@ export default function Game({ game, currentPlayerId }: GameProps) {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px var(--shadow-hover);
           }
+
+          .question-review {
+            margin-top: 2rem;
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+          }
+
+          .question-review h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            text-align: center;
+            font-size: 1.1rem;
+          }
+
+          .review-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border);
+          }
+
+          .review-question {
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.4;
+          }
+
+          .review-question strong {
+            color: var(--primary);
+          }
+
+          .review-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-left: 1rem;
+          }
+
+          .review-option {
+            padding: 0.5rem 0.75rem;
+            background: var(--card-hover);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+          }
+
+          .review-option.correct-answer {
+            background: var(--success);
+            color: white;
+            font-weight: 600;
+          }
+
+          @media (max-width: 768px) {
+            .game-finished {
+              padding: 2rem;
+            }
+
+            .game-finished h2 {
+              font-size: 1.5rem;
+            }
+
+            .question-review {
+              padding: 1rem;
+            }
+          }
         `}</style>
       </div>
     );
@@ -188,7 +351,7 @@ export default function Game({ game, currentPlayerId }: GameProps) {
           Question {questionNumber} of {totalQuestions}
         </div>
         <div className="timer-container">
-          <div className="timer"> {(timeLeft / 1000).toFixed(2)}s</div>
+          <div className="timer">⏱️ {(timeLeft / 1000).toFixed(2)}s</div>
           <div className="timer-bar-container">
             <div 
               className="timer-bar" 
@@ -260,9 +423,20 @@ export default function Game({ game, currentPlayerId }: GameProps) {
 
       <style jsx>{`
         .game-container {
-          max-width: 800px;
+          min-height: 100vh;
+          max-width: 900px;
           margin: 0 auto;
           padding: 2rem;
+          background: var(--bg-primary);
+        }
+
+        .loading {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          font-size: 1.2rem;
+          color: var(--text-primary);
         }
 
         .game-header {
@@ -270,8 +444,8 @@ export default function Game({ game, currentPlayerId }: GameProps) {
           justify-content: space-between;
           align-items: center;
           background: var(--card-bg);
-          padding: 1rem;
-          border-radius: 8px;
+          padding: 1.25rem;
+          border-radius: 12px;
           margin-bottom: 2rem;
           box-shadow: 0 2px 10px var(--shadow);
           transition: background-color 0.3s ease;
@@ -282,6 +456,7 @@ export default function Game({ game, currentPlayerId }: GameProps) {
         .score {
           font-weight: 600;
           color: var(--text-primary);
+          font-size: 1rem;
         }
 
         .timer-container {
@@ -290,11 +465,11 @@ export default function Game({ game, currentPlayerId }: GameProps) {
           align-items: center;
           gap: 0.5rem;
           flex: 1;
-          max-width: 200px;
+          max-width: 250px;
         }
 
         .timer {
-          font-size: 1.2rem;
+          font-size: 1.3rem;
           color: ${timeLeft <= 5000 ? 'var(--danger)' : 'var(--text-primary)'};
           font-variant-numeric: tabular-nums;
         }
@@ -316,17 +491,18 @@ export default function Game({ game, currentPlayerId }: GameProps) {
 
         .question-card {
           background: var(--card-bg);
-          padding: 2rem;
-          border-radius: 8px;
+          padding: 2.5rem;
+          border-radius: 12px;
           margin-bottom: 2rem;
-          box-shadow: 0 2px 10px var(--shadow);
+          box-shadow: 0 4px 20px var(--shadow);
           transition: background-color 0.3s ease;
         }
 
         .question-text {
           color: var(--text-primary);
-          margin-bottom: 1rem;
+          margin-bottom: 1.5rem;
           font-size: 1.5rem;
+          line-height: 1.4;
         }
 
         .question-meta {
@@ -337,7 +513,7 @@ export default function Game({ game, currentPlayerId }: GameProps) {
 
         .category,
         .difficulty {
-          padding: 0.25rem 0.75rem;
+          padding: 0.4rem 0.9rem;
           border-radius: 20px;
           font-size: 0.875rem;
           font-weight: 600;
@@ -345,7 +521,7 @@ export default function Game({ game, currentPlayerId }: GameProps) {
 
         .category {
           background: var(--info);
-          color: var(--info-text);
+          color: white;
         }
 
         .difficulty {
@@ -357,7 +533,7 @@ export default function Game({ game, currentPlayerId }: GameProps) {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1rem;
-          margin-bottom: 1rem;
+          margin-bottom: 1.5rem;
         }
 
         .answer-btn {
@@ -370,11 +546,14 @@ export default function Game({ game, currentPlayerId }: GameProps) {
           cursor: pointer;
           transition: all 0.2s;
           text-align: left;
+          font-weight: 500;
         }
 
         .answer-btn:hover:not(:disabled) {
           border-color: var(--primary);
-          background: var(--info);
+          background: var(--card-hover);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px var(--shadow);
         }
 
         .answer-btn:disabled {
@@ -384,42 +563,43 @@ export default function Game({ game, currentPlayerId }: GameProps) {
         .answer-btn.selected {
           border-color: var(--primary);
           background: var(--info);
+          color: white;
         }
 
         .answer-btn.correct {
           border-color: var(--success);
-          background: var(--success-light);
+          background: var(--success);
           color: white;
         }
 
         .answer-btn.incorrect {
           border-color: var(--danger);
-          background: var(--danger-light);
+          background: var(--danger);
           color: white;
         }
 
         .result {
-          padding: 1rem;
-          border-radius: 4px;
+          padding: 1.25rem;
+          border-radius: 8px;
           text-align: center;
           font-weight: 600;
-          font-size: 1.1rem;
+          font-size: 1.2rem;
         }
 
         .correct-result {
-          background: var(--success-light);
+          background: var(--success);
           color: white;
         }
 
         .incorrect-result {
-          background: var(--danger-light);
+          background: var(--danger);
           color: white;
         }
 
         .scoreboard {
           background: var(--card-bg);
           padding: 1.5rem;
-          border-radius: 8px;
+          border-radius: 12px;
           box-shadow: 0 2px 10px var(--shadow);
           transition: background-color 0.3s ease;
         }
@@ -427,6 +607,7 @@ export default function Game({ game, currentPlayerId }: GameProps) {
         .scoreboard h3 {
           margin-bottom: 1rem;
           color: var(--text-primary);
+          font-size: 1.1rem;
         }
 
         .scores-list {
@@ -440,17 +621,42 @@ export default function Game({ game, currentPlayerId }: GameProps) {
           justify-content: space-between;
           padding: 0.75rem;
           background: var(--card-hover);
-          border-radius: 4px;
+          border-radius: 6px;
           border: 1px solid var(--border);
         }
 
         .player-name {
           color: var(--text-primary);
+          font-weight: 500;
         }
 
         .player-score {
           font-weight: 600;
           color: var(--success);
+        }
+
+        @media (max-width: 768px) {
+          .game-container {
+            padding: 1rem;
+          }
+
+          .game-header {
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: center;
+          }
+
+          .question-card {
+            padding: 1.5rem;
+          }
+
+          .question-text {
+            font-size: 1.2rem;
+          }
+
+          .answers {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
     </div>

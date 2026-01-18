@@ -18,7 +18,7 @@ export default function ThemeToggle() {
           border-radius: 50%;
           border: 2px solid var(--border);
           background: var(--card-bg);
-          font-size: 1.5rem;
+          font-size: 1.2rem;
           cursor: pointer;
           display: flex;
           align-items: center;

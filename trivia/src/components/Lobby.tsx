@@ -18,6 +18,11 @@ export default function Lobby({ lobby, players, currentPlayerId }: LobbyProps) {
   useEffect(() => {
     if (currentPlayerId) {
       setIsHost(lobby.hostId === currentPlayerId);
+      
+      if (isHost) {
+        handleReady();
+      }
+      
     }
   }, [lobby.hostId, currentPlayerId]);
 
@@ -48,10 +53,20 @@ export default function Lobby({ lobby, players, currentPlayerId }: LobbyProps) {
   return (
     <div className="lobby-container">
       <div className="lobby-header">
-        <h2>Lobby: {lobby.id.substring(0, 8)}</h2>
-        <p>
-          Players: {lobby.playerCount} / {lobby.maxPlayers}
-        </p>
+        <h2>{lobby.name}</h2>
+        <div className="lobby-meta">
+          <span className="meta-item">
+            👥 {players.length} / {lobby.maxPlayers} Players
+          </span>
+          <span className="meta-item difficulty">
+            {lobby.difficulty.charAt(0).toUpperCase() + lobby.difficulty.slice(1)}
+          </span>
+        </div>
+        {lobby.theme && (
+          <p className="lobby-theme">
+            <strong>Theme:</strong> {lobby.theme}
+          </p>
+        )}
       </div>
 
       <div className="players-list">
@@ -109,8 +124,46 @@ export default function Lobby({ lobby, players, currentPlayerId }: LobbyProps) {
         }
 
         .lobby-header h2 {
-          margin: 0 0 0.5rem 0;
+          margin: 0 0 1rem 0;
           color: var(--text-primary);
+          font-size: 1.8rem;
+        }
+
+        .lobby-meta {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+          margin-bottom: 0.75rem;
+        }
+
+        .meta-item {
+          padding: 0.4rem 0.8rem;
+          background: var(--bg-secondary);
+          border-radius: 4px;
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+        }
+
+        .meta-item.difficulty {
+          background: var(--primary);
+          color: white;
+          font-weight: 600;
+        }
+
+        .lobby-theme {
+          margin: 0;
+          padding: 0.5rem;
+          background: var(--card-hover);
+          border-radius: 4px;
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+          font-style: italic;
+        }
+
+        .lobby-theme strong {
+          color: var(--text-primary);
+          font-style: normal;
         }
 
         .lobby-header p {

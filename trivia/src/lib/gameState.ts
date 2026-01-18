@@ -22,12 +22,24 @@ class GameStateManager {
 
   // === Lobby Operations ===
   
-  createLobby(lobbyId: string, hostId: string, maxPlayers: number = 8): LobbyInfo {
+  createLobby(
+    lobbyId: string,
+    hostId: string,
+    name: string,
+    maxPlayers: number = 8,
+    difficulty: 'easy' | 'medium' | 'hard' = 'medium',
+    theme?: string,
+    questions?: any[]
+  ): LobbyInfo {
     const lobby: LobbyInfo = {
       id: lobbyId,
+      name,
       hostId,
       playerCount: 0,
       maxPlayers,
+      difficulty,
+      theme,
+      questions,
       status: 'waiting',
     };
     this.lobbies.set(lobbyId, lobby);

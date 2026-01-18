@@ -29,9 +29,13 @@ export interface GameState {
 
 export interface LobbyInfo {
   id: string;
+  name: string;
   hostId: string;
   playerCount: number;
   maxPlayers: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+  theme?: string;
+  questions?: Question[];
   status: 'waiting' | 'starting' | 'in-progress';
 }
 
@@ -50,20 +54,34 @@ export interface ServerToClientEvents {
   'game:question': (question: Omit<Question, 'correctAnswer'>, questionNumber: number, totalQuestions: number) => void;
   'game:answer-result': (correct: boolean, correctAnswer: number) => void;
   'game:round-end': (scores: { playerId: string; score: number }[]) => void;
-  'game:finished': (finalScores: { playerId: string; nickname: string; score: number }[]) => void;
+  'game:finished': (finalScores: { playerId: string; nickname: string; score: number }[], questions: Question[]) => void;
+  'game:data': (gameState: GameState) => void;
+  'lobby:data': (lobby: LobbyInfo, players: Player[]) => void;
+  'lobby:players-updated': (players: Player[]) => void;
+}
+
+export interface LobbyCreateOptions {
+  nickname: string;
+  lobbyName: string;
+  maxPlayers: number;
+  questionCount: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+  theme?: string;
 }
 
 export interface ClientToServerEvents {
   // Lobby events
   'lobby:list': () => void;
-  'lobby:create': (nickname: string) => void;
+  'lobby:create': (options: LobbyCreateOptions) => void;
   'lobby:join': (lobbyId: string, nickname: string) => void;
   'lobby:leave': () => void;
   'lobby:ready': () => void;
   'lobby:start': () => void;
+  'lobby:get': (lobbyId: string) => void;
   
   // Game events
   'game:answer': (questionId: string, answer: number) => void;
+  'game:get': (lobbyId: string) => void;
 }
 
 export interface InterServerEvents {

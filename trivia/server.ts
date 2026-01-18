@@ -15,6 +15,7 @@ import type {
   Question,
 } from './src/lib/types.js';
 import { gameState } from './src/lib/gameState.js';
+import { generateQuestions } from './src/lib/questionGenerator.js';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = dev ? 'localhost' : '0.0.0.0';
@@ -23,7 +24,45 @@ const port = parseInt(process.env.PORT || '3002', 10);
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
-// Mock trivia questions
+// Function to fetch questions using AWS Bedrock
+async function fetchQuestionsFromAPI(
+  difficulty: 'easy' | 'medium' | 'hard',
+  theme?: string,
+  count: number = 10
+): Promise<Question[]> {
+  try {
+    console.log(`Fetching questions for difficulty: ${difficulty}, theme: ${theme || 'general'}`);
+    
+    // Generate questions using AWS Bedrock
+    const generatedQuestions = await generateQuestions({
+      theme: theme || 'general knowledge',
+      difficulty,
+      count,
+    });
+
+    // Transform to Question format with IDs and category
+    return generatedQuestions.map(q => ({
+      id: uuidv4(),
+      question: q.question,
+      options: q.options,
+      correctAnswer: q.correctAnswer,
+      category: theme || 'General Knowledge',
+      difficulty,
+    }));
+  } catch (error) {
+    console.error('Error fetching questions from Bedrock:', error);
+    console.log('Falling back to mock questions');
+    // Fallback to mock questions on error
+    return MOCK_QUESTIONS.map((q) => ({
+      ...q,
+      id: uuidv4(),
+      difficulty,
+      category: theme || q.category,
+    }));
+  }
+}
+
+// Mock trivia questions (fallback)
 const MOCK_QUESTIONS: Question[] = [
   {
     id: '1',
@@ -99,10 +138,40 @@ app.prepare().then(() => {
       socket.emit('lobby:updated', gameState.getAllLobbies());
     });
 
-    socket.on('lobby:create', (nickname) => {
+    socket.on('lobby:get', (lobbyId: string) => {
       try {
-        if (!nickname || nickname.trim().length === 0) {
+        const lobby = gameState.getLobby(lobbyId);
+        if (!lobby) {
+          socket.emit('lobby:error', 'Lobby not found');
+          return;
+        }
+
+        // If player is not already in this lobby's socket room, join it
+        // This ensures they receive game:started and other room broadcasts
+        const socketRooms = Array.from(socket.rooms);
+        if (!socketRooms.includes(lobbyId)) {
+          console.log(`Socket ${socket.id} joining room ${lobbyId} via lobby:get`);
+          socket.join(lobbyId);
+        }
+
+        const players = gameState.getPlayersInLobby(lobbyId);
+        socket.emit('lobby:data', lobby, players);
+        console.log(`Sent lobby data for ${lobbyId} to ${socket.id}`);
+      } catch (error) {
+        console.error('Error getting lobby:', error);
+        socket.emit('lobby:error', 'Failed to get lobby data');
+      }
+    });
+
+    socket.on('lobby:create', async (options) => {
+      try {
+        if (!options || !options.nickname || options.nickname.trim().length === 0) {
           socket.emit('lobby:error', 'Nickname is required');
+          return;
+        }
+
+        if (!options.lobbyName || options.lobbyName.trim().length === 0) {
+          socket.emit('lobby:error', 'Lobby name is required');
           return;
         }
 
@@ -112,20 +181,37 @@ app.prepare().then(() => {
         // Create player
         const player: Player = {
           id: playerId,
-          nickname: nickname.trim(),
+          nickname: options.nickname.trim(),
           socketId: socket.id,
           score: 0,
           ready: false,
         };
         gameState.createPlayer(player);
 
-        // Create lobby
-        const lobby = gameState.createLobby(lobbyId, playerId);
+        // Fetch questions dynamically based on difficulty and theme
+        console.log('Fetching questions for lobby...');
+        const questions = await fetchQuestionsFromAPI(
+          options.difficulty || 'medium',
+          options.theme?.trim(),
+          options.questionCount || 3
+        );
+        console.log(`Fetched ${questions.length} questions`);
+
+        // Create lobby with new parameters including questions
+        const lobby = gameState.createLobby(
+          lobbyId,
+          playerId,
+          options.lobbyName.trim(),
+          options.maxPlayers || 8,
+          options.difficulty || 'medium',
+          options.theme?.trim(),
+          questions
+        );
         gameState.addPlayerToLobby(playerId, lobbyId);
 
         // Store player data in socket
         socket.data.playerId = playerId;
-        socket.data.nickname = nickname.trim();
+        socket.data.nickname = options.nickname.trim();
         socket.data.lobbyId = lobbyId;
 
         // Join socket room
@@ -135,7 +221,7 @@ app.prepare().then(() => {
         socket.emit('lobby:joined', lobby, [player]);
         io.emit('lobby:updated', gameState.getAllLobbies());
 
-        console.log(`Player ${nickname} created lobby ${lobbyId}`);
+        console.log(`Player ${options.nickname} created lobby "${options.lobbyName}" (${lobbyId}) with ${questions.length} questions`);
       } catch (error) {
         console.error('Error creating lobby:', error);
         socket.emit('lobby:error', 'Failed to create lobby');
@@ -205,11 +291,10 @@ app.prepare().then(() => {
       if (!playerId || !lobbyId) return;
 
       gameState.updatePlayer(playerId, { ready: true });
-      const lobby = gameState.getLobby(lobbyId);
       const players = gameState.getPlayersInLobby(lobbyId);
-      if (lobby) {
-        io.to(lobbyId).emit('lobby:joined', lobby, players);
-      }
+      
+      // Broadcast updated player list, not full lobby data
+      io.to(lobbyId).emit('lobby:players-updated', players);
     });
 
     socket.on('lobby:start', () => {
@@ -223,8 +308,8 @@ app.prepare().then(() => {
       }
 
       const players = gameState.getPlayersInLobby(lobbyId);
-      if (players.length < 2) {
-        socket.emit('lobby:error', 'Need at least 2 players to start');
+      if (players.length < 1) {
+        socket.emit('lobby:error', 'Need at least 1 player to start');
         return;
       }
 
@@ -233,6 +318,29 @@ app.prepare().then(() => {
     });
 
     // === GAME EVENTS ===
+
+    socket.on('game:get', (lobbyId: string) => {
+      try {
+        const game = gameState.getGame(lobbyId);
+        if (!game) {
+          socket.emit('lobby:error', 'Game not found');
+          return;
+        }
+
+        // Ensure socket is in the game room
+        const socketRooms = Array.from(socket.rooms);
+        if (!socketRooms.includes(lobbyId)) {
+          console.log(`Socket ${socket.id} joining game room ${lobbyId} via game:get`);
+          socket.join(lobbyId);
+        }
+
+        socket.emit('game:data', game);
+        console.log(`Sent game data for ${lobbyId} to ${socket.id}`);
+      } catch (error) {
+        console.error('Error getting game:', error);
+        socket.emit('lobby:error', 'Failed to get game data');
+      }
+    });
 
     socket.on('game:answer', (questionId, answer) => {
       const { playerId, lobbyId } = socket.data;
@@ -332,12 +440,18 @@ function startGame(
   gameState.updateLobby(lobbyId, { status: 'in-progress' });
 
   const players = gameState.getPlayersInLobby(lobbyId);
+  
+  // Use lobby's questions or fallback to MOCK_QUESTIONS
+  const questions = lobby.questions && lobby.questions.length > 0 
+    ? lobby.questions 
+    : MOCK_QUESTIONS;
+  
   const game: GameState = {
     id: lobbyId,
     status: 'in-progress',
     players,
     currentQuestion: 0,
-    questions: MOCK_QUESTIONS,
+    questions,
     startedAt: Date.now(),
   };
 
@@ -411,7 +525,8 @@ function endGame(
     .map((p) => ({ playerId: p.id, nickname: p.nickname, score: p.score }))
     .sort((a, b) => b.score - a.score);
 
-  io.to(gameId).emit('game:finished', finalScores);
+  // Send scores and questions for review
+  io.to(gameId).emit('game:finished', finalScores, game.questions);
 
   // Clean up lobby after 30 seconds
   setTimeout(() => {

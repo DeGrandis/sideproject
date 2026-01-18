@@ -1,25 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSocket } from '@/components/SocketProvider';
-import Lobby from '@/components/Lobby';
-import Game from '@/components/Game';
-import { LobbyInfo, Player, GameState } from '@/lib/types';
-
-type ViewState = 'home' | 'lobby' | 'game';
+import { LobbyInfo } from '@/lib/types';
 
 export default function HomePage() {
   const socket = useSocket();
-  const [viewState, setViewState] = useState<ViewState>('home');
-  const [nickname, setNickname] = useState('');
+  const router = useRouter();
   const [availableLobbies, setAvailableLobbies] = useState<LobbyInfo[]>([]);
-  const [currentLobby, setCurrentLobby] = useState<LobbyInfo | null>(null);
-  const [lobbyPlayers, setLobbyPlayers] = useState<Player[]>([]);
-  const [currentPlayerId, setCurrentPlayerId] = useState<string | undefined>();
-  const [currentGame, setCurrentGame] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [joinLobbyId, setJoinLobbyId] = useState<string | null>(null);
+  const [nickname, setNickname] = useState('');
+
+  // Load saved nickname from localStorage on mount
+  useEffect(() => {
+    const savedNickname = localStorage.getItem('trivia-nickname');
+    if (savedNickname) {
+      setNickname(savedNickname);
+    }
+  }, []);
 
   useEffect(() => {
     if (!socket) return;
@@ -27,37 +28,14 @@ export default function HomePage() {
     // Request initial lobby list
     socket.emit('lobby:list');
 
+    // Update lobby list when it changes
     socket.on('lobby:updated', (lobbies) => {
       setAvailableLobbies(lobbies);
     });
 
-    socket.on('lobby:joined', (lobby, players) => {
-      setCurrentLobby(lobby);
-      setLobbyPlayers(players);
-      setViewState('lobby');
-      setError(null);
-      
-      // Find current player ID
-      const myPlayer = players.find(p => p.socketId === socket.id);
-      if (myPlayer) {
-        setCurrentPlayerId(myPlayer.id);
-      }
-    });
-
-    socket.on('lobby:player-joined', (player) => {
-      setLobbyPlayers((prev) => [...prev, player]);
-    });
-
-    socket.on('lobby:player-left', (playerId) => {
-      setLobbyPlayers((prev) => prev.filter((p) => p.id !== playerId));
-    });
-
-    socket.on('lobby:left', () => {
-      // Reset state and return to home page
-      setViewState('home');
-      setCurrentLobby(null);
-      setLobbyPlayers([]);
-      setCurrentPlayerId(undefined);
+    // Navigate to lobby page when joined
+    socket.on('lobby:joined', (lobby) => {
+      router.push(`/lobby/${lobby.id}`);
     });
 
     socket.on('lobby:error', (message) => {
@@ -65,35 +43,15 @@ export default function HomePage() {
       setTimeout(() => setError(null), 3000);
     });
 
-    socket.on('game:started', (game) => {
-      setCurrentGame(game);
-      setViewState('game');
-    });
-
-    socket.on('game:finished', () => {
-      setTimeout(() => {
-        setViewState('home');
-        setCurrentLobby(null);
-        setCurrentGame(null);
-        setLobbyPlayers([]);
-      }, 10000);
-    });
-
     return () => {
       socket.off('lobby:updated');
       socket.off('lobby:joined');
-      socket.off('lobby:player-joined');
-      socket.off('lobby:player-left');
-      socket.off('lobby:left');
       socket.off('lobby:error');
-      socket.off('game:started');
-      socket.off('game:finished');
     };
-  }, [socket]);
+  }, [socket, router]);
 
   const handleCreateLobby = () => {
-    setJoinLobbyId(null);
-    setShowNicknameModal(true);
+    router.push('/create-lobby');
   };
 
   const handleJoinLobby = (lobbyId: string) => {
@@ -108,20 +66,28 @@ export default function HomePage() {
       return;
     }
 
-    console.log('Submitting nickname:', nickname.trim());
-    console.log('Socket connected:', socket.connected);
-    console.log('Join lobby ID:', joinLobbyId);
-
-    if (joinLobbyId) {
-      console.log('Emitting lobby:join event');
-      socket.emit('lobby:join', joinLobbyId, nickname.trim());
-    } else {
-      console.log('Emitting lobby:create event');
-      socket.emit('lobby:create', nickname.trim());
+    if (!joinLobbyId) {
+      setError('No lobby selected');
+      setTimeout(() => setError(null), 3000);
+      return;
     }
 
+    console.log('Joining lobby:', joinLobbyId, 'with nickname:', nickname.trim());
+    
+    // Save nickname to localStorage
+    localStorage.setItem('trivia-nickname', nickname.trim());
+    
+    socket.emit('lobby:join', joinLobbyId, nickname.trim());
+
     setShowNicknameModal(false);
-    setNickname('');
+    setJoinLobbyId(null);
+  };
+
+  const handleNicknameChange = (newNickname: string) => {
+    setNickname(newNickname);
+    if (newNickname.trim()) {
+      localStorage.setItem('trivia-nickname', newNickname.trim());
+    }
   };
 
   if (!socket) {
@@ -132,39 +98,45 @@ export default function HomePage() {
     );
   }
 
-  if (viewState === 'game' && currentGame) {
-    return <Game game={currentGame} currentPlayerId={currentPlayerId} />;
-  }
-
-  if (viewState === 'lobby' && currentLobby) {
-    return (
-      <Lobby
-        lobby={currentLobby}
-        players={lobbyPlayers}
-        currentPlayerId={currentPlayerId}
-      />
-    );
-  }
-
   return (
     <div className="home-container">
       <div className="hero">
-        <h1>TrivAI-l Pursuit</h1>
+        <h1>Infinitivia</h1>
       </div>
 
+
+          
+          
       {error && <div className="error-banner">{error}</div>}
 
       <div className="main-content">
         <div className="create-lobby-section">
-          <h2>Create New Game</h2>
+          <h2>Start a Game</h2>
           <p>Start a new lobby and invite your friends</p>
+          
+
+          
           <button onClick={handleCreateLobby} className="btn-primary">
             Create Lobby
           </button>
+
+                    {nickname && (
+            <div className="nickname-display">
+              <label htmlFor="nickname-input">Your Nickname</label>
+              <input
+                id="nickname-input"
+                type="text"
+                value={nickname}
+                onChange={(e) => handleNicknameChange(e.target.value)}
+                placeholder="Enter your nickname"
+                maxLength={20}
+              />
+            </div>
+          )}
         </div>
 
         <div className="lobbies-section">
-          <h2>Join Existing Game</h2>
+          <h2>Lobbies</h2>
           {availableLobbies.length === 0 ? (
             <p className="no-lobbies">No lobbies available. Create one!</p>
           ) : (
@@ -172,10 +144,20 @@ export default function HomePage() {
               {availableLobbies.map((lobby) => (
                 <div key={lobby.id} className="lobby-card">
                   <div className="lobby-info">
-                    <h3>Lobby {lobby.id.substring(0, 8)}</h3>
-                    <p>
-                      {lobby.playerCount} / {lobby.maxPlayers} players
-                    </p>
+                    <h3>{lobby.name}</h3>
+                    <div className="lobby-details">
+                      <span className="lobby-detail">
+                        👥 {lobby.playerCount} / {lobby.maxPlayers}
+                      </span>
+                      <span className="lobby-detail difficulty">
+                        {lobby.difficulty.charAt(0).toUpperCase() + lobby.difficulty.slice(1)}
+                      </span>
+                      {lobby.theme && (
+                        <span className="lobby-detail theme" title={lobby.theme}>
+                          🎯 {lobby.theme.length > 30 ? lobby.theme.substring(0, 30) + '...' : lobby.theme}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <button
                     onClick={() => handleJoinLobby(lobby.id)}
@@ -299,6 +281,40 @@ export default function HomePage() {
           margin-bottom: 1.5rem;
         }
 
+        .nickname-display {
+          width: 100%;
+          margin-top: 1.5rem;
+          padding: 1.1rem;
+          background: var(--bg-secondary);
+          border-radius: 8px;
+
+        }
+
+        .nickname-display label {
+          display: block;
+          color: var(--text-primary);
+          font-size: 0.95rem;
+          font-weight: 600;
+          margin-bottom: 0.75rem;
+        }
+
+        .nickname-display input {
+          width: 100%;
+          padding: 1rem;
+          border: 2px solid var(--border);
+          border-radius: 4px;
+          font-size: 1rem;
+          box-sizing: border-box;
+          background: var(--card-bg);
+          color: var(--text-primary);
+          transition: border-color 0.2s;
+        }
+
+        .nickname-display input:focus {
+          outline: none;
+          border-color: var(--primary);
+        }
+
         .btn-primary {
           padding: 1rem 2rem;
           background: var(--primary);
@@ -345,10 +361,42 @@ export default function HomePage() {
           box-shadow: 0 2px 8px var(--shadow);
         }
 
+        .lobby-info {
+          flex: 1;
+        }
+
         .lobby-info h3 {
-          margin: 0 0 0.25rem 0;
+          margin: 0 0 0.5rem 0;
           color: var(--text-primary);
-          font-size: 1rem;
+          font-size: 1.1rem;
+        }
+
+        .lobby-details {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .lobby-detail {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          padding: 0.25rem 0.5rem;
+          background: var(--bg-secondary);
+          border-radius: 4px;
+        }
+
+        .lobby-detail.difficulty {
+          font-weight: 600;
+          background: var(--primary);
+          color: white;
+        }
+
+        .lobby-detail.theme {
+          font-style: italic;
+          max-width: 250px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .lobby-info p {
