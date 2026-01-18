@@ -7,7 +7,7 @@ const bedrockClient = new BedrockRuntimeClient({
   region: process.env.AWS_REGION || "us-east-1",
 });
 
-// Use cross-region inference profile instead of direct model ID
+// Use cross-region inference profile (required for on-demand throughput)
 const MODEL_ID = "us.meta.llama3-1-70b-instruct-v1:0";
 
 const SYSTEM_PROMPT = `You are a host for a trivia game. You are being instructed to generate questions for users playing the game in a batch depending on parameters which contain the subject matter for the trivia and the difficulty and quantity. Keep the length of the question short, around 50-120 characters max. Do not output any other text besides the valid JSON array. You MUST use proper JSON syntax with double quotes around property names and string values. You should output the questions in valid JSON format as follows:

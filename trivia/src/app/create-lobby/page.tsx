@@ -328,7 +328,7 @@ export default function CreateLobbyPage() {
 
         h1 {
           color: var(--text-primary);
-          margin-bottom: 2rem;
+          margin-bottom: 1.6rem;
           text-align: center;
           font-size: 2rem;
         }
@@ -338,19 +338,19 @@ export default function CreateLobbyPage() {
           color: white;
           padding: 1rem;
           border-radius: 4px;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.2rem;
           text-align: center;
         }
 
         .form-section {
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.2rem;
         }
 
         label {
           display: block;
           color: var(--text-primary);
           font-weight: 600;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.4rem;
           font-size: 0.95rem;
         }
 
@@ -383,7 +383,7 @@ export default function CreateLobbyPage() {
 
         .input-hint {
           display: block;
-          margin-top: 0.25rem;
+          margin-top: 0.2rem;
           font-size: 0.85rem;
           color: var(--text-tertiary);
         }
@@ -470,7 +470,7 @@ export default function CreateLobbyPage() {
         .form-actions {
           display: flex;
           gap: 1rem;
-          margin-top: 2rem;
+          margin-top: 1.6rem;
         }
 
         .form-actions button {
@@ -543,7 +543,7 @@ export default function CreateLobbyPage() {
           border-top-color: var(--primary);
           border-radius: 50%;
           animation: spin 1s linear infinite;
-          margin: 0 auto 1.5rem;
+          margin: 0 auto 1.2rem;
         }
 
         @keyframes spin {
@@ -554,13 +554,13 @@ export default function CreateLobbyPage() {
 
         .loading-modal h2 {
           color: var(--text-primary);
-          margin-bottom: 1rem;
+          margin-bottom: 0.8rem;
           font-size: 1.5rem;
         }
 
         .loading-modal p {
           color: var(--text-secondary);
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.4rem;
         }
 
         .loading-subtext {
@@ -571,19 +571,34 @@ export default function CreateLobbyPage() {
 
         @media (max-width: 768px) {
           .create-lobby-container {
-            padding: 1rem;
+            padding: 0;
+            justify-content: flex-start;
           }
 
           .create-lobby-card {
-            padding: 1.5rem;
+            max-width: 100%;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 1.5rem 1rem;
+            min-height: 100vh;
           }
 
           h1 {
             font-size: 1.5rem;
+            margin-bottom: 0.9rem;
           }
 
           .difficulty-selector {
             flex-direction: column;
+          }
+
+          .form-group {
+            margin-bottom: 0.9rem;
+          }
+
+          .btn-primary,
+          .btn-cancel {
+            width: 100%;
           }
         }
       `}</style>

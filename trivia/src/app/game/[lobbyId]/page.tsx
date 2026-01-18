@@ -208,12 +208,12 @@ export default function GamePage() {
 
           .game-finished h2 {
             color: var(--text-primary);
-            margin-bottom: 2rem;
+            margin-bottom: 1.6rem;
             font-size: 2rem;
           }
 
           .final-scores h3 {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             color: var(--text-secondary);
             font-size: 1.2rem;
           }
@@ -223,7 +223,7 @@ export default function GamePage() {
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.6rem;
             background: var(--card-hover);
             border-radius: 8px;
             border: 1px solid var(--border);
@@ -251,7 +251,7 @@ export default function GamePage() {
           }
 
           .btn-home {
-            margin-top: 2rem;
+            margin-top: 1.6rem;
             padding: 1rem 2rem;
             background: var(--primary);
             color: white;
@@ -270,7 +270,7 @@ export default function GamePage() {
           }
 
           .question-review {
-            margin-top: 2rem;
+            margin-top: 1.6rem;
             text-align: left;
             max-height: 400px;
             overflow-y: auto;
@@ -280,14 +280,14 @@ export default function GamePage() {
           }
 
           .question-review h3 {
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             color: var(--text-primary);
             text-align: center;
             font-size: 1.1rem;
           }
 
           .review-item {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             padding: 1rem;
             background: var(--card-bg);
             border-radius: 6px;
@@ -295,7 +295,7 @@ export default function GamePage() {
           }
 
           .review-question {
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.6rem;
             color: var(--text-primary);
             font-size: 0.95rem;
             line-height: 1.4;
@@ -327,8 +327,16 @@ export default function GamePage() {
           }
 
           @media (max-width: 768px) {
+            .game-container {
+              padding: 0;
+            }
+
             .game-finished {
-              padding: 2rem;
+              max-width: 100%;
+              border-radius: 0;
+              box-shadow: none;
+              padding: 2rem 1rem;
+              min-height: 100vh;
             }
 
             .game-finished h2 {
@@ -337,6 +345,27 @@ export default function GamePage() {
 
             .question-review {
               padding: 1rem;
+              border-radius: 0;
+              margin-left: -1rem;
+              margin-right: -1rem;
+              max-height: none;
+            }
+
+            .review-item {
+              border-radius: 4px;
+            }
+
+            .final-scores {
+              margin-bottom: 0.9rem;
+            }
+
+            .btn-home {
+              width: 100%;
+              margin-top: 0.9rem;
+            }
+
+            .score-item {
+              padding: 0.875rem;
             }
           }
         `}</style>
@@ -351,7 +380,7 @@ export default function GamePage() {
           Question {questionNumber} of {totalQuestions}
         </div>
         <div className="timer-container">
-          <div className="timer">⏱️ {(timeLeft / 1000).toFixed(2)}s</div>
+          <div className="timer">{(timeLeft / 1000).toFixed(2)}s</div>
           <div className="timer-bar-container">
             <div 
               className="timer-bar" 
@@ -365,10 +394,7 @@ export default function GamePage() {
       {currentQuestion && (
         <div className="question-card">
           <h2 className="question-text">{currentQuestion.question}</h2>
-          <div className="question-meta">
-            <span className="category">{currentQuestion.category}</span>
-            <span className="difficulty">{currentQuestion.difficulty}</span>
-          </div>
+
 
           <div className="answers">
             {currentQuestion.options.map((option, index) => {
@@ -446,7 +472,7 @@ export default function GamePage() {
           background: var(--card-bg);
           padding: 1.25rem;
           border-radius: 12px;
-          margin-bottom: 2rem;
+          margin-bottom: 1.6rem;
           box-shadow: 0 2px 10px var(--shadow);
           transition: background-color 0.3s ease;
         }
@@ -475,7 +501,7 @@ export default function GamePage() {
         }
 
         .timer-bar-container {
-          width: 100%;
+          width: 150%;
           height: 8px;
           background: var(--border);
           border-radius: 4px;
@@ -493,22 +519,24 @@ export default function GamePage() {
           background: var(--card-bg);
           padding: 2.5rem;
           border-radius: 12px;
-          margin-bottom: 2rem;
+          margin-bottom: 1.6rem;
           box-shadow: 0 4px 20px var(--shadow);
           transition: background-color 0.3s ease;
         }
 
         .question-text {
           color: var(--text-primary);
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.2rem;
           font-size: 1.5rem;
           line-height: 1.4;
+          margin: 0;
+          margin-bottom: 1rem;
         }
 
         .question-meta {
           display: flex;
           gap: 1rem;
-          margin-bottom: 2rem;
+          margin-bottom: 1.6rem;
         }
 
         .category,
@@ -533,7 +561,7 @@ export default function GamePage() {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1rem;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.2rem;
         }
 
         .answer-btn {
@@ -549,11 +577,13 @@ export default function GamePage() {
           font-weight: 500;
         }
 
-        .answer-btn:hover:not(:disabled) {
-          border-color: var(--primary);
-          background: var(--card-hover);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px var(--shadow);
+        @media (hover: hover) and (pointer: fine) {
+          .answer-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: var(--card-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+          }
         }
 
         .answer-btn:disabled {
@@ -605,7 +635,7 @@ export default function GamePage() {
         }
 
         .scoreboard h3 {
-          margin-bottom: 1rem;
+          margin-bottom: 0.8rem;
           color: var(--text-primary);
           font-size: 1.1rem;
         }
@@ -637,25 +667,69 @@ export default function GamePage() {
 
         @media (max-width: 768px) {
           .game-container {
-            padding: 1rem;
+            padding: 0;
           }
 
           .game-header {
             flex-direction: column;
             gap: 0.5rem;
             text-align: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 0;
+            box-shadow: none;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
           }
 
           .question-card {
-            padding: 1.5rem;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 1.5rem 1rem;
+            margin-bottom: 0;
           }
 
           .question-text {
             font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+          }
+
+          .question-meta {
+            margin-bottom: 1.2rem;
           }
 
           .answers {
             grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.2rem;
+          }
+
+          .answer-btn {
+            padding: 1.25rem;
+            font-size: 1rem;
+            border-radius: 8px;
+          }
+
+          .result {
+            border-radius: 0;
+            margin-left: -1rem;
+            margin-right: -1rem;
+            padding: 1rem;
+          }
+
+          .scoreboard {
+            border-radius: 0;
+            box-shadow: none;
+            padding: 1.5rem 1rem;
+            border-top: 1px solid var(--border);
+          }
+
+          .score-item {
+            padding: 0.75rem;
+          }
+
+          .btn-home {
+            width: 100%;
           }
         }
       `}</style>

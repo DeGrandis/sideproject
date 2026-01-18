@@ -55,8 +55,15 @@ export default function HomePage() {
   };
 
   const handleJoinLobby = (lobbyId: string) => {
-    setJoinLobbyId(lobbyId);
-    setShowNicknameModal(true);
+    if (nickname.trim()) {
+      // User already has a nickname, join directly
+      console.log('Joining lobby:', lobbyId, 'with nickname:', nickname.trim());
+      socket?.emit('lobby:join', lobbyId, nickname.trim());
+    } else {
+      // No nickname set, show modal
+      setJoinLobbyId(lobbyId);
+      setShowNicknameModal(true);
+    }
   };
 
   const handleSubmitNickname = () => {
@@ -221,12 +228,12 @@ export default function HomePage() {
         .hero {
           text-align: center;
           color: var(--text-primary);
-          margin-bottom: 3rem;
+          margin-bottom: 2.4rem;
         }
 
         .hero h1 {
           font-size: 3rem;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.4rem;
         }
 
         .hero p {
@@ -239,7 +246,7 @@ export default function HomePage() {
           color: white;
           padding: 1rem;
           border-radius: 4px;
-          margin-bottom: 2rem;
+          margin-bottom: 1.6rem;
           text-align: center;
           max-width: 600px;
           margin-left: auto;
@@ -257,7 +264,7 @@ export default function HomePage() {
         .create-lobby-section,
         .lobbies-section {
           background: var(--card-bg);
-          padding: 2rem;
+          padding: rem;
           border-radius: 8px;
           box-shadow: 0 4px 20px var(--shadow);
           transition: background-color 0.3s ease;
@@ -273,37 +280,36 @@ export default function HomePage() {
 
         h2 {
           color: var(--text-primary);
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.4rem;
         }
 
         p {
           color: var(--text-secondary);
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.2rem;
         }
 
         .nickname-display {
           width: 100%;
-          margin-top: 1.5rem;
-          padding: 1.1rem;
+          margin-top: 1rem;
+          padding: 1rem;
           background: var(--bg-secondary);
           border-radius: 8px;
-
         }
 
         .nickname-display label {
           display: block;
           color: var(--text-primary);
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           font-weight: 600;
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.6rem;
         }
 
         .nickname-display input {
           width: 100%;
-          padding: 1rem;
+          padding: .9rem;
           border: 2px solid var(--border);
           border-radius: 4px;
-          font-size: 1rem;
+          font-size: .9rem;
           box-sizing: border-box;
           background: var(--card-bg);
           color: var(--text-primary);
@@ -443,7 +449,7 @@ export default function HomePage() {
         }
 
         .modal h2 {
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.2rem;
           text-align: center;
           color: var(--text-primary);
         }
@@ -454,7 +460,7 @@ export default function HomePage() {
           border: 2px solid var(--border);
           border-radius: 4px;
           font-size: 1rem;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.2rem;
           box-sizing: border-box;
           background: var(--bg-secondary);
           color: var(--text-primary);
@@ -490,12 +496,53 @@ export default function HomePage() {
         }
 
         @media (max-width: 768px) {
-          .main-content {
-            grid-template-columns: 1fr;
+          .home-container {
+            padding: 0;
+          }
+
+          .hero {
+            padding: 1.5rem 1rem;
+            margin-bottom: 0;
           }
 
           .hero h1 {
             font-size: 2rem;
+          }
+
+          .hero p {
+            font-size: 1rem;
+          }
+
+          .error-banner {
+            border-radius: 0;
+            margin-bottom: 0;
+          }
+
+          .main-content {
+            grid-template-columns: 1fr;
+            gap: 0;
+          }
+
+          .create-lobby-section,
+          .lobbies-section {
+            border-radius: 0;
+            box-shadow: none;
+            padding: 1.25rem 1rem;
+            border-top: 1px solid var(--border);
+          }
+
+          .create-lobby-section {
+            border-bottom: 1px solid var(--border);
+          }
+
+          .nickname-display {
+            padding: 0.9rem;
+          }
+
+          .modal {
+            border-radius: 12px;
+            width: calc(100% - 2rem);
+            margin: 1rem;
           }
         }
       `}</style>

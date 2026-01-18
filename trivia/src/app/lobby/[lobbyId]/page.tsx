@@ -221,7 +221,7 @@ export default function LobbyPage() {
           color: white;
           padding: 1rem;
           border-radius: 4px;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.2rem;
           text-align: center;
           max-width: 600px;
         }
@@ -238,7 +238,7 @@ export default function LobbyPage() {
 
         .lobby-header {
           text-align: center;
-          margin-bottom: 2rem;
+          margin-bottom: 1.6rem;
           border-bottom: 2px solid var(--border);
           padding-bottom: 1rem;
         }
@@ -254,7 +254,7 @@ export default function LobbyPage() {
           justify-content: center;
           gap: 1rem;
           flex-wrap: wrap;
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.6rem;
         }
 
         .meta-item {
@@ -287,11 +287,11 @@ export default function LobbyPage() {
         }
 
         .players-list {
-          margin-bottom: 2rem;
+          margin-bottom: 1.6rem;
         }
 
         .players-list h3 {
-          margin-bottom: 1rem;
+          margin-bottom: 0.8rem;
           color: var(--text-primary);
         }
 
@@ -300,7 +300,7 @@ export default function LobbyPage() {
           justify-content: space-between;
           align-items: center;
           padding: 1rem;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.4rem;
           background: var(--card-hover);
           border-radius: 4px;
           border: 1px solid var(--border);
@@ -374,15 +374,33 @@ export default function LobbyPage() {
 
         @media (max-width: 768px) {
           .lobby-container {
-            padding: 1rem;
+            padding: 0;
+            justify-content: flex-start;
           }
 
           .lobby-card {
-            padding: 1.5rem;
+            max-width: 100%;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 1.5rem 1rem;
+            min-height: 100vh;
+          }
+
+          .lobby-header {
+            padding-bottom: 1rem;
+            margin-bottom: 0.9rem;
           }
 
           .lobby-header h2 {
             font-size: 1.5rem;
+          }
+
+          .info-grid {
+            gap: 0.75rem;
+          }
+
+          .players-list {
+            gap: 0.5rem;
           }
         }
       `}</style>
