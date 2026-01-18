@@ -55,7 +55,7 @@ services:
       options:
         awslogs-region: "us-east-1"
         awslogs-group: "/containers/trivia"
-        awslogs-stream-prefix: "trivia"
+        awslogs-stream: "trivia"
         awslogs-create-group: "true"
     networks:
       - client-side
