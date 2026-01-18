@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.709.0",
-    "@serdnam/pino-cloudwatch-transport": "^1.0.4",
     "next": "^14.2.0",
     "pino": "^8.17.0",
     "react": "^18.3.0",

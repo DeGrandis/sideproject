@@ -2,33 +2,35 @@ import pino from 'pino';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const logGroupName = '/containers/trivia';
-const region = process.env.AWS_REGION || 'us-east-1';
 
-// Create Pino logger
+// Log which mode we're in on startup
+console.log(`[Logger Init] Environment: ${process.env.NODE_ENV}, Production: ${isProduction}`);
+
+// In production, output JSON to stdout (Docker awslogs captures it)
+// In development, use pretty printing
 const logger = pino({
-  level: process.env.LOG_LEVEL || 'info',
+  level: process.env.LOG_LEVEL || (isProduction ? 'info' : 'debug'),
   base: {
     env: process.env.NODE_ENV,
   },
   timestamp: pino.stdTimeFunctions.isoTime,
-  // Configure transport based on environment
-  transport: isProduction ? {
-    target: '@serdnam/pino-cloudwatch-transport',
-    options: {
-      logGroupName,
-      logStreamName: `app-${new Date().toISOString().split('T')[0]}`, // Daily log streams
-      awsRegion: region,
-      interval: 1000, // Batch logs every 1 second
-    }
-  } : {
+  // Pretty print only in development
+  transport: !isProduction ? {
     target: 'pino-pretty',
     options: {
       colorize: true,
       translateTime: 'HH:MM:ss Z',
       ignore: 'pid,hostname',
     }
-  }
+  } : undefined // Production: output JSON to stdout, Docker awslogs handles CloudWatch
 });
+
+// Log successful initialization
+logger.info({ 
+  isProduction, 
+  logDestination: isProduction ? 'stdout -> Docker awslogs -> CloudWatch' : 'console (pretty)',
+  logGroupName: isProduction ? logGroupName : 'n/a'
+}, 'Logger initialized');
 
 export default logger;
 
