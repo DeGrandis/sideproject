@@ -1,5 +1,33 @@
 # Trivia App - Quick Reference Notes
 
+## Logging
+
+### Pino Logger (Structured Logging)
+- **Library**: Pino with CloudWatch transport (non-blocking, asynchronous)
+- **Log Location**: 
+  - Development: Colorized console output
+  - Production: CloudWatch Logs at `/containers/trivia`
+- **Documentation**: See [PINO_LOGGING.md](PINO_LOGGING.md) for detailed usage
+
+### Key Event Tracking
+All major events logged with structured data:
+- `lobby_created` - Track lobby creation with theme, difficulty, player info
+- `player_joined` - Track when players join lobbies
+- Game lifecycle events
+
+### Query Examples (CloudWatch Logs Insights)
+```sql
+# Count lobbies by theme
+fields @timestamp, theme, lobbyName
+| filter event = "lobby_created"
+| stats count() by theme
+
+# Track player activity
+fields @timestamp, event, playerName, lobbyName
+| filter event in ["lobby_created", "player_joined"]
+| sort @timestamp desc
+```
+
 ## CloudWatch Logs - Viewing Logs Remotely
 
 ### Requirements

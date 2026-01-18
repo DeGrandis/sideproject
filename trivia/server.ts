@@ -3,6 +3,15 @@ import { parse } from 'url';
 import next from 'next';
 import { Server as SocketIOServer } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
+import logger from './src/lib/logger.js';
+
+// Simple user-agent fingerprinting
+function fingerprintUserAgent(userAgent: string | undefined): string {
+  if (!userAgent) return 'unknown';
+  // Create a short hash of the user agent for privacy
+  return crypto.createHash('md5').update(userAgent).digest('hex').substring(0, 10);
+}
 
 // Import types and game state - using relative paths for tsx compatibility
 import type {
@@ -28,10 +37,17 @@ const handle = app.getRequestHandler();
 async function fetchQuestionsFromAPI(
   difficulty: 'easy' | 'medium' | 'hard',
   theme?: string,
-  count: number = 10
+  count: number = 10,
+  userAgentFingerprint?: string
 ): Promise<Question[]> {
   try {
-    console.log(`Fetching questions for difficulty: ${difficulty}, theme: ${theme || 'general'}`);
+    logger.info({ 
+      event: 'questions_requested',
+      difficulty, 
+      theme: theme || 'general', 
+      count,
+      userAgentFingerprint: userAgentFingerprint || 'unknown'
+    }, 'Fetching questions from Bedrock');
     
     // Generate questions using AWS Bedrock
     const generatedQuestions = await generateQuestions({
@@ -50,8 +66,12 @@ async function fetchQuestionsFromAPI(
       difficulty,
     }));
   } catch (error) {
-    console.error('Error fetching questions from Bedrock:', error);
-    console.log('Falling back to mock questions');
+    logger.error({ 
+      error, 
+      difficulty, 
+      theme,
+      userAgentFingerprint: userAgentFingerprint || 'unknown'
+    }, 'Error fetching questions from Bedrock, falling back to mock');
     // Fallback to mock questions on error
     return MOCK_QUESTIONS.map((q) => ({
       ...q,
@@ -91,7 +111,7 @@ const MOCK_QUESTIONS: Question[] = [
 ];
 
 app.prepare().then(() => {
-  console.log('✓ Next.js prepared');
+  logger.info('Next.js application prepared');
   
   // Create HTTP server without request handler
   const server = createServer(async (req, res) => {
@@ -103,7 +123,7 @@ app.prepare().then(() => {
         await handle(req, res, parsedUrl);
       }
     } catch (err) {
-      console.error('Error occurred handling', req.url, err);
+      logger.error({ err, url: req.url }, 'Error handling HTTP request');
       res.statusCode = 500;
       res.end('internal server error');
     }
@@ -127,10 +147,23 @@ app.prepare().then(() => {
     allowEIO3: true,
   });
 
-  console.log('✓ Socket.IO server initialized on path: /api/socket');
+  logger.info({ path: '/api/socket' }, 'Socket.IO server initialized');
 
   io.on('connection', (socket) => {
-    console.log('✅ Client connected:', socket.id);
+    // Extract client information
+    const clientIp = socket.handshake.headers['x-forwarded-for'] || 
+                     socket.handshake.headers['x-real-ip'] || 
+                     socket.handshake.address;
+    const userAgent = socket.handshake.headers['user-agent'];
+    const userAgentFingerprint = fingerprintUserAgent(userAgent);
+    
+    logger.info({ 
+      event: 'client_connected',
+      socketId: socket.id,
+      clientIp: clientIp,
+      userAgent: userAgent,
+      userAgentFingerprint: userAgentFingerprint
+    }, 'Client connected');
 
     // === LOBBY EVENTS ===
 
@@ -150,15 +183,15 @@ app.prepare().then(() => {
         // This ensures they receive game:started and other room broadcasts
         const socketRooms = Array.from(socket.rooms);
         if (!socketRooms.includes(lobbyId)) {
-          console.log(`Socket ${socket.id} joining room ${lobbyId} via lobby:get`);
+          logger.debug({ socketId: socket.id, lobbyId, via: 'lobby:get' }, 'Socket joining room');
           socket.join(lobbyId);
         }
 
         const players = gameState.getPlayersInLobby(lobbyId);
         socket.emit('lobby:data', lobby, players);
-        console.log(`Sent lobby data for ${lobbyId} to ${socket.id}`);
+        logger.debug({ lobbyId, socketId: socket.id, playerCount: players.length }, 'Sent lobby data');
       } catch (error) {
-        console.error('Error getting lobby:', error);
+        logger.error({ error, lobbyId }, 'Error getting lobby');
         socket.emit('lobby:error', 'Failed to get lobby data');
       }
     });
@@ -189,13 +222,33 @@ app.prepare().then(() => {
         gameState.createPlayer(player);
 
         // Fetch questions dynamically based on difficulty and theme
-        console.log('Fetching questions for lobby...');
         const questions = await fetchQuestionsFromAPI(
           options.difficulty || 'medium',
           options.theme?.trim(),
-          options.questionCount || 3
+          options.questionCount || 3,
+          userAgentFingerprint
         );
-        console.log(`Fetched ${questions.length} questions`);
+        logger.info({ 
+          event: 'questions_fetched',
+          questionCount: questions.length, 
+          difficulty: options.difficulty, 
+          theme: options.theme,
+          userAgentFingerprint: userAgentFingerprint
+        }, 'Questions fetched successfully');
+
+        // Log each question individually for searchability
+        questions.forEach((q, index) => {
+          logger.info({
+            event: 'question_generated',
+            lobbyId,
+            questionIndex: index,
+            questionText: q.question,
+            category: q.category,
+            difficulty: q.difficulty,
+            theme: options.theme,
+            userAgentFingerprint: userAgentFingerprint
+          }, 'Question generated');
+        });
 
         // Create lobby with new parameters including questions
         const lobby = gameState.createLobby(
@@ -221,9 +274,19 @@ app.prepare().then(() => {
         socket.emit('lobby:joined', lobby, [player]);
         io.emit('lobby:updated', gameState.getAllLobbies());
 
-        console.log(`Player ${options.nickname} created lobby "${options.lobbyName}" (${lobbyId}) with ${questions.length} questions`);
+        logger.info({ 
+          event: 'lobby_created',
+          playerId,
+          playerName: options.nickname,
+          lobbyId,
+          lobbyName: options.lobbyName,
+          questionCount: questions.length,
+          difficulty: options.difficulty,
+          theme: options.theme,
+          userAgentFingerprint: userAgentFingerprint
+        }, 'Player created lobby');
       } catch (error) {
-        console.error('Error creating lobby:', error);
+        logger.error({ error, nickname: options?.nickname, lobbyName: options?.lobbyName }, 'Error creating lobby');
         socket.emit('lobby:error', 'Failed to create lobby');
       }
     });
@@ -275,9 +338,9 @@ app.prepare().then(() => {
         socket.to(lobbyId).emit('lobby:player-joined', player);
         io.emit('lobby:updated', gameState.getAllLobbies());
 
-        console.log(`Player ${nickname} joined lobby ${lobbyId}`);
+        logger.info({ event: 'player_joined', playerId, playerName: nickname, lobbyId }, 'Player joined lobby');
       } catch (error) {
-        console.error('Error joining lobby:', error);
+        logger.error({ error, nickname, lobbyId }, 'Error joining lobby');
         socket.emit('lobby:error', 'Failed to join lobby');
       }
     });
@@ -330,14 +393,14 @@ app.prepare().then(() => {
         // Ensure socket is in the game room
         const socketRooms = Array.from(socket.rooms);
         if (!socketRooms.includes(lobbyId)) {
-          console.log(`Socket ${socket.id} joining game room ${lobbyId} via game:get`);
+          logger.debug({ socketId: socket.id, lobbyId, via: 'game:get' }, 'Socket joining game room');
           socket.join(lobbyId);
         }
 
         socket.emit('game:data', game);
-        console.log(`Sent game data for ${lobbyId} to ${socket.id}`);
+        logger.debug({ lobbyId, socketId: socket.id, questionCount: game.questions.length }, 'Sent game data');
       } catch (error) {
-        console.error('Error getting game:', error);
+        logger.error({ error, lobbyId }, 'Error getting game');
         socket.emit('lobby:error', 'Failed to get game data');
       }
     });
@@ -369,14 +432,23 @@ app.prepare().then(() => {
     });
 
     socket.on('disconnect', () => {
-      console.log('Client disconnected:', socket.id);
+      logger.info({ 
+        event: 'client_disconnected',
+        socketId: socket.id,
+        userAgentFingerprint: userAgentFingerprint
+      }, 'Client disconnected');
       handlePlayerLeave(socket, io);
     });
   });
 
   server.listen(port, () => {
-    console.log(`\n🚀 Server ready on http://${hostname}:${port}`);
-    console.log(`📡 Socket.IO listening on ws://${hostname}:${port}/api/socket\n`);
+    logger.info({ 
+      hostname, 
+      port, 
+      environment: process.env.NODE_ENV,
+      httpUrl: `http://${hostname}:${port}`,
+      socketUrl: `ws://${hostname}:${port}/api/socket`
+    }, 'Server started successfully');
   });
 });
 

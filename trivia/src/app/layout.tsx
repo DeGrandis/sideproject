@@ -2,7 +2,7 @@ import { SocketProvider } from '@/components/SocketProvider';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import ThemeToggle from '@/components/ThemeToggle';
 import './globals.css';
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
   title: {
@@ -57,11 +57,12 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   manifest: '/manifest.json',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#f5f5f5' },
     { media: '(prefers-color-scheme: dark)', color: '#1a1a1a' },
