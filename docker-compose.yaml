@@ -51,11 +51,11 @@ services:
       - NODE_ENV=production
       - AWS_REGION=${AWS_REGION:-us-east-1}
     logging:
-      driver: awslogs
+      driver: "awslogs"
       options:
-        awslogs-region: us-east-1
-        awslogs-group: /containers/trivia
-        awslogs-stream-prefix: trivia
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/trivia"
+        awslogs-stream-prefix: "trivia"
         awslogs-create-group: "true"
     networks:
       - client-side
