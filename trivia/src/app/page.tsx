@@ -94,6 +94,8 @@ export default function HomePage() {
     setNickname(newNickname);
     if (newNickname.trim()) {
       localStorage.setItem('trivia-nickname', newNickname.trim());
+    } else {
+      localStorage.removeItem('trivia-nickname');
     }
   };
 
@@ -127,7 +129,7 @@ export default function HomePage() {
             Create Lobby
           </button>
 
-                    {nickname && (
+          {nickname && (
             <div className="nickname-display">
               <label htmlFor="nickname-input">Your Nickname</label>
               <input
