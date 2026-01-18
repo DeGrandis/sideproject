@@ -13,12 +13,22 @@ export default function HomePage() {
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [joinLobbyId, setJoinLobbyId] = useState<string | null>(null);
   const [nickname, setNickname] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
-  // Load saved nickname from localStorage on mount
+  // Load saved nickname and theme from localStorage on mount
   useEffect(() => {
     const savedNickname = localStorage.getItem('trivia-nickname');
     if (savedNickname) {
       setNickname(savedNickname);
+    }
+    
+    const savedTheme = localStorage.getItem('trivia-theme');
+    if (savedTheme === 'light') {
+      setIsDarkMode(false);
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      setIsDarkMode(true);
+      document.documentElement.setAttribute('data-theme', 'dark');
     }
   }, []);
 
@@ -90,6 +100,14 @@ export default function HomePage() {
     setJoinLobbyId(null);
   };
 
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    const theme = newMode ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('trivia-theme', theme);
+  };
+
   const handleNicknameChange = (newNickname: string) => {
     setNickname(newNickname);
     if (newNickname.trim()) {
@@ -110,12 +128,28 @@ export default function HomePage() {
   return (
     <div className="home-container">
       <div className="hero">
-        <h1>Infinitivia</h1>
+        <h1>
+          <div className="infinity-container">
+            <svg className="infinity-symbol" viewBox="0 0 100 35" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 10,17.5 C 10,8 20,4 30,4 C 40,4 45,12 50,17.5 C 55,23 60,31 70,31 C 80,31 90,27 90,17.5 C 90,8 80,4 70,4 C 60,4 55,12 50,17.5 C 45,23 40,31 30,31 C 20,31 10,27 10,17.5 Z" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="3"/>
+              <circle className="swoosh" r="10" fill="var(--primary)">
+                <animateMotion
+                  dur="5s"
+                  repeatCount="indefinite"
+                  path="M 10,17.5 C 10,8 20,4 30,4 C 40,4 45,12 50,17.5 C 55,23 60,31 70,31 C 80,31 90,27 90,17.5 C 90,8 80,4 70,4 C 60,4 55,12 50,17.5 C 45,23 40,31 30,31 C 20,31 10,27 10,17.5 Z"
+                  calcMode="linear"
+                />
+              </circle>
+            </svg>
+          </div>
+          Infinitivia
+        </h1>
       </div>
 
 
-          
-          
       {error && <div className="error-banner">{error}</div>}
 
       <div className="main-content">
@@ -236,6 +270,27 @@ export default function HomePage() {
         .hero h1 {
           font-size: 3rem;
           margin-bottom: 0.4rem;
+          display: inline-block;
+          position: relative;
+        }
+
+        .infinity-container {
+          position: absolute;
+          left: -70px;
+          top: 50%;
+          transform: translateY(-50%);
+          display: flex;
+          align-items: center;
+        }
+
+        .infinity-symbol {
+          width: 60px;
+          height: 30px;
+          color: var(--text-primary);
+        }
+
+        .swoosh {
+          filter: drop-shadow(0 0 8px var(--primary));
         }
 
         .hero p {
@@ -266,7 +321,7 @@ export default function HomePage() {
         .create-lobby-section,
         .lobbies-section {
           background: var(--card-bg);
-          padding: rem;
+          padding: 1.25rem 1rem;
           border-radius: 8px;
           box-shadow: 0 4px 20px var(--shadow);
           transition: background-color 0.3s ease;
@@ -490,7 +545,36 @@ export default function HomePage() {
 
         .btn-secondary {
           background: var(--border);
-          color: var(--text-primary);
+          c
+
+          .infinity-symbol {
+            width: 45px;
+            height: 22px;
+          }olor: var(--text-primary);
+        }
+
+        .theme-toggle {
+          position: fixed;
+          bottom: 2rem;
+          right: 2rem;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: var(--card-bg);
+          border: 2px solid var(--border);
+          font-size: 1.5rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px var(--shadow);
+          transition: all 0.3s ease;
+          z-index: 100;
+        }
+
+        .theme-toggle:hover {
+          transform: scale(1.1) rotate(15deg);
+          box-shadow: 0 6px 20px var(--shadow-hover);
         }
 
         .btn-secondary:hover {
@@ -522,6 +606,14 @@ export default function HomePage() {
 
           .main-content {
             grid-template-columns: 1fr;
+
+          .theme-toggle {
+            bottom: 1rem;
+            right: 1rem;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+          }
             gap: 0;
           }
 
@@ -546,6 +638,7 @@ export default function HomePage() {
             width: calc(100% - 2rem);
             margin: 1rem;
           }
+
         }
       `}</style>
     </div>

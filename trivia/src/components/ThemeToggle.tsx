@@ -13,12 +13,12 @@ export default function ThemeToggle() {
           position: fixed;
           top: 1rem;
           right: 1rem;
-          width: 50px;
-          height: 50px;
+          width: 35px;
+          height: 35px;
           border-radius: 50%;
           border: 2px solid var(--border);
           background: var(--card-bg);
-          font-size: 1.2rem;
+          font-size: .8rem;
           cursor: pointer;
           display: flex;
           align-items: center;
