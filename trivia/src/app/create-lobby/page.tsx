@@ -11,7 +11,6 @@ export default function CreateLobbyPage() {
   
   const [nickname, setNickname] = useState('');
   const [showNicknameField, setShowNicknameField] = useState(false);
-  const [lobbyName, setLobbyName] = useState('');
   const [playerLimit, setPlayerLimit] = useState(4);
   const [questionCount, setQuestionCount] = useState(3);
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
@@ -68,12 +67,6 @@ export default function CreateLobbyPage() {
       return;
     }
     
-    if (!lobbyName.trim()) {
-      setError('Please enter a lobby name');
-      setTimeout(() => setError(null), 3000);
-      return;
-    }
-    
     if (playerLimit < 2 || playerLimit > 20) {
       setError('Player limit must be between 2 and 20');
       setTimeout(() => setError(null), 3000);
@@ -98,9 +91,12 @@ export default function CreateLobbyPage() {
       return;
     }
 
+    // Generate random 6-digit lobby name
+    const randomLobbyName = Math.floor(100000 + Math.random() * 900000).toString();
+
     console.log('Creating lobby with:', {
       nickname: nickname.trim(),
-      lobbyName: lobbyName.trim(),
+      lobbyName: randomLobbyName,
       playerLimit,
       questionCount,
       difficulty,
@@ -116,7 +112,7 @@ export default function CreateLobbyPage() {
     // Emit lobby:create event - will navigate on lobby:joined
     socket.emit('lobby:create', {
       nickname: nickname.trim(),
-      lobbyName: lobbyName.trim(),
+      lobbyName: randomLobbyName,
       maxPlayers: playerLimit,
       questionCount,
       difficulty,
@@ -172,19 +168,6 @@ export default function CreateLobbyPage() {
         )}
 
         <div className="form-section">
-          <label htmlFor="lobbyName">Lobby Name *</label>
-          <input
-            id="lobbyName"
-            type="text"
-            value={lobbyName}
-            onChange={(e) => setLobbyName(e.target.value)}
-            placeholder="Enter a lobby name"
-            maxLength={30}
-          />
-          <span className="input-hint">{lobbyName.length}/30 characters</span>
-        </div>
-
-        <div className="form-section">
           <label htmlFor="playerLimit">Player Limit *</label>
           <div className="player-limit-control">
             <button
@@ -228,20 +211,20 @@ export default function CreateLobbyPage() {
               id="questionCount"
               type="number"
               value={questionCount}
-              onChange={(e) => setQuestionCount(Math.max(2, Math.min(6, parseInt(e.target.value) || 2)))}
+              onChange={(e) => setQuestionCount(Math.max(2, Math.min(10, parseInt(e.target.value) || 2)))}
               min={2}
-              max={6}
+              max={10}
               className="player-limit-input"
             />
             <button
               type="button"
-              onClick={() => setQuestionCount(Math.min(6, questionCount + 1))}
+              onClick={() => setQuestionCount(Math.min(10, questionCount + 1))}
               className="btn-counter"
             >
               +
             </button>
           </div>
-          <span className="input-hint">Between 2 and 6 questions</span>
+          <span className="input-hint">Between 2 and 10 questions</span>
         </div>
 
         <div className="form-section">

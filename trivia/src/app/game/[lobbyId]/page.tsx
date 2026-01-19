@@ -26,6 +26,7 @@ export default function GamePage() {
   const [isFinished, setIsFinished] = useState(false);
   const [finalScores, setFinalScores] = useState<{ playerId: string; nickname: string; score: number }[]>([]);
   const [reviewQuestions, setReviewQuestions] = useState<Question[]>([]);
+  const [userAnswers, setUserAnswers] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     if (!socket) return;
@@ -133,6 +134,8 @@ export default function GamePage() {
     if (!socket || !currentQuestion || selectedAnswer !== null) return;
 
     setSelectedAnswer(answerIndex);
+    // Store the user's answer for review later
+    setUserAnswers(prev => new Map(prev).set(currentQuestion.id, answerIndex));
     socket.emit('game:answer', currentQuestion.id, answerIndex);
   };
 
@@ -177,23 +180,43 @@ export default function GamePage() {
           {reviewQuestions.length > 0 && (
             <div className="question-review">
               <h3>Question Review</h3>
-              {reviewQuestions.map((q, index) => (
-                <div key={q.id} className="review-item">
-                  <div className="review-question">
-                    <strong>Q{index + 1}:</strong> {q.question}
+              {reviewQuestions.map((q, index) => {
+                const userAnswerIndex = userAnswers.get(q.id);
+                const userWasCorrect = userAnswerIndex === q.correctAnswer;
+                
+                return (
+                  <div key={q.id} className="review-item">
+                    <div className="review-question">
+                      <strong>Q{index + 1}:</strong> {q.question}
+                    </div>
+                    <div className="review-options">
+                      {q.options.map((option, optIndex) => {
+                        const isCorrectAnswer = optIndex === q.correctAnswer;
+                        const isUserAnswer = optIndex === userAnswerIndex;
+                        
+                        let className = 'review-option';
+                        if (isCorrectAnswer && isUserAnswer) {
+                          className += ' user-correct';
+                        } else if (isCorrectAnswer) {
+                          className += ' correct-answer';
+                        } else if (isUserAnswer) {
+                          className += ' user-wrong';
+                        }
+                        
+                        return (
+                          <div key={optIndex} className={className}>
+                            {isCorrectAnswer && <Check className="inline-icon-sm" />}
+                            {isUserAnswer && !isCorrectAnswer && <X className="inline-icon-sm" />}
+                            {option}
+                            {isUserAnswer && isCorrectAnswer && <span className="badge">Your answer</span>}
+                            {isUserAnswer && !isCorrectAnswer && <span className="badge">Your answer</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                  <div className="review-options">
-                    {q.options.map((option, optIndex) => (
-                      <div
-                        key={optIndex}
-                        className={`review-option ${optIndex === q.correctAnswer ? 'correct-answer' : ''}`}
-                      >
-                        {optIndex === q.correctAnswer && <Check className="inline-icon-sm" />}{option}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
           
@@ -326,6 +349,30 @@ export default function GamePage() {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+          .review-option.user-correct {
+            background: var(--success);
+            color: white;
+            font-weight: 600;
+            border: 3px solid #16a34a;
+          }
+
+          .review-option.user-wrong {
+            background: var(--danger);
+            color: white;
+            font-weight: 600;
+          }
+
+          .badge {
+            margin-left: auto;
+            padding: 0.15rem 0.5rem;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
             margin-left: 1rem;
           }
 
@@ -341,8 +388,8 @@ export default function GamePage() {
           }
 
           .review-option.correct-answer {
-            background: var(--success);
-            color: white;
+            background: #d1d5db;
+            color: #374151;
             font-weight: 600;
           }
 
