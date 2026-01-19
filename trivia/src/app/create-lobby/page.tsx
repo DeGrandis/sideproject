@@ -73,8 +73,8 @@ export default function CreateLobbyPage() {
       return;
     }
     
-    if (questionCount < 2 || questionCount > 6) {
-      setError('Question count must be between 2 and 6');
+    if (questionCount < 2 || questionCount > 10) {
+      setError('Question count must be between 2 and 10');
       setTimeout(() => setError(null), 3000);
       return;
     }

@@ -488,8 +488,8 @@ export default function GamePage() {
                   className={className}
                 >
                   {option}
-                  {showCorrect && isCorrect && <Check className="inline-icon-sm" />}
-                  {showCorrect && isSelected && !isCorrect && <X className="inline-icon-sm" />}
+                  {showCorrect && isCorrect && <Check className="button-icon" />}
+                  {showCorrect && isSelected && !isCorrect && <X className="button-icon" />}
                 </button>
               );
             })}
@@ -658,6 +658,9 @@ export default function GamePage() {
           transition: all 0.2s;
           text-align: left;
           font-weight: 500;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
 
         @media (hover: hover) and (pointer: fine) {
@@ -697,6 +700,10 @@ export default function GamePage() {
           text-align: center;
           font-weight: 600;
           font-size: 1.2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.35rem;
         }
 
         .correct-result {
@@ -756,7 +763,7 @@ export default function GamePage() {
           display: inline-block;
           width: 1.25em;
           height: 1.25em;
-          vertical-align: text-bottom;
+          vertical-align: middle;
           margin-right: 0.25rem;
         }
 
@@ -764,8 +771,15 @@ export default function GamePage() {
           display: inline-block;
           width: 1em;
           height: 1em;
-          vertical-align: text-bottom;
+          vertical-align: middle;
           margin-left: 0.35rem;
+        }
+
+        .button-icon {
+          display: inline-block;
+          width: 1em;
+          height: 1em;
+          flex-shrink: 0;
         }
 
         .scoreboard {
