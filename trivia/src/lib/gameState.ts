@@ -29,7 +29,8 @@ class GameStateManager {
     maxPlayers: number = 8,
     difficulty: 'easy' | 'medium' | 'hard' = 'medium',
     theme?: string,
-    questions?: any[]
+    questions?: any[],
+    timedMode: boolean = false
   ): LobbyInfo {
     const lobby: LobbyInfo = {
       id: lobbyId,
@@ -41,6 +42,7 @@ class GameStateManager {
       theme,
       questions,
       status: 'waiting',
+      timedMode,
     };
     this.lobbies.set(lobbyId, lobby);
     this.lobbyPlayers.set(lobbyId, new Set());

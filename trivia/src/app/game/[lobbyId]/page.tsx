@@ -13,6 +13,8 @@ export default function GamePage() {
 
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentPlayerId, setCurrentPlayerId] = useState<string | undefined>();
+  const [hostId, setHostId] = useState<string | undefined>();
+  const [timedMode, setTimedMode] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState<Omit<Question, 'correctAnswer'> | null>(null);
   const [questionNumber, setQuestionNumber] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -27,9 +29,16 @@ export default function GamePage() {
   useEffect(() => {
     if (!socket) return;
 
-    // Request game data on mount
+    // Request game data and lobby data on mount
     console.log('Requesting game data for lobby:', lobbyId);
     socket.emit('game:get', lobbyId);
+    socket.emit('lobby:get', lobbyId);
+
+    const handleLobbyData = (lobby: any, players: Player[]) => {
+      console.log('Lobby data received:', lobby);
+      setHostId(lobby.hostId);
+      setTimedMode(lobby.timedMode ?? true);
+    };
 
     const handleGameData = (game: GameState) => {
       console.log('Game data received:', game);
@@ -89,6 +98,7 @@ export default function GamePage() {
     };
 
     // Register event listeners
+    socket.on('lobby:data', handleLobbyData);
     socket.on('game:data', handleGameData);
     socket.on('game:started', handleGameStarted);
     socket.on('game:question', handleGameQuestion);
@@ -97,6 +107,7 @@ export default function GamePage() {
     socket.on('game:finished', handleGameFinished);
 
     return () => {
+      socket.off('lobby:data', handleLobbyData);
       socket.off('game:data', handleGameData);
       socket.off('game:started', handleGameStarted);
       socket.off('game:question', handleGameQuestion);
@@ -106,22 +117,27 @@ export default function GamePage() {
     };
   }, [socket, lobbyId]);
 
-  // Timer countdown
+  // Timer countdown (only in timed mode)
   useEffect(() => {
-    if (timeLeft <= 0 || !currentQuestion) return;
+    if (!timedMode || timeLeft <= 0 || !currentQuestion) return;
 
     const timer = setTimeout(() => {
       setTimeLeft(Math.max(0, timeLeft - 50)); // Decrease by 50ms for smooth animation
     }, 50);
 
     return () => clearTimeout(timer);
-  }, [timeLeft, currentQuestion]);
+  }, [timeLeft, currentQuestion, timedMode]);
 
   const handleAnswer = (answerIndex: number) => {
     if (!socket || !currentQuestion || selectedAnswer !== null) return;
 
     setSelectedAnswer(answerIndex);
     socket.emit('game:answer', currentQuestion.id, answerIndex);
+  };
+
+  const handleNextQuestion = () => {
+    if (!socket) return;
+    socket.emit('game:next-question');
   };
 
   const handleReturnHome = () => {
@@ -379,15 +395,21 @@ export default function GamePage() {
         <div className="question-info">
           Question {questionNumber} of {totalQuestions}
         </div>
-        <div className="timer-container">
-          <div className="timer">{(timeLeft / 1000).toFixed(2)}s</div>
-          <div className="timer-bar-container">
-            <div 
-              className="timer-bar" 
-              style={{ width: `${(timeLeft / TOTAL_TIME) * 100}%` }}
-            />
+        {timedMode ? (
+          <div className="timer-container">
+            <div className="timer">{(timeLeft / 1000).toFixed(2)}s</div>
+            <div className="timer-bar-container">
+              <div 
+                className="timer-bar" 
+                style={{ width: `${(timeLeft / TOTAL_TIME) * 100}%` }}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="timeless-mode-indicator">
+            <span className="mode-badge">⏸️ Timeless Mode</span>
+          </div>
+        )}
         <div className="score">Your Score: {currentPlayer?.score || 0}</div>
       </div>
 
@@ -426,6 +448,12 @@ export default function GamePage() {
             <div className={`result ${answerResult.correct ? 'correct-result' : 'incorrect-result'}`}>
               {answerResult.correct ? '🎉 Correct! +10 points' : '❌ Incorrect'}
             </div>
+          )}
+
+          {!timedMode && hostId === currentPlayerId && (
+            <button onClick={handleNextQuestion} className="next-question-btn">
+              Next Question →
+            </button>
           )}
         </div>
       )}
@@ -624,6 +652,46 @@ export default function GamePage() {
         .incorrect-result {
           background: var(--danger);
           color: white;
+        }
+
+        .timeless-mode-indicator {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex: 1;
+        }
+
+        .mode-badge {
+          background: var(--info);
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-size: 0.9rem;
+          font-weight: 600;
+        }
+
+        .next-question-btn {
+          width: 100%;
+          margin-top: 1.5rem;
+          padding: 1.25rem;
+          background: var(--primary);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 1.1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        .next-question-btn:hover {
+          background: var(--primary-hover);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px var(--shadow-hover);
         }
 
         .scoreboard {

@@ -37,6 +37,7 @@ export interface LobbyInfo {
   theme?: string;
   questions?: Question[];
   status: 'waiting' | 'starting' | 'in-progress';
+  timedMode: boolean;
 }
 
 // Socket event types
@@ -67,6 +68,7 @@ export interface LobbyCreateOptions {
   questionCount: number;
   difficulty: 'easy' | 'medium' | 'hard';
   theme?: string;
+  timedMode: boolean;
 }
 
 export interface ClientToServerEvents {
@@ -82,6 +84,7 @@ export interface ClientToServerEvents {
   // Game events
   'game:answer': (questionId: string, answer: number) => void;
   'game:get': (lobbyId: string) => void;
+  'game:next-question': () => void;
 }
 
 export interface InterServerEvents {

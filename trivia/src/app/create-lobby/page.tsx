@@ -15,6 +15,7 @@ export default function CreateLobbyPage() {
   const [questionCount, setQuestionCount] = useState(3);
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   const [theme, setTheme] = useState('');
+  const [timedMode, setTimedMode] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -103,6 +104,7 @@ export default function CreateLobbyPage() {
       questionCount,
       difficulty,
       theme: theme.trim(),
+      timedMode,
     });
 
     setIsCreating(true);
@@ -118,6 +120,7 @@ export default function CreateLobbyPage() {
       questionCount,
       difficulty,
       theme: theme.trim(),
+      timedMode,
     });
   };
 
@@ -263,6 +266,30 @@ export default function CreateLobbyPage() {
               onClick={() => setDifficulty('hard')}
             >
               Hard
+            </button>
+          </div>
+        </div>
+
+        <div className="form-section">
+          <label htmlFor="gameMode">Game Mode *</label>
+          <div className="game-mode-selector">
+            <button
+              type="button"
+              className={`mode-btn ${!timedMode ? 'active' : ''}`}
+              onClick={() => setTimedMode(false)}
+            >
+              <div className="mode-icon">⏸️</div>
+              <div className="mode-label">Timeless</div>
+              <div className="mode-description">Host controls question progression</div>
+            </button>
+            <button
+              type="button"
+              className={`mode-btn ${timedMode ? 'active' : ''}`}
+              onClick={() => setTimedMode(true)}
+            >
+              <div className="mode-icon">⏱️</div>
+              <div className="mode-label">Timed</div>
+              <div className="mode-description">10 seconds per question</div>
             </button>
           </div>
         </div>
@@ -465,6 +492,50 @@ export default function CreateLobbyPage() {
 
         .difficulty-btn.difficulty-hard:hover {
           border-color: #ef4444;
+        }
+
+        .game-mode-selector {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .mode-btn {
+          flex: 1;
+          padding: 1.2rem;
+          border: 2px solid var(--border);
+          border-radius: 8px;
+          background: var(--bg-secondary);
+          color: var(--text-primary);
+          cursor: pointer;
+          transition: all 0.2s;
+          text-align: center;
+        }
+
+        .mode-btn:hover {
+          background: var(--card-hover);
+          border-color: var(--primary);
+        }
+
+        .mode-btn.active {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: white;
+        }
+
+        .mode-icon {
+          font-size: 2rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .mode-label {
+          font-weight: 600;
+          font-size: 1.1rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .mode-description {
+          font-size: 0.85rem;
+          opacity: 0.8;
         }
 
         .form-actions {

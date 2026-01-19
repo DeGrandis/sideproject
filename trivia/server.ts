@@ -281,7 +281,8 @@ app.prepare().then(() => {
           options.maxPlayers || 8,
           options.difficulty || 'medium',
           options.theme?.trim(),
-          questions
+          questions,
+          options.timedMode ?? false
         );
         gameState.addPlayerToLobby(playerId, lobbyId);
 
@@ -454,6 +455,25 @@ app.prepare().then(() => {
       io.to(lobbyId).emit('game:round-end', scores);
     });
 
+    // Manual progression for timeless mode
+    socket.on('game:next-question', () => {
+      const { lobbyId, playerId } = socket.data;
+      if (!lobbyId || !playerId) return;
+
+      const lobby = gameState.getLobby(lobbyId);
+      if (!lobby || lobby.hostId !== playerId) {
+        // Only host can progress
+        return;
+      }
+
+      const game = gameState.getGame(lobbyId);
+      if (!game || game.status !== 'in-progress') return;
+
+      // Move to next question
+      gameState.updateGame(lobbyId, { currentQuestion: game.currentQuestion + 1 });
+      sendNextQuestion(io, lobbyId);
+    });
+
     socket.on('disconnect', () => {
       logger.info({ 
         event: 'client_disconnected',
@@ -588,14 +608,22 @@ function sendNextQuestion(
     game.questions.length
   );
 
-  // Move to next question after 10 seconds
-  setTimeout(() => {
-    const currentGame = gameState.getGame(gameId);
-    if (currentGame) {
-      gameState.updateGame(gameId, { currentQuestion: currentGame.currentQuestion + 1 });
-      sendNextQuestion(io, gameId);
-    }
-  }, 10000);
+  // Get lobby to check if timed mode is enabled
+  const lobby = gameState.getLobby(gameId);
+  const isTimedMode = lobby?.timedMode ?? true; // Default to timed if not specified
+
+  // Only auto-progress in timed mode
+  if (isTimedMode) {
+    // Move to next question after 10 seconds
+    setTimeout(() => {
+      const currentGame = gameState.getGame(gameId);
+      if (currentGame) {
+        gameState.updateGame(gameId, { currentQuestion: currentGame.currentQuestion + 1 });
+        sendNextQuestion(io, gameId);
+      }
+    }, 10000);
+  }
+  // In timeless mode, host manually triggers next question
 }
 
 function endGame(
