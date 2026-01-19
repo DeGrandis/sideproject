@@ -1,13 +1,14 @@
 'use client';
 
 import { useTheme } from './ThemeProvider';
+import { Moon, Sun } from 'lucide-react';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle theme">
-      {theme === 'light' ? '🌙' : '☀️'}
+      {theme === 'light' ? <Moon size={18} /> : <Sun size={18} color="#ffffff" />}
       <style jsx>{`
         .theme-toggle {
           position: fixed;

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSocket } from '@/components/SocketProvider';
 import { LobbyInfo } from '@/lib/types';
+import { Users } from 'lucide-react';
 
 export default function HomePage() {
   const socket = useSocket();
@@ -190,7 +191,7 @@ export default function HomePage() {
                     <h3>{lobby.name}</h3>
                     <div className="lobby-details">
                       <span className="lobby-detail">
-                        👥 {lobby.playerCount} / {lobby.maxPlayers}
+                        <Users size={16} className="inline-icon-sm" /> {lobby.playerCount} / {lobby.maxPlayers}
                       </span>
                       <span className="lobby-detail difficulty">
                         {lobby.difficulty.charAt(0).toUpperCase() + lobby.difficulty.slice(1)}
@@ -446,6 +447,14 @@ export default function HomePage() {
           padding: 0.25rem 0.5rem;
           background: var(--bg-secondary);
           border-radius: 4px;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        .inline-icon-sm {
+          display: inline-block;
+          flex-shrink: 0;
         }
 
         .lobby-detail.difficulty {

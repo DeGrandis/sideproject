@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSocket } from '@/components/SocketProvider';
+import { Pause, Clock } from 'lucide-react';
 
 export default function CreateLobbyPage() {
   const socket = useSocket();
@@ -278,7 +279,7 @@ export default function CreateLobbyPage() {
               className={`mode-btn ${!timedMode ? 'active' : ''}`}
               onClick={() => setTimedMode(false)}
             >
-              <div className="mode-icon">⏸️</div>
+              <div className="mode-icon"><Pause size={32} /></div>
               <div className="mode-label">Timeless</div>
               <div className="mode-description">Host controls question progression</div>
             </button>
@@ -287,7 +288,7 @@ export default function CreateLobbyPage() {
               className={`mode-btn ${timedMode ? 'active' : ''}`}
               onClick={() => setTimedMode(true)}
             >
-              <div className="mode-icon">⏱️</div>
+              <div className="mode-icon"><Clock size={32} /></div>
               <div className="mode-label">Timed</div>
               <div className="mode-description">10 seconds per question</div>
             </button>

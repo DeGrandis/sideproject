@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useSocket } from '@/components/SocketProvider';
 import { LobbyInfo, Player } from '@/lib/types';
+import { Users, Check } from 'lucide-react';
 
 export default function LobbyPage() {
   const socket = useSocket();
@@ -146,7 +147,7 @@ export default function LobbyPage() {
           <h2>{lobby.name}</h2>
           <div className="lobby-meta">
             <span className="meta-item">
-              👥 {players.length} / {lobby.maxPlayers} Players
+              <Users size={16} className="inline-icon-sm" /> {players.length} / {lobby.maxPlayers} Players
             </span>
             <span className="meta-item difficulty">
               {lobby.difficulty.charAt(0).toUpperCase() + lobby.difficulty.slice(1)}
@@ -169,7 +170,11 @@ export default function LobbyPage() {
                 {player.id === currentPlayerId && ' (You)'}
               </span>
               <span className="player-status">
-                {player.ready || player.id === lobby.hostId ? '✓ Ready' : 'Not Ready'}
+                {player.ready || player.id === lobby.hostId ? (
+                  <><Check size={16} className="inline-icon-sm" /> Ready</>
+                ) : (
+                  'Not Ready'
+                )}
               </span>
             </div>
           ))}
@@ -263,6 +268,9 @@ export default function LobbyPage() {
           border-radius: 4px;
           color: var(--text-secondary);
           font-size: 0.9rem;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
         }
 
         .meta-item.difficulty {
@@ -314,6 +322,14 @@ export default function LobbyPage() {
         .player-status {
           color: var(--text-secondary);
           font-size: 0.9rem;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        .inline-icon-sm {
+          display: inline-block;
+          flex-shrink: 0;
         }
 
         .lobby-actions {

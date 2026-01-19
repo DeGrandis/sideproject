@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useSocket } from '@/components/SocketProvider';
 import { GameState, Question, Player } from '@/lib/types';
+import { PartyPopper, X, Check, Pause, ArrowRight } from 'lucide-react';
 
 export default function GamePage() {
   const socket = useSocket();
@@ -161,7 +162,7 @@ export default function GamePage() {
     return (
       <div className="game-container">
         <div className="game-finished">
-          <h2>🎉 Game Finished!</h2>
+          <h2><PartyPopper className="inline-icon" /> Game Finished!</h2>
           <div className="final-scores">
             <h3>Final Scores</h3>
             {finalScores.map((score, index) => (
@@ -187,7 +188,7 @@ export default function GamePage() {
                         key={optIndex}
                         className={`review-option ${optIndex === q.correctAnswer ? 'correct-answer' : ''}`}
                       >
-                        {optIndex === q.correctAnswer && '✓ '}{option}
+                        {optIndex === q.correctAnswer && <Check className="inline-icon-sm" />}{option}
                       </div>
                     ))}
                   </div>
@@ -334,6 +335,9 @@ export default function GamePage() {
             border-radius: 4px;
             font-size: 0.9rem;
             color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
           }
 
           .review-option.correct-answer {
@@ -407,7 +411,7 @@ export default function GamePage() {
           </div>
         ) : (
           <div className="timeless-mode-indicator">
-            <span className="mode-badge">⏸️ Timeless Mode</span>
+            <span className="mode-badge"><Pause className="inline-icon-sm" /> Timeless Mode</span>
           </div>
         )}
         <div className="score">Your Score: {currentPlayer?.score || 0}</div>
@@ -437,8 +441,8 @@ export default function GamePage() {
                   className={className}
                 >
                   {option}
-                  {showCorrect && isCorrect && ' ✓'}
-                  {showCorrect && isSelected && !isCorrect && ' ✗'}
+                  {showCorrect && isCorrect && <Check className="inline-icon-sm" />}
+                  {showCorrect && isSelected && !isCorrect && <X className="inline-icon-sm" />}
                 </button>
               );
             })}
@@ -446,13 +450,17 @@ export default function GamePage() {
 
           {answerResult && (
             <div className={`result ${answerResult.correct ? 'correct-result' : 'incorrect-result'}`}>
-              {answerResult.correct ? '🎉 Correct! +10 points' : '❌ Incorrect'}
+              {answerResult.correct ? (
+                <><PartyPopper className="inline-icon" /> Correct! +10 points</>
+              ) : (
+                <><X className="inline-icon" /> Incorrect</>
+              )}
             </div>
           )}
 
           {!timedMode && hostId === currentPlayerId && (
             <button onClick={handleNextQuestion} className="next-question-btn">
-              Next Question →
+              Next Question <ArrowRight className="inline-icon-sm" />
             </button>
           )}
         </div>
@@ -668,6 +676,9 @@ export default function GamePage() {
           border-radius: 20px;
           font-size: 0.9rem;
           font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
         }
 
         .next-question-btn {
@@ -692,6 +703,22 @@ export default function GamePage() {
           background: var(--primary-hover);
           transform: translateY(-2px);
           box-shadow: 0 4px 12px var(--shadow-hover);
+        }
+
+        .inline-icon {
+          display: inline-block;
+          width: 1.25em;
+          height: 1.25em;
+          vertical-align: text-bottom;
+          margin-right: 0.25rem;
+        }
+
+        .inline-icon-sm {
+          display: inline-block;
+          width: 1em;
+          height: 1em;
+          vertical-align: text-bottom;
+          margin-left: 0.35rem;
         }
 
         .scoreboard {

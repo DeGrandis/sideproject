@@ -95,8 +95,8 @@ export default function DebugGamePage() {
                 className={className}
               >
                 {option}
-                {showCorrect && isCorrect && ' ✓'}
-                {showCorrect && isSelected && !isCorrect && ' ✗'}
+                {showCorrect && isCorrect && <Check className="inline-icon-sm" />}
+                {showCorrect && isSelected && !isCorrect && <X className="inline-icon-sm" />}
               </button>
             );
           })}
@@ -104,7 +104,11 @@ export default function DebugGamePage() {
 
         {answerResult && (
           <div className={`result ${answerResult.correct ? 'correct-result' : 'incorrect-result'}`}>
-            {answerResult.correct ? '🎉 Correct! +10 points' : '❌ Incorrect'}
+            {answerResult.correct ? (
+              <><PartyPopper className="inline-icon" /> Correct! +10 points</>
+            ) : (
+              <><X className="inline-icon" /> Incorrect</>
+            )}
           </div>
         )}
       </div>
