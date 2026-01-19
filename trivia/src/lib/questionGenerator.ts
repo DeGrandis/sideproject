@@ -55,84 +55,110 @@ export async function generateQuestions(
   params: GenerateQuestionsParams
 ): Promise<GeneratedQuestion[]> {
   const { theme, difficulty, count } = params;
+  const maxRetries = 1;
+  let lastError: Error | null = null;
 
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      if (attempt > 0) {
+        console.log(`[QuestionGenerator] Retry attempt ${attempt} of ${maxRetries}`);
+      }
+      
+      const questions = await attemptGenerateQuestions(theme, difficulty, count);
+      return questions;
+    } catch (error) {
+      lastError = error as Error;
+      console.error(`[QuestionGenerator] Attempt ${attempt + 1} failed:`, error);
+      
+      if (attempt === maxRetries) {
+        console.error('[QuestionGenerator] All retry attempts exhausted');
+        throw lastError;
+      }
+    }
+  }
+
+  throw lastError || new Error('Question generation failed');
+}
+
+/**
+ * Single attempt to generate questions
+ */
+async function attemptGenerateQuestions(
+  theme: string,
+  difficulty: string,
+  count: number
+): Promise<GeneratedQuestion[]> {
   const userPrompt = `Generate ${count} trivia questions about "${theme}" with super ${difficulty} difficulty.`;
 
-  try {
-    console.log(`[QuestionGenerator] Generating ${count} questions for theme: ${theme}, difficulty: ${difficulty}`);
-    
-    const command = new InvokeModelCommand({
-      modelId: MODEL_ID,
-      contentType: "application/json",
-      accept: "application/json",
-      body: JSON.stringify({
-        prompt: `<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+  console.log(`[QuestionGenerator] Generating ${count} questions for theme: ${theme}, difficulty: ${difficulty}`);
+  
+  const command = new InvokeModelCommand({
+    modelId: MODEL_ID,
+    contentType: "application/json",
+    accept: "application/json",
+    body: JSON.stringify({
+      prompt: `<|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
 ${SYSTEM_PROMPT}<|eot_id|><|start_header_id|>user<|end_header_id|>
 
 ${userPrompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>`,
-        max_gen_len: 1024,
-        temperature: 0.7,
-        top_p: 0.9,
-      }),
-    });
+      max_gen_len: 1024,
+      temperature: 0.6,
+      top_p: 0.9,
+    }),
+  });
 
-    const response = await bedrockClient.send(command);
-    const responseBody = JSON.parse(new TextDecoder().decode(response.body));
-    const generatedText = responseBody.generation;
+  const response = await bedrockClient.send(command);
+  const responseBody = JSON.parse(new TextDecoder().decode(response.body));
+  const generatedText = responseBody.generation;
 
-    console.log('[QuestionGenerator] Raw response:', generatedText);
+  console.log('[QuestionGenerator] Raw response:', generatedText);
 
-    // Extract JSON array from response
-    const jsonMatch = generatedText.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) {
-      throw new Error('No JSON array found in response');
-    }
-
-    let jsonString = jsonMatch[0];
-    let questions: GeneratedQuestion[];
-
-    try {
-      // Try parsing directly first (if model returned valid JSON)
-      questions = JSON.parse(jsonString);
-      console.log('[QuestionGenerator] Parsed JSON directly (valid format)');
-    } catch (firstError) {
-      console.log('[QuestionGenerator] Direct parse failed, attempting to fix JavaScript object notation...');
-      
-      // Fix JavaScript object notation to valid JSON
-      // Replace unquoted property names with quoted ones (e.g., question: -> "question":)
-      jsonString = jsonString.replace(/(\w+):/g, '"$1":');
-      
-      // Replace single quotes used as string delimiters with double quotes
-      // This preserves apostrophes within strings by matching quoted strings specifically
-      jsonString = jsonString.replace(/'([^']*)'/g, '"$1"');
-
-      console.log('[QuestionGenerator] Cleaned JSON:', jsonString);
-      questions = JSON.parse(jsonString);
-    }
-
-    // Validate questions
-    if (!Array.isArray(questions) || questions.length === 0) {
-      throw new Error('Invalid questions format');
-    }
-
-    // Validate each question
-    questions.forEach((q, index) => {
-      if (!q.question || !Array.isArray(q.options) || q.options.length !== 4 || typeof q.correctAnswer !== 'number') {
-        throw new Error(`Invalid question format at index ${index}`);
-      }
-      if (q.correctAnswer < 0 || q.correctAnswer > 3) {
-        throw new Error(`Invalid correctAnswer at index ${index}: must be 0-3`);
-      }
-    });
-
-    console.log(`[QuestionGenerator] Successfully generated ${questions.length} questions`);
-    return questions;
-
-  } catch (error) {
-    console.error('[QuestionGenerator] Error generating questions:', error);
-    throw error;
+  // Extract JSON array from response
+  const jsonMatch = generatedText.match(/\[[\s\S]*\]/);
+  if (!jsonMatch) {
+    throw new Error('No JSON array found in response');
   }
+
+  let jsonString = jsonMatch[0];
+  let questions: GeneratedQuestion[];
+
+  try {
+    // Try parsing directly first (if model returned valid JSON)
+    questions = JSON.parse(jsonString);
+    console.log('[QuestionGenerator] Parsed JSON directly (valid format)');
+  } catch (firstError) {
+    console.log('[QuestionGenerator] Direct parse failed, attempting to fix JavaScript object notation...');
+    
+    // Fix JavaScript object notation to valid JSON
+    // Replace unquoted property names with quoted ones (e.g., question: -> "question":)
+    jsonString = jsonString.replace(/(\w+):/g, '"$1":');
+    
+    // Replace single quotes used as string delimiters with double quotes
+    // This preserves apostrophes within strings by matching quoted strings specifically
+    jsonString = jsonString.replace(/'([^']*)'/g, '"$1"');
+
+    console.log('[QuestionGenerator] Cleaned JSON:', jsonString);
+    questions = JSON.parse(jsonString);
+  }
+
+  // Validate questions
+  if (!Array.isArray(questions) || questions.length === 0) {
+    throw new Error('Invalid questions format');
+  }
+
+  // Validate each question
+  questions.forEach((q, index) => {
+    if (!q.question || !Array.isArray(q.options) || q.options.length !== 4 || typeof q.correctAnswer !== 'number') {
+      throw new Error(`Invalid question format at index ${index}`);
+    }
+    if (q.correctAnswer < 0 || q.correctAnswer > 3) {
+      throw new Error(`Invalid correctAnswer at index ${index}: must be 0-3`);
+    }
+  });
+
+  console.log(`[QuestionGenerator] Successfully generated ${questions.length} questions`);
+  return questions;
 }
 
 /**

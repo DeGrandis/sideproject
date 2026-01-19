@@ -6,11 +6,26 @@ import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 import logger from './src/lib/logger.js';
 
-// Simple user-agent fingerprinting
-function fingerprintUserAgent(userAgent: string | undefined): string {
-  if (!userAgent) return 'unknown';
-  // Create a short hash of the user agent for privacy
-  return crypto.createHash('md5').update(userAgent).digest('hex').substring(0, 10);
+// Enhanced user fingerprinting combining multiple factors
+function fingerprintUser(
+  ip: string | string[] | undefined, 
+  userAgent: string | undefined,
+  acceptLanguage?: string | undefined,
+  platform?: string | undefined
+): string {
+  if (!ip && !userAgent) return 'unknown';
+  
+  // Normalize IP (handle x-forwarded-for with multiple IPs)
+  const normalizedIp = Array.isArray(ip) ? ip[0] : ip?.split(',')[0]?.trim() || 'no-ip';
+  const normalizedUA = userAgent || 'no-ua';
+  const normalizedLang = acceptLanguage?.split(',')[0]?.trim() || 'no-lang';
+  const normalizedPlatform = platform || 'no-platform';
+  
+  // Combine factors for fingerprint
+  const fingerprintString = `${normalizedIp}|${normalizedUA}|${normalizedLang}|${normalizedPlatform}`;
+  
+  // Create a hash for privacy
+  return crypto.createHash('sha256').update(fingerprintString).digest('hex').substring(0, 16);
 }
 
 // Import types and game state - using relative paths for tsx compatibility
@@ -38,7 +53,7 @@ async function fetchQuestionsFromAPI(
   difficulty: 'easy' | 'medium' | 'hard',
   theme?: string,
   count: number = 10,
-  userAgentFingerprint?: string
+  userFingerprint?: string
 ): Promise<Question[]> {
   try {
     logger.info({ 
@@ -46,7 +61,7 @@ async function fetchQuestionsFromAPI(
       difficulty, 
       theme: theme || 'general', 
       count,
-      userAgentFingerprint: userAgentFingerprint || 'unknown'
+      userFingerprint: userFingerprint || 'unknown'
     }, 'Fetching questions from Bedrock');
     
     // Generate questions using AWS Bedrock
@@ -70,7 +85,7 @@ async function fetchQuestionsFromAPI(
       error, 
       difficulty, 
       theme,
-      userAgentFingerprint: userAgentFingerprint || 'unknown'
+      userFingerprint: userFingerprint || 'unknown'
     }, 'Error fetching questions from Bedrock, falling back to mock');
     // Fallback to mock questions on error
     return MOCK_QUESTIONS.map((q) => ({
@@ -150,19 +165,25 @@ app.prepare().then(() => {
   logger.info({ path: '/api/socket' }, 'Socket.IO server initialized');
 
   io.on('connection', (socket) => {
-    // Extract client information
+    // Extract client information for fingerprinting
     const clientIp = socket.handshake.headers['x-forwarded-for'] || 
                      socket.handshake.headers['x-real-ip'] || 
                      socket.handshake.address;
     const userAgent = socket.handshake.headers['user-agent'];
-    const userAgentFingerprint = fingerprintUserAgent(userAgent);
+    const acceptLanguage = socket.handshake.headers['accept-language'];
+    // Modern browsers send platform via User-Agent Client Hints
+    const platformHeader = socket.handshake.headers['sec-ch-ua-platform'];
+    const platform = (Array.isArray(platformHeader) ? platformHeader[0] : platformHeader)?.replace(/"/g, '');
+    const userFingerprint = fingerprintUser(clientIp, userAgent, acceptLanguage, platform);
     
     logger.info({ 
       event: 'client_connected',
       socketId: socket.id,
-      clientIp: clientIp,
+      clientIp: Array.isArray(clientIp) ? clientIp[0] : clientIp?.split(',')[0]?.trim(),
       userAgent: userAgent,
-      userAgentFingerprint: userAgentFingerprint
+      acceptLanguage: acceptLanguage?.split(',')[0],
+      platform: platform,
+      userFingerprint: userFingerprint
     }, 'Client connected');
 
     // === LOBBY EVENTS ===
@@ -225,15 +246,15 @@ app.prepare().then(() => {
         const questions = await fetchQuestionsFromAPI(
           options.difficulty || 'medium',
           options.theme?.trim(),
-          options.questionCount || 3,
-          userAgentFingerprint
+          options.questionCount || 10,
+          userFingerprint
         );
         logger.info({ 
           event: 'questions_fetched',
           questionCount: questions.length, 
           difficulty: options.difficulty, 
           theme: options.theme,
-          userAgentFingerprint: userAgentFingerprint
+          userFingerprint: userFingerprint
         }, 'Questions fetched successfully');
 
         // Log each question individually for searchability
@@ -243,10 +264,12 @@ app.prepare().then(() => {
             lobbyId,
             questionIndex: index,
             questionText: q.question,
+            options: q.options,
+            correctAnswer: q.correctAnswer,
             category: q.category,
             difficulty: q.difficulty,
             theme: options.theme,
-            userAgentFingerprint: userAgentFingerprint
+            userFingerprint: userFingerprint,
           }, 'Question generated');
         });
 
@@ -283,7 +306,7 @@ app.prepare().then(() => {
           questionCount: questions.length,
           difficulty: options.difficulty,
           theme: options.theme,
-          userAgentFingerprint: userAgentFingerprint
+          userFingerprint: userFingerprint
         }, 'Player created lobby');
       } catch (error) {
         logger.error({ error, nickname: options?.nickname, lobbyName: options?.lobbyName }, 'Error creating lobby');
@@ -435,7 +458,7 @@ app.prepare().then(() => {
       logger.info({ 
         event: 'client_disconnected',
         socketId: socket.id,
-        userAgentFingerprint: userAgentFingerprint
+        userFingerprint: userFingerprint
       }, 'Client disconnected');
       handlePlayerLeave(socket, io);
     });
