@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useSocket } from '@/components/SocketProvider';
 import { GameState, Question, Player } from '@/lib/types';
-import { PartyPopper, X, Check, Pause, ArrowRight } from 'lucide-react';
+import { PartyPopper, X, Check, Pause, ArrowRight, Clock } from 'lucide-react';
 
 export default function GamePage() {
   const socket = useSocket();
@@ -27,6 +27,7 @@ export default function GamePage() {
   const [finalScores, setFinalScores] = useState<{ playerId: string; nickname: string; score: number }[]>([]);
   const [reviewQuestions, setReviewQuestions] = useState<Question[]>([]);
   const [userAnswers, setUserAnswers] = useState<Map<string, number>>(new Map());
+  const [answeredPlayers, setAnsweredPlayers] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!socket) return;
@@ -62,6 +63,7 @@ export default function GamePage() {
       setSelectedAnswer(null);
       setAnswerResult(null);
       setTimeLeft(10000); // Reset to 10 seconds in milliseconds
+      setAnsweredPlayers(new Set()); // Reset answered players for new question
     };
 
     const handleAnswerResult = (correct: boolean, correctAnswer: number) => {
@@ -99,12 +101,17 @@ export default function GamePage() {
       }
     };
 
+    const handlePlayerAnswered = (playerId: string) => {
+      setAnsweredPlayers(prev => new Set(prev).add(playerId));
+    };
+
     // Register event listeners
     socket.on('lobby:data', handleLobbyData);
     socket.on('game:data', handleGameData);
     socket.on('game:started', handleGameStarted);
     socket.on('game:question', handleGameQuestion);
     socket.on('game:answer-result', handleAnswerResult);
+    socket.on('game:player-answered', handlePlayerAnswered);
     socket.on('game:round-end', handleRoundEnd);
     socket.on('game:finished', handleGameFinished);
 
@@ -114,6 +121,7 @@ export default function GamePage() {
       socket.off('game:started', handleGameStarted);
       socket.off('game:question', handleGameQuestion);
       socket.off('game:answer-result', handleAnswerResult);
+      socket.off('game:player-answered', handlePlayerAnswered);
       socket.off('game:round-end', handleRoundEnd);
       socket.off('game:finished', handleGameFinished);
     };
@@ -518,15 +526,29 @@ export default function GamePage() {
         <div className="scores-list">
           {players
             .sort((a, b) => b.score - a.score)
-            .map((player) => (
-              <div key={player.id} className="score-item">
-                <span className="player-name">
-                  {player.nickname}
-                  {player.id === currentPlayerId && ' (You)'}
-                </span>
-                <span className="player-score">{player.score}</span>
-              </div>
-            ))}
+            .map((player) => {
+              const hasAnswered = answeredPlayers.has(player.id);
+              return (
+                <div key={player.id} className="score-item">
+                  <span className="player-name">
+                    {player.nickname}
+                    {player.id === currentPlayerId && ' (You)'}
+                  </span>
+                  <div className="player-status">
+                    {currentQuestion && (
+                      <span className={`status-badge ${hasAnswered ? 'answered' : 'thinking'}`}>
+                        {hasAnswered ? (
+                          <><Check className="badge-icon" /> Answered</>
+                        ) : (
+                          <><Clock className="badge-icon" /> Thinking...</>
+                        )}
+                      </span>
+                    )}
+                    <span className="player-score">{player.score}</span>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </div>
 
@@ -805,6 +827,7 @@ export default function GamePage() {
         .score-item {
           display: flex;
           justify-content: space-between;
+          align-items: center;
           padding: 0.75rem;
           background: var(--card-hover);
           border-radius: 6px;
@@ -816,9 +839,44 @@ export default function GamePage() {
           font-weight: 500;
         }
 
+        .player-status {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .status-badge {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.25rem 0.6rem;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          transition: all 0.2s;
+        }
+
+        .status-badge.answered {
+          background: var(--success);
+          color: white;
+        }
+
+        .status-badge.thinking {
+          background: #d1d5db;
+          color: #374151;
+        }
+
+        .badge-icon {
+          width: 0.85em;
+          height: 0.85em;
+          flex-shrink: 0;
+        }
+
         .player-score {
           font-weight: 600;
           color: var(--success);
+          min-width: 3rem;
+          text-align: right;
         }
 
         @media (max-width: 768px) {

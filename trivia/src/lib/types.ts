@@ -54,6 +54,7 @@ export interface ServerToClientEvents {
   'game:started': (gameState: GameState) => void;
   'game:question': (question: Omit<Question, 'correctAnswer'>, questionNumber: number, totalQuestions: number) => void;
   'game:answer-result': (correct: boolean, correctAnswer: number) => void;
+  'game:player-answered': (playerId: string) => void;
   'game:round-end': (scores: { playerId: string; score: number }[]) => void;
   'game:finished': (finalScores: { playerId: string; nickname: string; score: number }[], questions: Question[]) => void;
   'game:data': (gameState: GameState) => void;

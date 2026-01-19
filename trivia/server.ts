@@ -449,6 +449,9 @@ app.prepare().then(() => {
 
       socket.emit('game:answer-result', correct, question.correctAnswer);
       
+      // Notify all players that this player has answered
+      io.to(lobbyId).emit('game:player-answered', playerId);
+      
       // Broadcast updated scores to all players in the game
       const players = gameState.getPlayersInLobby(lobbyId);
       const scores = players.map(p => ({ playerId: p.id, score: p.score }));
