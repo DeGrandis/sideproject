@@ -18,12 +18,23 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     console.log('🔌 Initializing Socket.IO connection...');
     console.log('Current URL:', window.location.origin);
     
+    // Capture ref parameter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const ref = urlParams.get('ref');
+    
+    if (ref) {
+      console.log('📊 Ref parameter detected:', ref);
+    }
+    
     const socketInstance: SocketInstance = io({
       path: '/api/socket',
       addTrailingSlash: false,
       transports: ['polling', 'websocket'],
       timeout: 10000,
       reconnection: true,
+      query: {
+        ...(ref && { ref }), // Include ref in socket handshake if present
+      },
     });
 
     socketInstance.on('connect', () => {

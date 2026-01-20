@@ -135,6 +135,19 @@ app.prepare().then(() => {
       // Socket.IO will handle its own requests through the engine.io middleware
       if (!req.url?.startsWith('/api/socket')) {
         const parsedUrl = parse(req.url!, true);
+        
+        // Log ref parameter for CloudWatch grouping if present on main page
+        if (parsedUrl.query?.ref && parsedUrl.pathname === '/') {
+          const ref = parsedUrl.query.ref;
+          logger.info({
+            event: 'page_visit_with_ref',
+            ref: ref,
+            url: req.url,
+            userAgent: req.headers['user-agent'],
+            ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+          }, `Page visited with ref: ${ref}`);
+        }
+        
         await handle(req, res, parsedUrl);
       }
     } catch (err) {
@@ -176,6 +189,9 @@ app.prepare().then(() => {
     const platform = (Array.isArray(platformHeader) ? platformHeader[0] : platformHeader)?.replace(/"/g, '');
     const userFingerprint = fingerprintUser(clientIp, userAgent, acceptLanguage, platform);
     
+    // Capture ref parameter from socket handshake query
+    const ref = socket.handshake.query.ref as string | undefined;
+    
     logger.info({ 
       event: 'client_connected',
       socketId: socket.id,
@@ -183,8 +199,9 @@ app.prepare().then(() => {
       userAgent: userAgent,
       acceptLanguage: acceptLanguage?.split(',')[0],
       platform: platform,
-      userFingerprint: userFingerprint
-    }, 'Client connected');
+      userFingerprint: userFingerprint,
+      ref: ref || 'none'
+    }, ref ? `Client connected with ref: ${ref}` : 'Client connected');
 
     // === LOBBY EVENTS ===
 
