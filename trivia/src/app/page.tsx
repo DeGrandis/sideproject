@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSocket } from '@/components/SocketProvider';
 import { LobbyInfo } from '@/lib/types';
-import { Users } from 'lucide-react';
+import { Users, Info } from 'lucide-react';
 
 export default function HomePage() {
   const socket = useSocket();
@@ -12,6 +12,9 @@ export default function HomePage() {
   const [availableLobbies, setAvailableLobbies] = useState<LobbyInfo[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [isClosingInfoModal, setIsClosingInfoModal] = useState(false);
+  const [infoCarouselIndex, setInfoCarouselIndex] = useState(0);
   const [joinLobbyId, setJoinLobbyId] = useState<string | null>(null);
   const [nickname, setNickname] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -118,6 +121,15 @@ export default function HomePage() {
     }
   };
 
+  const closeInfoModal = () => {
+    setIsClosingInfoModal(true);
+    setTimeout(() => {
+      setShowInfoModal(false);
+      setIsClosingInfoModal(false);
+      setInfoCarouselIndex(0);
+    }, 300);
+  };
+
   if (!socket) {
     return (
       <div className="loading">
@@ -155,7 +167,16 @@ export default function HomePage() {
 
       <div className="main-content">
         <div className="create-lobby-section">
-          <h2>Start a Game</h2>
+          <div className="section-header">
+            <h2>Start a Game</h2>
+            <button
+              className="info-icon-btn"
+              onClick={() => setShowInfoModal(true)}
+              title="Learn more"
+            >
+              <Info size={20} />
+            </button>
+          </div>
           <p>Start a new lobby and invite your friends</p>
           
 
@@ -216,6 +237,52 @@ export default function HomePage() {
         </div>
       </div>
 
+      {showInfoModal && (
+        <div className={`modal-overlay ${isClosingInfoModal ? 'closing' : ''}`}>
+          <div className={`modal ${isClosingInfoModal ? 'closing' : ''}`}>
+            <h2>How To Play</h2>
+            
+            {infoCarouselIndex === 0 && (
+              <div className="carousel-section">
+                <p>Create or join a lobby to start playing trivia with your friends in real-time.</p>
+              </div>
+            )}
+            
+            {infoCarouselIndex === 1 && (
+              <div className="carousel-section">
+                <p>Enter a theme and let AI generate trivia questions related to it.</p>
+              </div>
+            )}
+            
+            {infoCarouselIndex === 2 && (
+              <div className="carousel-section">
+                <p>Once you create a lobby, invite your friends to join using the ID or by sharing the link.</p>
+              </div>
+            )}
+            
+            <div className="carousel-controls">
+              <span className="carousel-indicator">{infoCarouselIndex + 1} / 3</span>
+              <button
+                onClick={() => setInfoCarouselIndex((infoCarouselIndex + 1) % 3)}
+                className="carousel-next-btn"
+                title="Next"
+              >
+                →
+              </button>
+            </div>
+            
+            <div className="modal-actions">
+              <button
+                onClick={closeInfoModal}
+                className="btn-primary"
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showNicknameModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -247,10 +314,59 @@ export default function HomePage() {
         </div>
       )}
 
+      <footer className="page-footer">
+        <p>&copy; 2026 Infinitivia by <a href="https://degrand.is" target="_blank" rel="noopener noreferrer">DEGRAND.IS</a> // All rights reserved.</p>
+      </footer>
+
       <style jsx>{`
         .home-container {
           min-height: 100vh;
           padding: 2rem;
+          padding-bottom: 8rem;
+        }
+
+        .page-footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: var(--bg-tertiary);
+          border-top: 1px solid var(--border);
+          padding: 1.5rem 2rem;
+          text-align: center;
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+          z-index: 99;
+        }
+
+        .page-footer p {
+          margin: 0;
+          color: var(--text-secondary);
+        }
+
+        .page-footer a {
+          background: linear-gradient(90deg, #2196f3, #76b2e4, #2196f3);
+          background-size: 200% 100%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          text-decoration: none;
+          font-weight: bold;
+          text-transform: lowercase;
+          animation: gradientPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gradientPulse {
+          0%, 100% {
+            background-position: 0% center;
+          }
+          50% {
+            background-position: 100% center;
+          }
+        }
+
+        .page-footer a:hover {
+          opacity: 0.8;
         }
 
         .loading {
@@ -327,7 +443,40 @@ export default function HomePage() {
           box-shadow: 0 4px 20px var(--shadow);
           transition: background-color 0.3s ease;
         }
+.section-header {
+          position: relative;
+          display: inline-block;
+          width: 100%;
+          text-align: center;
+        }
 
+        .section-header h2 {
+          margin: 0;
+          display: inline-block;
+        }
+
+        .info-icon-btn {
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: var(--text-secondary);
+          cursor: pointer;
+          padding: 0.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+        }
+
+        .info-icon-btn:hover {
+          color: var(--primary);
+          transform: translateY(-50%) scale(1.2);
+        }
+
+        
         .create-lobby-section {
           display: flex;
           flex-direction: column;
@@ -447,14 +596,6 @@ export default function HomePage() {
           padding: 0.25rem 0.5rem;
           background: var(--bg-secondary);
           border-radius: 4px;
-          display: flex;
-          align-items: center;
-          gap: 0.25rem;
-        }
-
-        .inline-icon-sm {
-          display: inline-block;
-          flex-shrink: 0;
         }
 
         .lobby-detail.difficulty {
@@ -488,6 +629,75 @@ export default function HomePage() {
           transition: all 0.2s;
         }
 
+
+        .carousel-section {
+          min-height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: left;
+          margin-bottom: 1rem;
+          animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .carousel-section p {
+          margin: 0;
+          text-align: justify;
+          font-size: 1rem;
+          line-height: 1.4;
+        }
+
+        .carousel-controls {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .carousel-indicator {
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+          font-weight: 600;
+        }
+
+        .carousel-next-btn {
+          background: var(--primary);
+          color: white;
+          border: none;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          font-size: 1.2rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+        }
+
+        .carousel-next-btn:hover {
+          background: var(--primary-hover);
+          animation: bounce 0.2s ease-in-out;
+        }
+
+        @keyframes bounce {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.15);
+          }
+        }
         .btn-join:hover {
           background: var(--success-hover);
         }
@@ -503,6 +713,16 @@ export default function HomePage() {
           justify-content: center;
           align-items: center;
           z-index: 1000;
+          animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
 
         .modal {
@@ -512,6 +732,46 @@ export default function HomePage() {
           box-shadow: 0 4px 20px var(--shadow-hover);
           max-width: 400px;
           width: 90%;
+          animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes popIn {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes popOut {
+          from {
+            opacity: 1;
+            transform: scale(1);
+          }
+          to {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+        }
+
+        .modal-overlay.closing {
+          animation: fadeOut 0.3s ease-in-out;
+        }
+
+        @keyframes fadeOut {
+          from {
+            opacity: 0.5;
+          }
+          to {
+            opacity: 0;
+          }
+        }
+
+        .modal.closing {
+          animation: popOut 0.5s cubic-bezier(0.64, 0, 0.78, 0);
         }
 
         .modal h2 {
@@ -646,6 +906,19 @@ export default function HomePage() {
             border-radius: 12px;
             width: calc(100% - 2rem);
             margin: 1rem;
+          }
+
+          .home-container {
+            padding-bottom: 7rem;
+          }
+
+          .page-footer {
+            padding: 1rem 1rem;
+            font-size: 0.8rem;
+          }
+
+          .page-footer p {
+            margin: 0;
           }
 
         }

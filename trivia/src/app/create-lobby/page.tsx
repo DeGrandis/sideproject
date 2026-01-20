@@ -291,6 +291,10 @@ export default function CreateLobbyPage() {
           <span className="input-hint">{theme.length}/300 characters</span>
         </div>
 
+        <div className="ai-disclaimer">
+          <p><strong>Note:</strong> The AI may generate incorrect or hallucinated answers.</p>
+        </div>
+
         <div className="form-actions">
           <button 
             onClick={handleCreateLobby} 
@@ -397,6 +401,25 @@ export default function CreateLobbyPage() {
           margin-top: 0.2rem;
           font-size: 0.85rem;
           color: var(--text-tertiary);
+        }
+
+        .ai-disclaimer {
+          background: var(--info);
+          border-left: 4px solid var(--info-text);
+          padding: 0.75rem 1rem;
+          border-radius: 4px;
+          margin-bottom: 1.6rem;
+        }
+
+        .ai-disclaimer p {
+          margin: 0;
+          color: var(--info-text);
+          font-size: 0.75rem;
+          line-height: 1.4;
+        }
+
+        .ai-disclaimer strong {
+          font-weight: 500;
         }
 
         .player-limit-control {
