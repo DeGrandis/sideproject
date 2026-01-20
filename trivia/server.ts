@@ -6,23 +6,20 @@ import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 import logger from './src/lib/logger.js';
 
-// Enhanced user fingerprinting combining multiple factors
+// Enhanced user fingerprinting combining multiple factors (no IP for privacy)
 function fingerprintUser(
-  ip: string | string[] | undefined, 
   userAgent: string | undefined,
   acceptLanguage?: string | undefined,
   platform?: string | undefined
 ): string {
-  if (!ip && !userAgent) return 'unknown';
+  if (!userAgent) return 'unknown';
   
-  // Normalize IP (handle x-forwarded-for with multiple IPs)
-  const normalizedIp = Array.isArray(ip) ? ip[0] : ip?.split(',')[0]?.trim() || 'no-ip';
   const normalizedUA = userAgent || 'no-ua';
   const normalizedLang = acceptLanguage?.split(',')[0]?.trim() || 'no-lang';
   const normalizedPlatform = platform || 'no-platform';
   
-  // Combine factors for fingerprint
-  const fingerprintString = `${normalizedIp}|${normalizedUA}|${normalizedLang}|${normalizedPlatform}`;
+  // Combine factors for fingerprint (excluding IP for privacy)
+  const fingerprintString = `${normalizedUA}|${normalizedLang}|${normalizedPlatform}`;
   
   // Create a hash for privacy
   return crypto.createHash('sha256').update(fingerprintString).digest('hex').substring(0, 16);
@@ -187,7 +184,7 @@ app.prepare().then(() => {
     // Modern browsers send platform via User-Agent Client Hints
     const platformHeader = socket.handshake.headers['sec-ch-ua-platform'];
     const platform = (Array.isArray(platformHeader) ? platformHeader[0] : platformHeader)?.replace(/"/g, '');
-    const userFingerprint = fingerprintUser(clientIp, userAgent, acceptLanguage, platform);
+    const userFingerprint = fingerprintUser(userAgent, acceptLanguage, platform);
     
     // Capture ref parameter from socket handshake query
     const ref = socket.handshake.query.ref as string | undefined;
