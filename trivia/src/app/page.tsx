@@ -438,7 +438,7 @@ export default function HomePage() {
         .create-lobby-section,
         .lobbies-section {
           background: var(--card-bg);
-          padding: 1.25rem 1rem;
+          padding: 1.4rem 1.4rem;
           border-radius: 8px;
           box-shadow: 0 4px 20px var(--shadow);
           transition: background-color 0.3s ease;
