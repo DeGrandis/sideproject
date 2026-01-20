@@ -28,9 +28,16 @@ export const metadata: Metadata = {
     images: [
       {
         url: '/og-image.png',
-        width: 1200,
-        height: 630,
+        width: 1205,
+        height: 666,
         alt: 'Infinitivia',
+      },
+      {
+        url: '/icon.svg',
+        width: 100,
+        height: 45,
+        alt: 'Infinitivia Logo',
+        type: 'image/svg+xml',
       },
     ],
   },
@@ -77,6 +84,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta property="og:logo" content="https://trivia.degrand.is/icon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@400;600;700&family=Geist:wght@400;500;600&display=swap" rel="stylesheet" />
