@@ -29,6 +29,7 @@ export default function GamePage() {
   const [userAnswers, setUserAnswers] = useState<Map<string, number>>(new Map());
   const [answeredPlayers, setAnsweredPlayers] = useState<Set<string>>(new Set());
   const [showSkipConfirmation, setShowSkipConfirmation] = useState(false);
+  const [showConnectionError, setShowConnectionError] = useState(false);
 
   useEffect(() => {
     if (!socket) return;
@@ -106,6 +107,11 @@ export default function GamePage() {
       setAnsweredPlayers(prev => new Set(prev).add(playerId));
     };
 
+    const handleConnectError = () => {
+      console.log('Socket connection error');
+      setShowConnectionError(true);
+    };
+
     // Register event listeners
     socket.on('lobby:data', handleLobbyData);
     socket.on('game:data', handleGameData);
@@ -115,6 +121,7 @@ export default function GamePage() {
     socket.on('game:player-answered', handlePlayerAnswered);
     socket.on('game:round-end', handleRoundEnd);
     socket.on('game:finished', handleGameFinished);
+    socket.on('connect_error', handleConnectError);
 
     return () => {
       socket.off('lobby:data', handleLobbyData);
@@ -125,6 +132,7 @@ export default function GamePage() {
       socket.off('game:player-answered', handlePlayerAnswered);
       socket.off('game:round-end', handleRoundEnd);
       socket.off('game:finished', handleGameFinished);
+      socket.off('connect_error', handleConnectError);
     };
   }, [socket, lobbyId]);
 
@@ -474,6 +482,17 @@ export default function GamePage() {
 
   return (
     <div className="game-container">
+      {showConnectionError && (
+        <div className="modal-overlay">
+          <div className="modal connection-error-modal">
+            <h2>Connection Lost</h2>
+            <p>Your connection to the game server was lost. Please return to home and try joining again.</p>
+            <button onClick={handleReturnHome} className="btn-return-home">
+              Return to Home
+            </button>
+          </div>
+        </div>
+      )}
       {showSkipConfirmation && (
         <div className="modal-overlay">
           <div className="modal">
@@ -730,6 +749,51 @@ export default function GamePage() {
         }
 
         .btn-confirm:hover {
+          background: var(--primary-hover);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px var(--shadow-hover);
+        }
+
+        .connection-error-modal {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .error-icon {
+          width: 3rem;
+          height: 3rem;
+          color: var(--danger);
+          margin-bottom: 1rem;
+        }
+
+        .connection-error-modal h2 {
+          color: var(--danger);
+          margin-bottom: 0.75rem;
+        }
+
+        .connection-error-modal p {
+          color: var(--text-secondary);
+          margin: 0 0 1.5rem 0;
+          font-size: 0.95rem;
+          line-height: 1.5;
+        }
+
+        .btn-return-home {
+          width: 100%;
+          padding: 0.875rem;
+          background: var(--primary);
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-weight: 600;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-return-home:hover {
           background: var(--primary-hover);
           transform: translateY(-2px);
           box-shadow: 0 4px 12px var(--shadow-hover);
