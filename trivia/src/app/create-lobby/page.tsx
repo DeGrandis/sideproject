@@ -11,7 +11,7 @@ export default function CreateLobbyPage() {
   
   const [nickname, setNickname] = useState('');
   const [showNicknameField, setShowNicknameField] = useState(false);
-  const [playerLimit, setPlayerLimit] = useState(4);
+  const [playerLimit] = useState(10);
   const [questionCount, setQuestionCount] = useState(3);
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   const [theme, setTheme] = useState('');
@@ -63,12 +63,6 @@ export default function CreateLobbyPage() {
     // Validation
     if (!nickname.trim()) {
       setError('Please enter a nickname');
-      setTimeout(() => setError(null), 3000);
-      return;
-    }
-    
-    if (playerLimit < 2 || playerLimit > 20) {
-      setError('Player limit must be between 2 and 20');
       setTimeout(() => setError(null), 3000);
       return;
     }
@@ -166,36 +160,6 @@ export default function CreateLobbyPage() {
             <span className="input-hint">{nickname.length}/20 characters</span>
           </div>
         )}
-
-        <div className="form-section">
-          <label htmlFor="playerLimit">Player Limit *</label>
-          <div className="player-limit-control">
-            <button
-              type="button"
-              onClick={() => setPlayerLimit(Math.max(2, playerLimit - 1))}
-              className="btn-counter"
-            >
-              -
-            </button>
-            <input
-              id="playerLimit"
-              type="number"
-              value={playerLimit}
-              onChange={(e) => setPlayerLimit(Math.max(2, Math.min(10, parseInt(e.target.value) || 2)))}
-              min={2}
-              max={10}
-              className="player-limit-input"
-            />
-            <button
-              type="button"
-              onClick={() => setPlayerLimit(Math.min(10, playerLimit + 1))}
-              className="btn-counter"
-            >
-              +
-            </button>
-          </div>
-          <span className="input-hint">Between 2 and 10 players</span>
-        </div>
 
         <div className="form-section">
           <label htmlFor="questionCount">Number of Questions *</label>

@@ -17,22 +17,12 @@ export default function HomePage() {
   const [infoCarouselIndex, setInfoCarouselIndex] = useState(0);
   const [joinLobbyId, setJoinLobbyId] = useState<string | null>(null);
   const [nickname, setNickname] = useState('');
-  const [isDarkMode, setIsDarkMode] = useState(true);
 
-  // Load saved nickname and theme from localStorage on mount
+  // Load saved nickname from localStorage on mount
   useEffect(() => {
     const savedNickname = localStorage.getItem('trivia-nickname');
     if (savedNickname) {
       setNickname(savedNickname);
-    }
-    
-    const savedTheme = localStorage.getItem('trivia-theme');
-    if (savedTheme === 'light') {
-      setIsDarkMode(false);
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-      setIsDarkMode(true);
-      document.documentElement.setAttribute('data-theme', 'dark');
     }
   }, []);
 
@@ -102,14 +92,6 @@ export default function HomePage() {
 
     setShowNicknameModal(false);
     setJoinLobbyId(null);
-  };
-
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-    const theme = newMode ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('trivia-theme', theme);
   };
 
   const handleNicknameChange = (newNickname: string) => {

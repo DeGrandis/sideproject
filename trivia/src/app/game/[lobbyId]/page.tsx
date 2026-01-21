@@ -28,6 +28,7 @@ export default function GamePage() {
   const [reviewQuestions, setReviewQuestions] = useState<Question[]>([]);
   const [userAnswers, setUserAnswers] = useState<Map<string, number>>(new Map());
   const [answeredPlayers, setAnsweredPlayers] = useState<Set<string>>(new Set());
+  const [showSkipConfirmation, setShowSkipConfirmation] = useState(false);
 
   useEffect(() => {
     if (!socket) return;
@@ -138,6 +139,13 @@ export default function GamePage() {
     return () => clearTimeout(timer);
   }, [timeLeft, currentQuestion, timedMode]);
 
+  // Auto-close skip confirmation modal if all players answered
+  useEffect(() => {
+    if (showSkipConfirmation && players.length > 0 && answeredPlayers.size === players.length) {
+      setShowSkipConfirmation(false);
+    }
+  }, [showSkipConfirmation, answeredPlayers, players]);
+
   const handleAnswer = (answerIndex: number) => {
     if (!socket || !currentQuestion || selectedAnswer !== null) return;
 
@@ -149,7 +157,23 @@ export default function GamePage() {
 
   const handleNextQuestion = () => {
     if (!socket) return;
+    
+    // Check if there are unanswered players
+    const unansweredPlayers = players.filter(p => !answeredPlayers.has(p.id));
+    
+    if (unansweredPlayers.length > 0) {
+      // Show confirmation modal
+      setShowSkipConfirmation(true);
+    } else {
+      // No unanswered players, proceed immediately
+      socket.emit('game:next-question');
+    }
+  };
+
+  const handleConfirmSkip = () => {
+    if (!socket) return;
     socket.emit('game:next-question');
+    setShowSkipConfirmation(false);
   };
 
   const handleReturnHome = () => {
@@ -450,6 +474,35 @@ export default function GamePage() {
 
   return (
     <div className="game-container">
+      {showSkipConfirmation && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Skip Unanswered Players?</h2>
+            <p className="modal-subtitle">
+              The following players haven't answered yet:
+            </p>
+            <div className="unanswered-list">
+              {players
+                .filter(p => !answeredPlayers.has(p.id))
+                .map(player => (
+                  <div key={player.id} className="unanswered-item">
+                    {player.nickname}
+                  </div>
+                ))}
+            </div>
+            <p className="skip-warning">Are you sure you want to skip to the next question?</p>
+            <div className="modal-actions">
+              <button onClick={() => setShowSkipConfirmation(false)} className="btn-cancel">
+                Cancel
+              </button>
+              <button onClick={handleConfirmSkip} className="btn-confirm">
+                Skip
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="game-header">
         <div className="question-info">
           Question {questionNumber} of {totalQuestions}
@@ -553,6 +606,135 @@ export default function GamePage() {
       </div>
 
       <style jsx>{`
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+          animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        .modal {
+          background: var(--card-bg);
+          padding: 2rem;
+          border-radius: 12px;
+          box-shadow: 0 4px 20px var(--shadow-hover);
+          max-width: 450px;
+          width: 90%;
+          animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes popIn {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        .modal h2 {
+          margin: 0 0 0.5rem 0;
+          text-align: center;
+          color: var(--text-primary);
+          font-size: 1.3rem;
+        }
+
+        .modal-subtitle {
+          text-align: center;
+          color: var(--text-secondary);
+          margin: 0 0 1rem 0;
+          font-size: 0.95rem;
+        }
+
+        .unanswered-list {
+          background: var(--bg-secondary);
+          border-radius: 8px;
+          padding: 1rem;
+          margin-bottom: 1rem;
+          max-height: 150px;
+          overflow-y: auto;
+        }
+
+        .unanswered-item {
+          padding: 0.5rem 0.75rem;
+          margin-bottom: 0.5rem;
+          background: var(--card-hover);
+          border-radius: 4px;
+          border-left: 3px solid var(--warning);
+          color: var(--text-primary);
+          font-size: 0.95rem;
+        }
+
+        .unanswered-item:last-child {
+          margin-bottom: 0;
+        }
+
+        .skip-warning {
+          text-align: center;
+          color: var(--warning);
+          font-weight: 600;
+          margin: 0 0 1.5rem 0;
+          font-size: 0.95rem;
+        }
+
+        .modal-actions {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .btn-cancel {
+          flex: 1;
+          padding: 0.75rem;
+          border: 2px solid var(--border);
+          border-radius: 6px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          background: var(--bg-secondary);
+          color: var(--text-primary);
+        }
+
+        .btn-cancel:hover {
+          background: var(--card-hover);
+          border-color: var(--text-secondary);
+        }
+
+        .btn-confirm {
+          flex: 1;
+          padding: 0.75rem;
+          border: none;
+          border-radius: 6px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          background: var(--primary);
+          color: white;
+        }
+
+        .btn-confirm:hover {
+          background: var(--primary-hover);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px var(--shadow-hover);
+        }
+
         .game-container {
           min-height: 100vh;
           max-width: 900px;
@@ -746,7 +928,7 @@ export default function GamePage() {
         }
 
         .mode-badge {
-          background: var(--info);
+          background: var(--primary);
           color: white;
           padding: 0.5rem 1rem;
           border-radius: 20px;
@@ -857,7 +1039,7 @@ export default function GamePage() {
         }
 
         .status-badge.answered {
-          background: var(--success);
+          background: var(--primary);
           color: white;
         }
 
@@ -874,7 +1056,7 @@ export default function GamePage() {
 
         .player-score {
           font-weight: 600;
-          color: var(--success);
+          color: var(--primary);
           min-width: 3rem;
           text-align: right;
         }
