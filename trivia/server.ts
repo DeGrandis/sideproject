@@ -457,7 +457,7 @@ app.prepare().then(() => {
       if (correct) {
         const player = gameState.getPlayer(playerId);
         if (player) {
-          gameState.updatePlayer(playerId, { score: player.score + 10 });
+          gameState.updatePlayer(playerId, { score: player.score + 100 });
         }
       }
 

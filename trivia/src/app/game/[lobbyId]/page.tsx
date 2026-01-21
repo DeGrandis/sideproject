@@ -559,7 +559,7 @@ export default function GamePage() {
           {answerResult && (
             <div className={`result ${answerResult.correct ? 'correct-result' : 'incorrect-result'}`}>
               {answerResult.correct ? (
-                <><PartyPopper className="inline-icon" /> Correct! +10 points</>
+                <><PartyPopper className="inline-icon" /> Correct! +100 points</>
               ) : (
                 <><X className="inline-icon" /> Incorrect</>
               )}

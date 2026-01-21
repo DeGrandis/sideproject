@@ -12,7 +12,7 @@ export default function CreateLobbyPage() {
   const [nickname, setNickname] = useState('');
   const [showNicknameField, setShowNicknameField] = useState(false);
   const [playerLimit] = useState(10);
-  const [questionCount, setQuestionCount] = useState(3);
+  const [questionCount, setQuestionCount] = useState(5);
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   const [theme, setTheme] = useState('');
   const [timedMode, setTimedMode] = useState(false);
