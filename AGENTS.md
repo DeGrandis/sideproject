@@ -1,9 +1,9 @@
 # AI Coding Agent Instructions
 
 ## Project Overview
-- This repo hosts multiple services orchestrated via Docker Compose: auth backend, a simple demo backend, several React/Vite frontends, Postgres, and nginx; see [docker-compose.yaml](docker-compose.yaml).
+- This repo hosts multiple services orchestrated via Docker Compose: auth backend, a simple demo backend, several React/Vite frontends, a Next.js trivia app with Socket.IO, Postgres, and nginx; see [docker-compose.yaml](docker-compose.yaml).
 - Auth is handled by a dedicated FastAPI service in [auth_backend](auth_backend), which owns user accounts, password hashing, JWT issuance/verification, and login tracking.
-- UI is split into Vite-based React apps: the primary auth UI in [auth_frontend](auth_frontend), a budget UI in [budget_frontend](budget_frontend), and a generic starter in [frontend](frontend).
+- UI is split into Vite-based React apps: the primary auth UI in [auth_frontend](auth_frontend), a budget UI in [budget_frontend](budget_frontend), a generic starter in [frontend](frontend), and a real-time multiplayer trivia game in [trivia](trivia).
 
 ## Architecture and Data Flow
 - The auth backend ([auth_backend/auth_service.py](auth_backend/auth_service.py)) exposes endpoints for `/login`, `/create-account`, `/issue-authorization-code`, `/redeem-authorization-code`, `/verify-token`, `/protected`, and `/healthcheck`.
@@ -11,6 +11,7 @@
 - Passwords are always hashed with bcrypt via `hash_password`/`check_password` in [auth_backend/db_connection.py](auth_backend/db_connection.py); never store or compare plain-text passwords.
 - JWTs are signed with an RSA private key (`JWT_SECRET`) and verified with a public key (`JWT_PUBLIC_KEY`), configured via environment variables and validated at startup in [auth_backend/auth_service.py](auth_backend/auth_service.py).
 - The main non-auth backend in [backend/main.py](backend/main.py) is a minimal FastAPI app used for simple API experimentation (e.g., `/hello`, `/items/{item_id}`).
+- The trivia app ([trivia](trivia)) is a Next.js 14 application with a custom Node.js server that integrates Socket.IO for real-time multiplayer gameplay; see [trivia/server.ts](trivia/server.ts) for the server implementation and [trivia/src/lib/gameState.ts](trivia/src/lib/gameState.ts) for in-memory game state management.
 
 ## Runtime and Environment
 - Docker is the primary way to run the system locally/for deployment; service definitions and env wiring live in [docker-compose.yaml](docker-compose.yaml).
@@ -19,12 +20,13 @@
 - Database schema is bootstrapped from [postgres/init-scripts/schema.sql](postgres/init-scripts/schema.sql) via the Postgres container entrypoint.
 
 ### Docker / docker-compose commands
-- From the repo root, build and start the full stack (auth frontend, budget frontend, auth backend, Postgres, nginx) with:
+- From the repo root, build and start the full stack (auth frontend, budget frontend, trivia app, auth backend, Postgres, nginx) with:
 	- `docker compose up --build`
 - To start only a specific service with its dependencies, use the service name from [docker-compose.yaml](docker-compose.yaml):
 	- `docker compose up --build auth_backend`
 	- `docker compose up --build frontend`
 	- `docker compose up --build budget_frontend`
+	- `docker compose up --build trivia`
 - To rebuild images without cache (mirroring CI behavior) run:
 	- `docker compose build --no-cache`
 - To stop and remove containers while keeping images and volumes:
@@ -47,6 +49,10 @@
 	- Build image: `docker build -t budget_frontend ./budget_frontend`
 	- Run container: `docker run -p 3001:3001 -e REACT_APP_API_BASE_URL=https://api.degrand.is budget_frontend`
 	- Dockerfile builds the Vite app then runs `npm run start` on port 3001; see [budget_frontend/Dockerfile](budget_frontend/Dockerfile).
+- Trivia app ([trivia](trivia)):
+	- Build image: `docker build -t trivia ./trivia`
+	- Run container: `docker run -p 3002:3002 -e NODE_ENV=production trivia`
+	- Dockerfile builds the Next.js app and runs the custom server with Socket.IO via `npm run start` on port 3002; see [trivia/Dockerfile](trivia/Dockerfile) and [trivia/server.ts](trivia/server.ts).
 - Generic starter frontend ([frontend](frontend)):
 	- Build image: `docker build -t starter_frontend ./frontend`
 	- Run container (if wired into compose or manually): `docker run -p 3002:3000 starter_frontend` (adjust host port as needed).
