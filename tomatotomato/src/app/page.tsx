@@ -142,7 +142,7 @@ export default function HomePage() {
           </svg>
           TomatoTomato
         </h1>
-        <p>Match words with descriptions in real-time</p>
+        <p>It's kinda like Cards Against Humanity</p>
       </div>
 
       {error && <div className="error-banner">{error}</div>}
@@ -831,8 +831,8 @@ export default function HomePage() {
           }
 
           .page-footer {
-            padding: 1rem 1rem;
-            font-size: 0.8rem;
+            padding: .7rem;
+            font-size: 0.7rem;
           }
         }
       `}</style>

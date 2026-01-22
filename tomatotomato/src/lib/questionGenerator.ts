@@ -28,10 +28,11 @@ EXAMPLES OF GOOD PROMPTS:
 - Things That Are Broken
 - Royal and Majestic
 - Suspicious Characters
+- Things NOT to do at X
 - Things You Find in a Garage`;
 
 // System prompt for grading/scoring player answers
-const GRADER_SYSTEM_PROMPT = `You are the judge for an Apples to Apples style game. Players submit creative text answers trying to match a given prompt. Your job is to score the answers based on how well they match the prompt and how creative/funny they are.  The players are young and immature, so expect to see some crude humor.
+const GRADER_SYSTEM_PROMPT = `You are the judge for an Apples to Apples style game. Players submit creative text answers trying to match a given prompt. Your job is to score the answers based on how well they match the prompt and how creative/funny they are.  The players are young and immature, so expect to see some dark and crude humor.  Topics might be taboo but they are allowed.
 
 You will be given:
 1. The prompt 
@@ -52,7 +53,7 @@ Return ONLY valid JSON:
 {
   "answer": "the player's answer",
   "score": 85,
-  "reasoning": "brief explanation why, 60 characters or less"
+  "reasoning": "brief sentence why, 70 characters or less, you are allowed to interject your opinions or add quirky commentary"
 }
 ]
 
@@ -130,7 +131,7 @@ async function attemptGeneratePrompts(
 ${PROMPT_GENERATOR_SYSTEM_PROMPT}<|eot_id|><|start_header_id|>user<|end_header_id|>
 
 ${userPrompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>`,
-      max_gen_len: 512,
+      max_gen_len: 1024,
       temperature: 0.9,
       top_p: 0.9,
     }),
@@ -202,7 +203,7 @@ async function attemptGradeAnswers(
 Player answers:
 ${answersList}
 
-Score each answer based on how well it matches the prompt and how creative or humorous it is, or how absurd it is.  Compare answers against each other on how relatively good they are.  `;
+Score each answer based on how well it matches the prompt and with creativity, absurdity, humor, abstractness, directness, and originality.  This is subjective and you can grade however you like, these are just the guidelines. Expect answers to be dark and crude, potentially touching on taboo topics.  Compare answers against each other on how relatively good they are.`;
 
   console.log(`[Grader] Grading ${answers.length} answers for prompt: "${prompt}"`);
   

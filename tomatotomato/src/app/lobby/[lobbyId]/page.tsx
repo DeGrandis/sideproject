@@ -140,9 +140,9 @@ export default function LobbyPage() {
             <span className="meta-item">
               <Users size={16} className="inline-icon-sm" /> {players.length} / {lobby.maxPlayers} Players
             </span>
-            <span className="meta-item difficulty">
+            {/* <span className="meta-item difficulty">
               {lobby.difficulty.charAt(0).toUpperCase() + lobby.difficulty.slice(1)}
-            </span>
+            </span> */}
           </div>
           {lobby.theme && (
             <p className="lobby-theme">
@@ -351,12 +351,12 @@ export default function LobbyPage() {
         }
 
         .btn-start {
-          background: var(--primary);
+          background: var(--success);
           color: white;
         }
 
         .btn-start:hover:not(:disabled) {
-          background: var(--primary-hover);
+          background: var(--success-hover);
           transform: translateY(-2px);
           box-shadow: 0 4px 12px var(--shadow-hover);
         }
