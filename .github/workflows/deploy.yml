@@ -65,6 +65,6 @@ jobs:
           script: |
             cd /home/${{ secrets.EC2_USER }}/docker
             docker-compose down 
-            docker system prune -a -f
+            docker system prune -f
             docker-compose pull
             docker-compose up -d --no-build
