@@ -65,7 +65,7 @@ services:
       context: ./tomatotomato
     image: degrandis/tomatotomato:latest
     ports:
-      - "3003:3002"
+      - "3003:3003"
     environment:
       - NODE_ENV=production
       - AWS_REGION=${AWS_REGION:-us-east-1}
