@@ -18,7 +18,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # Expose the port the app runs on
-EXPOSE 3003
+EXPOSE 3002
 
 # Set production environment
 ENV NODE_ENV=production

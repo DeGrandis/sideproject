@@ -60,6 +60,25 @@ services:
     networks:
       - client-side
 
+  tomatotomato:
+    build:
+      context: ./tomatotomato
+    image: degrandis/tomatotomato:latest
+    ports:
+      - "3003:3002"
+    environment:
+      - NODE_ENV=production
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/tomatotomato"
+        awslogs-stream: "tomatotomato"
+        awslogs-create-group: "true"
+    networks:
+      - client-side
+
   auth_backend:
     build:
       context: ./auth_backend
@@ -113,6 +132,7 @@ services:
       - frontend
       - budget_frontend
       - trivia
+      - tomatotomato
       - auth_backend
     networks:
       - client-side
