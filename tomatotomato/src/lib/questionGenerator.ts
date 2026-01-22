@@ -37,10 +37,10 @@ You will be given:
 1. The prompt 
 2. A list of player answers
 
-Return a JSON array ranking the answers from best to worst fit, with scores. Score from 0-100 for each answer
+Return a JSON array ranking the answers from best to worst fit, with scores. Score from 0 to 100 in increments of 1 for each answer
 
 Consider:
-- How raunky or humorous the answer is
+- How raunchy or humorous the answer is
 - How crude or clever the answer is
 - How well the answer matches the prompt thematically
 - Creativity and humor
@@ -131,7 +131,7 @@ ${PROMPT_GENERATOR_SYSTEM_PROMPT}<|eot_id|><|start_header_id|>user<|end_header_i
 
 ${userPrompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>`,
       max_gen_len: 512,
-      temperature: 0.8,
+      temperature: 0.9,
       top_p: 0.9,
     }),
   });
@@ -202,7 +202,7 @@ async function attemptGradeAnswers(
 Player answers:
 ${answersList}
 
-Score each answer based on how well it matches the prompt and how creative/funny it is.  Compare answers against each other on how relatively good they are.  `;
+Score each answer based on how well it matches the prompt and how creative or humorous it is, or how absurd it is.  Compare answers against each other on how relatively good they are.  `;
 
   console.log(`[Grader] Grading ${answers.length} answers for prompt: "${prompt}"`);
   
@@ -217,7 +217,7 @@ ${GRADER_SYSTEM_PROMPT}<|eot_id|><|start_header_id|>user<|end_header_id|>
 
 ${userPrompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>`,
       max_gen_len: 1024,
-      temperature: 0.7,
+      temperature: 0.8,
       top_p: 0.9,
     }),
   });
