@@ -11,7 +11,7 @@ export default function CreateLobbyPage() {
   const [nickname, setNickname] = useState('');
   const [showNicknameField, setShowNicknameField] = useState(false);
   const [playerLimit] = useState(10);
-  const [roundCount, setRoundCount] = useState(2);
+  const [roundCount, setRoundCount] = useState(4);
   const [theme, setTheme] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
