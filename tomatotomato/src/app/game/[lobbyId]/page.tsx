@@ -34,6 +34,7 @@ export default function GamePage() {
   const [finalScores, setFinalScores] = useState<{ playerId: string; nickname: string; score: number }[]>([]);
   const [answeredPlayers, setAnsweredPlayers] = useState<Set<string>>(new Set());
   const [showSkipConfirmation, setShowSkipConfirmation] = useState(false);
+  const [revealedCount, setRevealedCount] = useState(0);
 
   // Initial data fetch - only runs once when component mounts
   useEffect(() => {
@@ -141,6 +142,7 @@ export default function GamePage() {
         [prompt.id]: gradedAnswers
       }));
       setIsGrading(false);
+      setRevealedCount(0); // Reset reveal count for new prompt
 
       // Update player scores with the grades from this prompt
       setPlayers(prevPlayers => 
@@ -236,11 +238,29 @@ export default function GamePage() {
     return () => clearTimeout(timer);
   }, [timeLeft, currentPrompt, timedMode, hasAnswered]);
 
+  // Suspenseful reveal effect for graded answers
+  useEffect(() => {
+    if (!isReviewing || isGrading || !allPrompts.length) return;
+    
+    const currentReviewPrompt = allPrompts[reviewPromptIndex];
+    const currentGradedAnswers = gradedAnswers[currentReviewPrompt?.id] || [];
+    
+    if (currentGradedAnswers.length === 0 || revealedCount >= currentGradedAnswers.length) return;
+
+    const timer = setTimeout(() => {
+      setRevealedCount(prev => prev + 1);
+    }, 2250); // Reveal one answer per second
+
+    return () => clearTimeout(timer);
+  }, [isReviewing, isGrading, allPrompts, reviewPromptIndex, gradedAnswers, revealedCount]);
+
   const handleSubmitAnswer = () => {
     if (!socket || !currentPrompt || !userAnswer.trim()) return;
 
     setHasAnswered(true);
-    socket.emit('game:answer', currentPrompt.id, userAnswer.trim());
+    // Remove newlines and replace with spaces to prevent display issues
+    const sanitizedAnswer = userAnswer.trim().replace(/\r?\n/g, ' ').replace(/\s+/g, ' ');
+    socket.emit('game:answer', currentPrompt.id, sanitizedAnswer);
   };
 
   const handleNextRound = () => {
@@ -326,6 +346,8 @@ export default function GamePage() {
   if (isReviewing && allPrompts.length > 0) {
     const currentReviewPrompt = allPrompts[reviewPromptIndex];
     const currentGradedAnswers = gradedAnswers[currentReviewPrompt.id] || [];
+    // Sort by score descending (best to worst) for display, reveal from bottom to top
+    const sortedGradedAnswers = [...currentGradedAnswers].sort((a, b) => b.score - a.score);
 
     return (
       <div className="game-container">
@@ -346,12 +368,15 @@ export default function GamePage() {
                   <Loader className="spinner" size={24} />
                   <p>AI is grading answers...</p>
                 </div>
-              ) : currentGradedAnswers.length > 0 ? (
+              ) : sortedGradedAnswers.length > 0 ? (
                 <>
                   <h4>AI Graded Answers:</h4>
                   <div className="answers-list">
-                    {currentGradedAnswers.map((item, index) => (
-                      <div key={index} className="graded-answer-item">
+                    {sortedGradedAnswers.map((item, index) => {
+                      // Reveal from bottom to top: last items (worst scores) reveal first
+                      const isRevealed = index >= (sortedGradedAnswers.length - revealedCount);
+                      return (
+                        <div key={index} className={`graded-answer-item ${!isRevealed ? 'blurred' : 'revealed'}`}>
                         <div className="answer-header">
                           <span className="answer-nickname">
                             {(() => {
@@ -364,7 +389,8 @@ export default function GamePage() {
                         </div>
                         <p className="answer-reasoning">{item.reasoning}</p>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </>
               ) : (
@@ -499,6 +525,33 @@ export default function GamePage() {
             display: flex;
             flex-direction: column;
             gap: 0.35rem;
+            transition: filter 0.5s ease, transform 0.5s ease;
+          }
+
+          .graded-answer-item.blurred {
+            filter: blur(8px);
+            opacity: 0.5;
+            pointer-events: none;
+          }
+
+          .graded-answer-item.revealed {
+            filter: blur(0);
+            opacity: 1;
+            animation: revealPop 0.5s ease-out;
+          }
+
+          @keyframes revealPop {
+            0% {
+              transform: scale(0.95);
+              opacity: 0.5;
+            }
+            50% {
+              transform: scale(1.02);
+            }
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
           }
 
           .answer-header {
