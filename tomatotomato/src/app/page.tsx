@@ -6,6 +6,8 @@ import { useSocket } from '@/components/SocketProvider';
 import { LobbyInfo } from '@/lib/types';
 import { Users, Info } from 'lucide-react';
 
+const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION || '0.0.0';
+
 export default function HomePage() {
   const socket = useSocket();
   const router = useRouter();
@@ -287,7 +289,7 @@ export default function HomePage() {
       )}
 
       <footer className="page-footer">
-        <p>&copy; 2026 Tomatotomato by <a href="https://degrand.is" target="_blank" rel="noopener noreferrer">DEGRAND.IS</a> // All rights reserved.</p>
+        <p>&copy; 2026 Tomatotomato by <a href="https://degrand.is" target="_blank" rel="noopener noreferrer">DEGRAND.IS</a> // v{APP_VERSION} // All rights reserved.</p>
       </footer>
 
       <style jsx>{`

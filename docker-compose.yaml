@@ -69,6 +69,7 @@ services:
     environment:
       - NODE_ENV=production
       - AWS_REGION=${AWS_REGION:-us-east-1}
+      - NEXT_PUBLIC_APP_VERSION=1.1.2
     logging:
       driver: "awslogs"
       options:
