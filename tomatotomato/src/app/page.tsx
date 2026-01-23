@@ -6,7 +6,7 @@ import { useSocket } from '@/components/SocketProvider';
 import { LobbyInfo } from '@/lib/types';
 import { Users, Info } from 'lucide-react';
 
-const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION || '0.0.0';
+const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION || '1.2.0';
 
 export default function HomePage() {
   const socket = useSocket();
