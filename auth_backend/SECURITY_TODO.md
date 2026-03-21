@@ -44,3 +44,44 @@ This file tracks known security issues and hardening tasks for the auth backend 
 ## Container Hardening
 - Update [auth_backend/Dockerfile](auth_backend/Dockerfile) to run the FastAPI app as a non-root user inside the container.
 - Ensure file permissions on the `/app/logs` directory are limited to the app user and that log files dont leak outside the container unintentionally.
+## OAuth2 Implementation Gaps
+The current authorization code flow in [auth_backend/auth_service.py](auth_backend/auth_service.py) mimics OAuth2 but lacks critical components for secure third-party app integration:
+
+### Missing Client Authentication
+- `/issue-authorization-code` and `/redeem-authorization-code` do not verify any `client_id` or `client_secret`.
+- Any logged-in user can request an authorization code and any caller can redeem it without proving they are the intended recipient.
+- **Action needed**: Implement a registered client system with `client_id`, `client_secret`, and allowed `redirect_uri` patterns stored in the database.
+- Validate client credentials during both authorization code issuance and redemption.
+
+### No Scopes Implementation
+- The current flow generates tokens with full user data and roles without any scope restrictions (e.g., `read:balance`, `write:transfer`).
+- Third-party apps have no way to request limited permissions.
+- **Action needed**: Add a `scopes` field to the authorization code flow; store requested scopes with the code, validate them during redemption, and embed only authorized scopes in the resulting access token claims.
+
+### Improper Redirect Handling
+- `/issue-authorization-code` returns the authorization code in a JSON response instead of redirecting the user's browser back to the merchant's `redirect_uri` with the code in the URL query string (standard OAuth2 pattern).
+- This breaks typical OAuth2 browser flows where the user is redirected from the merchant → auth service → back to merchant.
+- **Action needed**: Modify `/issue-authorization-code` to perform an HTTP 302 redirect to `redirect_uri?code=<auth_code>&state=<state>` after validating the redirect_uri against registered client settings.
+
+### "Double Token" Security Issue
+- In `issue_authorization_code()`, a **full access token** is pre-generated and stored in the `redirect_authorization_codes` dictionary using a UUID as the key.
+- In standard OAuth2, the authorization code is a temporary pointer; the access token should only be created **during redemption** after client authentication.
+- **Current risk**: If an attacker obtains an authorization code, they can redeem it for a token without proving they are the legitimate client.
+- **Action needed**: Store only user identity and requested scopes with the authorization code; generate the access token only in `redeem_authorization_code()` after validating client credentials.
+
+## Token Management & Lifecycle
+
+### Token Revocation / Logout
+- JWTs are stateless and cannot be revoked before their `exp` claim without additional infrastructure.
+- Users have no way to "log out" or invalidate tokens early (e.g., if a device is compromised).
+- **Action needed**: Implement a token blacklist using Redis or a database table; check the blacklist in `get_current_user()` before accepting a token.
+- Add a `/logout` endpoint that adds the token's `jti` (JWT ID) or a hash to the blacklist with a TTL matching the token's remaining lifetime.
+
+### Token Distribution: Cookies vs. JSON Body
+- `/login` sets the access token in an HTTP-only cookie **and** returns it in the response body JSON.
+- For third-party merchant apps on different domains, cookies will often fail due to CORS/SameSite restrictions.
+- This creates confusion: browser-based same-domain apps should use cookies; third-party apps should receive tokens in the response body and send them via `Authorization` headers.
+- **Action needed**: Clarify the intended use case:
+	- If supporting same-origin browser apps: keep cookie-based auth and remove token from JSON response (or make it optional).
+	- If supporting third-party OAuth2 clients: remove cookie-setting from `/login` and `/redeem-authorization-code`; rely on `Authorization: Bearer <token>` headers.
+	- Consider separate endpoints or a `grant_type` parameter to distinguish between flows (e.g., `password` grant for first-party, `authorization_code` for third-party).
