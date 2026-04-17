@@ -55,7 +55,7 @@ jobs:
             docker-compose.yaml,
             .env,
             postgres/*,
-            fodmap_frontend/index.html,
+            fodmap_frontend/*,
           target: /home/${{ secrets.EC2_USER }}/docker
       
 
