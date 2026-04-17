@@ -5,7 +5,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -23,7 +23,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -41,7 +41,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "over 1/2 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -50,7 +50,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "1 medium (unripe)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Unripe/green banana is lower FODMAP; very ripe banana may edge into medium.",
             "swap": ""
         },
@@ -59,16 +59,25 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
         {
             "name": "Blackberries",
             "category": "Fruit",
+            "fodmap_content": "Low",
+            "serving_size": "40g (~5 berries)",
+            "fodmap_type": "-",
+            "notes": "Low at up to 40g. Larger servings become moderate to high.",
+            "swap": ""
+        },
+        {
+            "name": "Blackberries (large serving)",
+            "category": "Fruit",
             "fodmap_content": "High",
-            "serving_size": "",
-            "fodmap_type": "—",
+            "serving_size": "over 40g",
+            "fodmap_type": "Polyols",
             "notes": "",
             "swap": ""
         },
@@ -77,7 +86,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -86,7 +95,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "1 cup (148g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -95,7 +104,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -104,7 +113,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "3/4 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -122,7 +131,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -131,7 +140,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "2/3 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -140,7 +149,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "3/4 glass",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -149,7 +158,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -158,16 +167,25 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
+        },
+        {
+            "name": "Dried cranberries",
+            "category": "Fruit",
+            "fodmap_content": "High",
+            "serving_size": "1/4 cup",
+            "fodmap_type": "Fructose",
+            "notes": "Concentrated fructose from drying plus often sweetened with apple juice or HFCS.",
+            "swap": "Fresh blueberries or strawberries"
         },
         {
             "name": "Figs",
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -176,7 +194,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "over 80g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -185,7 +203,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "1 cup (92g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -194,25 +212,25 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
         {
             "name": "Honeydew melon",
             "category": "Fruit",
-            "fodmap_content": "Low",
+            "fodmap_content": "High",
             "serving_size": "1/2 cup",
-            "fodmap_type": "—",
-            "notes": "",
-            "swap": ""
+            "fodmap_type": "Fructose",
+            "notes": "Honeydew is high in excess fructose. Despite being a melon, it is not safe like cantaloupe.",
+            "swap": "Cantaloupe or strawberries"
         },
         {
             "name": "Jackfruit",
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "1/3 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -221,7 +239,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "2 medium (148g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -230,7 +248,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "juice of 1/2 lemon",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -239,7 +257,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -248,7 +266,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -257,7 +275,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -275,7 +293,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "over 1/2 a nectarine",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -284,7 +302,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "1 medium (131g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -293,7 +311,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -302,7 +320,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -325,11 +343,20 @@
             "swap": "Orange or kiwi"
         },
         {
+            "name": "Persimmon",
+            "category": "Fruit",
+            "fodmap_content": "High",
+            "serving_size": "1 medium",
+            "fodmap_type": "Fructose",
+            "notes": "High in excess fructose.",
+            "swap": "Orange or kiwi"
+        },
+        {
             "name": "Pineapple",
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "1 cup diced (165g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -338,7 +365,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -347,7 +374,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -356,7 +383,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -365,7 +392,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -374,7 +401,7 @@
             "category": "Fruit",
             "fodmap_content": "High",
             "serving_size": "over 1 tbsp / 13g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -383,16 +410,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "1 cup (123g)",
-            "fodmap_type": "—",
-            "notes": "",
-            "swap": ""
-        },
-        {
-            "name": "Raspberry",
-            "category": "Fruit",
-            "fodmap_content": "Low",
-            "serving_size": "1/3 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -401,7 +419,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -410,7 +428,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "65g / ~5 medium",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -419,7 +437,7 @@
             "category": "Fruit",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -437,7 +455,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -446,7 +464,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -464,7 +482,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -473,7 +491,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -482,7 +500,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -491,7 +509,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -500,7 +518,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -509,7 +527,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/2 cup (74g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -518,7 +536,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/2 cup (74g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -536,7 +554,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -545,7 +563,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 cup (70g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -554,7 +572,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -563,7 +581,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "3/4 cup heads (91g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Florets at this serving are fine; stalks may contain slightly more fructans.",
             "swap": ""
         },
@@ -572,7 +590,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/4 cup heads",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -582,7 +600,7 @@
             "fodmap_content": "Low",
             "serving_size": "2 sprouts",
             "fodmap_type": "Fructans, GOS",
-            "notes": "Low FODMAP at just 2 sprouts. A typical side-dish portion (1/2 cup) is High — serving size matters critically here.",
+            "notes": "Low FODMAP at just 2 sprouts. A typical side-dish portion (1/2 cup) is High - serving size matters critically here.",
             "swap": "Broccoli or bok choy"
         },
         {
@@ -590,7 +608,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -599,7 +617,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/4 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -609,7 +627,7 @@
             "fodmap_content": "Low",
             "serving_size": "up to 3/4 cup",
             "fodmap_type": "Fructans",
-            "notes": "Savoy cabbage is higher; bok choy is a safe low-FODMAP swap. Common/red cabbage is safe up to 3/4 cup — beyond that fructan load becomes High.",
+            "notes": "Savoy cabbage is higher; bok choy is a safe low-FODMAP swap. Common/red cabbage is safe up to 3/4 cup - beyond that fructan load becomes High.",
             "swap": "Bok choy or spinach"
         },
         {
@@ -617,8 +635,8 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "up to 3/4 cup",
-            "fodmap_type": "—",
-            "notes": "Safe up to 3/4 cup. Larger portions push fructan content into High territory — serving size matters critically here.",
+            "fodmap_type": "-",
+            "notes": "Safe up to 3/4 cup. Larger portions push fructan content into High territory - serving size matters critically here.",
             "swap": ""
         },
         {
@@ -626,7 +644,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -635,25 +653,34 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 medium (61g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
         {
             "name": "Cauliflower",
             "category": "Vegetables & Legumes",
-            "fodmap_content": "High",
-            "serving_size": "1/2 cup (50g)",
+            "fodmap_content": "Low",
+            "serving_size": "1/2 cup florets (~65g)",
             "fodmap_type": "Fructans, Polyols",
-            "notes": "Even small amounts bother many IBS sufferers.",
-            "swap": "Broccoli (1 cup) or zucchini"
+            "notes": "Low at 1/2 cup of florets. A full cup or more is High in fructans and mannitol.",
+            "swap": "Broccoli or zucchini"
+        },
+        {
+            "name": "Cauliflower (large serving)",
+            "category": "Vegetables & Legumes",
+            "fodmap_content": "High",
+            "serving_size": "over 1 cup",
+            "fodmap_type": "Fructans, Polyols",
+            "notes": "",
+            "swap": ""
         },
         {
             "name": "Celeriac",
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -662,7 +689,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "less than 5cm of stalk",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Low FODMAP only below 5cm of stalk. A full stalk or more contains significant mannitol and becomes High.",
             "swap": ""
         },
@@ -671,7 +698,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/4 cup (42g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Rinsing removes much of the GOS. Larger servings or home-cooked become medium or high.",
             "swap": ""
         },
@@ -680,7 +707,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -689,7 +716,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "if tolerable",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -698,7 +725,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -707,7 +734,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -716,7 +743,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -725,7 +752,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -734,7 +761,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/2 cob",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -743,7 +770,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/2 cup sliced (52g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -752,7 +779,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/2 cup (75g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -761,7 +788,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 cup (82g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -770,7 +797,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "up to 75g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -779,7 +806,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "up to 1/2 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -789,7 +816,7 @@
             "fodmap_content": "High",
             "serving_size": "1 clove (3g)",
             "fodmap_type": "Fructans",
-            "notes": "Even 1 clove is high. Use garlic-infused oil instead — FODMAPs do not leach into oil.",
+            "notes": "Even 1 clove is high. Use garlic-infused oil instead - FODMAPs do not leach into oil.",
             "swap": "Garlic-infused oil"
         },
         {
@@ -797,7 +824,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -806,7 +833,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 cup (100g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -815,7 +842,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -824,7 +851,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -833,7 +860,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 cup (67g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -841,9 +868,9 @@
             "name": "Kidney beans",
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
-            "serving_size": "1/4 cup (45g)",
+            "serving_size": "any serving",
             "fodmap_type": "GOS",
-            "notes": "",
+            "notes": "High FODMAP even at small servings. Canned and rinsed red kidney beans may be tolerated at 1/4 cup by some.",
             "swap": "Chickpeas or lentils (canned, rinsed, 1/4 cup)"
         },
         {
@@ -851,7 +878,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/2 cup (30g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Use only the green leaf portion; the white bulb is high in fructans.",
             "swap": ""
         },
@@ -860,7 +887,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -869,7 +896,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/4 cup (46g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Canned and well rinsed only; home-cooked or larger portions are high.",
             "swap": ""
         },
@@ -878,7 +905,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 cup (47g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -887,7 +914,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -896,7 +923,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -905,7 +932,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -923,7 +950,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -932,7 +959,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "15 olives (45g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -950,7 +977,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -968,7 +995,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -977,7 +1004,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -986,7 +1013,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 medium (150g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -995,7 +1022,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "up to 63g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1004,7 +1031,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1013,7 +1040,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "over 85g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1022,7 +1049,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "over 1/2 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1031,7 +1058,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp (6g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Green tops only; the white bulb contains fructans.",
             "swap": ""
         },
@@ -1040,7 +1067,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1049,7 +1076,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1058,7 +1085,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1067,7 +1094,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1085,7 +1112,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1094,7 +1121,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1103,7 +1130,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 cup (30g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1112,7 +1139,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1121,7 +1148,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "4 pieces",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1130,7 +1157,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1138,17 +1165,17 @@
             "name": "Sweet potato",
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
-            "serving_size": "1/2 cup (100g)",
+            "serving_size": "1/2 cup (75g)",
             "fodmap_type": "Polyols",
-            "notes": "Mannitol content rises with serving size; safe only at 1/2 cup (75g). A full baked sweet potato is High FODMAP.",
+            "notes": "Mannitol content rises with serving size; safe at up to 1/2 cup (75g). A full baked sweet potato is High FODMAP.",
             "swap": "White potato or carrot"
         },
         {
             "name": "Taro",
             "category": "Vegetables & Legumes",
-            "fodmap_content": "High",
-            "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_content": "Low",
+            "serving_size": "1/2 cup (75g)",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1157,7 +1184,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 cup fresh",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1166,7 +1193,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1 medium / up to 65g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Cherry tomatoes may be slightly higher per serving due to concentrated fructose.",
             "swap": ""
         },
@@ -1175,7 +1202,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "3/5 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1184,7 +1211,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1193,7 +1220,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "1/2 turnip",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1202,7 +1229,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1211,7 +1238,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1220,7 +1247,7 @@
             "category": "Vegetables & Legumes",
             "fodmap_content": "Low",
             "serving_size": "65g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1229,7 +1256,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1238,7 +1265,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1247,7 +1274,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1256,7 +1283,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "1 cup cooked",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1265,7 +1292,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1274,7 +1301,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "1 cup cooked (195g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1283,7 +1310,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1292,7 +1319,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1301,7 +1328,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "1/4 cup cooked (44g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1310,7 +1337,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1319,7 +1346,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "3 tortillas",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1328,7 +1355,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "1/2 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1337,7 +1364,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1346,7 +1373,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1355,7 +1382,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1364,7 +1391,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1373,7 +1400,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1382,7 +1409,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1391,7 +1418,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1400,7 +1427,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1409,7 +1436,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1418,7 +1445,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "1 cup cooked (140g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Check ingredients; pasta made with legume flour may contain GOS.",
             "swap": ""
         },
@@ -1427,16 +1454,25 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
+        },
+        {
+            "name": "Granola",
+            "category": "Grains & Bread",
+            "fodmap_content": "High",
+            "serving_size": "1/2 cup",
+            "fodmap_type": "Fructans, GOS",
+            "notes": "Most granola contains honey, dried fruit, and wheat - all high FODMAP. Check for low-FODMAP certified brands.",
+            "swap": "Rolled oats with safe toppings"
         },
         {
             "name": "Millet",
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1445,7 +1481,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1454,7 +1490,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "1/2 cup dry (39g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1464,7 +1500,7 @@
             "fodmap_content": "Low",
             "serving_size": "up to 1/2 cup cooked",
             "fodmap_type": "Fructans",
-            "notes": "Low at up to 1/2 cup cooked only. A standard restaurant-sized bowl of wheat pasta is High in fructans — use gluten-free or rice noodles for larger meals.",
+            "notes": "Low at up to 1/2 cup cooked only. A standard restaurant-sized bowl of wheat pasta is High in fructans - use gluten-free or rice noodles for larger meals.",
             "swap": "Gluten-free pasta or rice noodles"
         },
         {
@@ -1472,7 +1508,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1481,7 +1517,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1490,7 +1526,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1499,7 +1535,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "1 cup cooked (185g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1508,7 +1544,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1517,7 +1553,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1526,7 +1562,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1535,7 +1571,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "1 cup cooked (176g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1544,7 +1580,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1553,7 +1589,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1562,7 +1598,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1571,7 +1607,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "2 slices (109g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Long fermentation breaks down fructans. Must be a traditionally made sourdough.",
             "swap": ""
         },
@@ -1580,7 +1616,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1589,7 +1625,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1598,7 +1634,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1607,7 +1643,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1616,7 +1652,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1626,7 +1662,7 @@
             "fodmap_content": "Low",
             "serving_size": "1 slice",
             "fodmap_type": "Fructans",
-            "notes": "Low at 1 slice only due to residual fructans. Two or more slices push it into High — choose sourdough or gluten-free for larger portions.",
+            "notes": "Low at 1 slice only due to residual fructans. Two or more slices push it into High - choose sourdough or gluten-free for larger portions.",
             "swap": "Sourdough (properly fermented) or gluten-free bread"
         },
         {
@@ -1634,7 +1670,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1643,7 +1679,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "1 cup cooked (186g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1652,7 +1688,7 @@
             "category": "Grains & Bread",
             "fodmap_content": "Low",
             "serving_size": "up to 1 cup",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1661,7 +1697,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1670,7 +1706,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1679,7 +1715,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1688,7 +1724,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1697,7 +1733,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1706,7 +1742,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1715,7 +1751,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1724,7 +1760,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1733,7 +1769,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1742,7 +1778,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1751,7 +1787,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1760,7 +1796,7 @@
             "category": "Fish & Seafood",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1769,7 +1805,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Plain cooked only; avoid pre-seasoned versions with garlic or onion.",
             "swap": ""
         },
@@ -1778,7 +1814,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Plain cooked only; marinades with garlic or onion add FODMAPs.",
             "swap": ""
         },
@@ -1787,8 +1823,8 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "check garlic in ingredients",
-            "fodmap_type": "—",
-            "notes": "Plain pork chorizo is Low FODMAP, but many brands add garlic or onion powder — always check the ingredient list.",
+            "fodmap_type": "-",
+            "notes": "Plain pork chorizo is Low FODMAP, but many brands add garlic or onion powder - always check the ingredient list.",
             "swap": ""
         },
         {
@@ -1796,7 +1832,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1805,7 +1841,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "check ingredients",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1814,7 +1850,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "2 large",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1823,7 +1859,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1832,7 +1868,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1841,7 +1877,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "2–3 slices",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1850,16 +1886,25 @@
             "category": "Meat & Protein",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
+        },
+        {
+            "name": "Silken tofu",
+            "category": "Meat & Protein",
+            "fodmap_content": "High",
+            "serving_size": "3.5 oz (100g)",
+            "fodmap_type": "GOS",
+            "notes": "Unlike firm tofu, silken tofu retains most of the GOS from soy beans.",
+            "swap": "Firm tofu"
         },
         {
             "name": "Tempeh",
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Fermentation significantly reduces FODMAPs.",
             "swap": ""
         },
@@ -1868,7 +1913,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "3.5 oz (100g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Firm tofu only; silken tofu is higher in GOS.",
             "swap": ""
         },
@@ -1877,7 +1922,7 @@
             "category": "Meat & Protein",
             "fodmap_content": "Low",
             "serving_size": "3 oz (85g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1886,7 +1931,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "1 cup (244ml)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Check label for added inulin or chicory root extract, which add FODMAPs.",
             "swap": ""
         },
@@ -1895,7 +1940,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp (14g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Almost pure fat with negligible lactose; safe for most lactose-sensitive people.",
             "swap": ""
         },
@@ -1904,7 +1949,7 @@
             "category": "Dairy",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1913,7 +1958,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "2 slices (40g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Hard aged cheeses are very low in lactose due to the fermentation process.",
             "swap": ""
         },
@@ -1922,7 +1967,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1931,7 +1976,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1940,7 +1985,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1949,7 +1994,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1958,7 +2003,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1967,7 +2012,7 @@
             "category": "Dairy",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1976,7 +2021,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1985,7 +2030,7 @@
             "category": "Dairy",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -1994,7 +2039,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2002,9 +2047,9 @@
             "name": "Greek yogurt (plain)",
             "category": "Dairy",
             "fodmap_content": "Low",
-            "serving_size": "23g",
-            "fodmap_type": "—",
-            "notes": "Straining reduces lactose; full-fat plain is best. Avoid flavoured varieties.",
+            "serving_size": "3/4 cup (~200g)",
+            "fodmap_type": "-",
+            "notes": "Straining removes most lactose; full-fat plain is best. Low at a generous serving. Avoid flavoured varieties.",
             "swap": ""
         },
         {
@@ -2012,7 +2057,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "40g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2030,7 +2075,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "1/2 cup (66g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2039,7 +2084,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "1 cup (244ml)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2048,7 +2093,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2066,7 +2111,7 @@
             "category": "Dairy",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2075,7 +2120,7 @@
             "category": "Dairy",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2084,7 +2129,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2102,7 +2147,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2111,7 +2156,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "up to 200ml",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2120,8 +2165,8 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
-            "notes": "Low at 2 tbsp only. Ricotta retains significant lactose — a larger serving (e.g. in lasagna) is High.",
+            "fodmap_type": "-",
+            "notes": "Low at 2 tbsp only. Ricotta retains significant lactose - a larger serving (e.g. in lasagna) is High.",
             "swap": ""
         },
         {
@@ -2129,16 +2174,25 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
         {
             "name": "Sour cream",
             "category": "Dairy",
+            "fodmap_content": "Low",
+            "serving_size": "2 tbsp (40g)",
+            "fodmap_type": "Lactose",
+            "notes": "Low at up to 2 tbsp. Larger servings are High due to lactose.",
+            "swap": ""
+        },
+        {
+            "name": "Sour cream (large serving)",
+            "category": "Dairy",
             "fodmap_content": "High",
             "serving_size": "over 2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "Lactose",
             "notes": "",
             "swap": ""
         },
@@ -2147,7 +2201,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2156,7 +2210,7 @@
             "category": "Dairy",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2165,7 +2219,7 @@
             "category": "Dairy",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2183,7 +2237,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "up to 10 nuts",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2201,7 +2255,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2210,7 +2264,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2219,7 +2273,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "up to 1 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2228,7 +2282,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "24 hazelnuts",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2237,7 +2291,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "up to 15 nuts (40g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2246,7 +2300,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "small handful",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2255,7 +2309,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "32 pieces (28g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2264,7 +2318,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "15 halves (20g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2273,7 +2327,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2282,7 +2336,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2291,7 +2345,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp (18g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2300,7 +2354,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2309,7 +2363,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp (18g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2318,7 +2372,7 @@
             "category": "Nuts & Seeds",
             "fodmap_content": "Low",
             "serving_size": "10–15 halves (29g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2336,7 +2390,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "limited to 1 bottle",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2345,7 +2399,7 @@
             "category": "Drinks",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2354,7 +2408,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2363,16 +2417,25 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
+        },
+        {
+            "name": "Chamomile tea",
+            "category": "Drinks",
+            "fodmap_content": "High",
+            "serving_size": "1 cup (strong brew)",
+            "fodmap_type": "Fructans",
+            "notes": "Chamomile flowers are high in fructans. A common surprise trigger for IBS sufferers.",
+            "swap": "Peppermint tea or green tea"
         },
         {
             "name": "Coconut milk",
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "125ml",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2381,8 +2444,8 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "100ml",
-            "fodmap_type": "—",
-            "notes": "",
+            "fodmap_type": "Polyols",
+            "notes": "Contains sorbitol; even 100ml may bother sensitive individuals. Use caution.",
             "swap": ""
         },
         {
@@ -2390,16 +2453,25 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "8 oz (240ml)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Black coffee is low FODMAP; milky coffees depend on the milk used.",
             "swap": ""
+        },
+        {
+            "name": "Fennel tea",
+            "category": "Drinks",
+            "fodmap_content": "High",
+            "serving_size": "1 cup (strong brew)",
+            "fodmap_type": "Fructans",
+            "notes": "Made from fennel seeds, which are high in fructans at tea-strength concentration.",
+            "swap": "Peppermint tea or ginger tea"
         },
         {
             "name": "Fruit juice (apple/pear/mango)",
             "category": "Drinks",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2408,7 +2480,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "125ml",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2417,7 +2489,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "1 standard drink",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2426,16 +2498,25 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "8 oz (240ml)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
         {
             "name": "Kombucha",
             "category": "Drinks",
+            "fodmap_content": "Low",
+            "serving_size": "180ml (~6 oz)",
+            "fodmap_type": "-",
+            "notes": "Low at up to 180ml. Larger serves become High due to fructose from fermentation.",
+            "swap": ""
+        },
+        {
+            "name": "Kombucha (large serving)",
+            "category": "Drinks",
             "fodmap_content": "High",
-            "serving_size": "",
-            "fodmap_type": "—",
+            "serving_size": "over 180ml",
+            "fodmap_type": "Fructose",
             "notes": "",
             "swap": ""
         },
@@ -2444,7 +2525,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "in low quantities",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2461,8 +2542,8 @@
             "name": "Orange juice (large quantity)",
             "category": "Drinks",
             "fodmap_content": "High",
-            "serving_size": "over 100ml",
-            "fodmap_type": "—",
+            "serving_size": "over 1/2 cup (120ml)",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2471,17 +2552,26 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "8 oz (240ml)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
         {
             "name": "Rum",
             "category": "Drinks",
-            "fodmap_content": "High",
-            "serving_size": "",
-            "fodmap_type": "—",
-            "notes": "",
+            "fodmap_content": "Low",
+            "serving_size": "1 standard drink",
+            "fodmap_type": "-",
+            "notes": "Pure distilled spirits are FODMAP-free. Same as gin, vodka, whiskey.",
+            "swap": ""
+        },
+        {
+            "name": "Soy milk (from soy protein)",
+            "category": "Drinks",
+            "fodmap_content": "Low",
+            "serving_size": "1 cup (250ml)",
+            "fodmap_type": "-",
+            "notes": "Soy milk made from soy protein isolate (not whole soy beans) is Low FODMAP. Check the ingredient list.",
             "swap": ""
         },
         {
@@ -2489,7 +2579,7 @@
             "category": "Drinks",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2498,7 +2588,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "1 standard drink",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2507,7 +2597,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "any amount",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2516,7 +2606,7 @@
             "category": "Drinks",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2525,7 +2615,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "1 serving",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2534,7 +2624,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "1 standard drink",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2543,7 +2633,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2552,7 +2642,7 @@
             "category": "Drinks",
             "fodmap_content": "Low",
             "serving_size": "limited to 1 glass",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2561,7 +2651,7 @@
             "category": "Drinks",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2570,7 +2660,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2579,7 +2669,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2588,7 +2678,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "check label",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2597,7 +2687,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2606,7 +2696,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "5 squares",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2615,8 +2705,17 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
+            "swap": ""
+        },
+        {
+            "name": "Erythritol",
+            "category": "Condiments & Sweeteners",
+            "fodmap_content": "Low",
+            "serving_size": "up to 1 tsp per sitting",
+            "fodmap_type": "-",
+            "notes": "The only sugar alcohol considered Low FODMAP. Well absorbed in the small intestine unlike sorbitol/mannitol.",
             "swap": ""
         },
         {
@@ -2624,7 +2723,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp (18ml)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2633,7 +2732,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "any amount",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2642,8 +2741,8 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp (14g)",
-            "fodmap_type": "—",
-            "notes": "FODMAPs from garlic are water-soluble and do not leach into oil — safe for all FODMAP types.",
+            "fodmap_type": "-",
+            "notes": "FODMAPs from garlic are water-soluble and do not leach into oil - safe for all FODMAP types.",
             "swap": ""
         },
         {
@@ -2651,7 +2750,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2676,9 +2775,18 @@
         {
             "name": "Hummus",
             "category": "Condiments & Sweeteners",
+            "fodmap_content": "Low",
+            "serving_size": "2 tbsp (42g)",
+            "fodmap_type": "GOS, Fructans",
+            "notes": "Low at up to 2 tbsp (42g). Larger servings are High due to chickpea GOS and often garlic.",
+            "swap": ""
+        },
+        {
+            "name": "Hummus (large serving)",
+            "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
-            "serving_size": "",
-            "fodmap_type": "—",
+            "serving_size": "over 1/4 cup",
+            "fodmap_type": "GOS, Fructans",
             "notes": "",
             "swap": ""
         },
@@ -2687,7 +2795,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "any amount",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2696,7 +2804,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "any amount",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2705,7 +2813,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2714,7 +2822,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "any amount",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2723,7 +2831,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "any amount",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2732,7 +2840,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp (40g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2741,7 +2849,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2750,7 +2858,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2759,7 +2867,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "4 squares",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2768,7 +2876,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2777,7 +2885,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2786,7 +2894,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2795,7 +2903,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp (14g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2804,7 +2912,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp (18ml)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2813,7 +2921,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp (32g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Check for added high-fructose corn syrup or honey in commercial brands.",
             "swap": ""
         },
@@ -2822,8 +2930,8 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "less than 1 tbsp",
-            "fodmap_type": "—",
-            "notes": "Low at less than 1 tbsp due to garlic content. A normal pasta-sauce quantity is High — use garlic-infused oil based pesto where possible.",
+            "fodmap_type": "-",
+            "notes": "Low at less than 1 tbsp due to garlic content. A normal pasta-sauce quantity is High - use garlic-infused oil based pesto where possible.",
             "swap": ""
         },
         {
@@ -2831,7 +2939,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2840,7 +2948,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "any amount",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2849,7 +2957,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp (30ml)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Traditional soy sauce is low FODMAP at this serving; check for added wheat.",
             "swap": ""
         },
@@ -2858,7 +2966,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2867,7 +2975,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "any amount",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2876,8 +2984,17 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
+            "swap": ""
+        },
+        {
+            "name": "Sucralose (Splenda)",
+            "category": "Condiments & Sweeteners",
+            "fodmap_content": "Low",
+            "serving_size": "1 packet",
+            "fodmap_type": "-",
+            "notes": "Artificial sweetener; safe on a low-FODMAP diet. However, some Splenda products contain maltodextrin or other fillers.",
             "swap": ""
         },
         {
@@ -2885,7 +3002,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp (12g)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "Balanced glucose-to-fructose ratio makes it low FODMAP at typical servings.",
             "swap": ""
         },
@@ -2894,7 +3011,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "30g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2903,7 +3020,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2912,7 +3029,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2921,16 +3038,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 sachets / 1 sachet (US)",
-            "fodmap_type": "—",
-            "notes": "",
-            "swap": ""
-        },
-        {
-            "name": "Vinegar (apple cider)",
-            "category": "Condiments & Sweeteners",
-            "fodmap_content": "Low",
-            "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2939,16 +3047,16 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
         {
-            "name": "Vinegar (white/apple cider)",
+            "name": "Vinegar (white / apple cider)",
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp (30ml)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2957,7 +3065,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp (low-FODMAP amount)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2966,7 +3074,7 @@
             "category": "Condiments & Sweeteners",
             "fodmap_content": "High",
             "serving_size": "any amount",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2975,7 +3083,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "pinch (onion substitute)",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2984,7 +3092,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -2993,7 +3101,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3002,7 +3110,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3011,7 +3119,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3020,7 +3128,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3029,7 +3137,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3038,7 +3146,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3047,7 +3155,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3056,7 +3164,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "High",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3065,7 +3173,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "check no garlic added",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3074,8 +3182,17 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
+            "swap": ""
+        },
+        {
+            "name": "Coconut cream",
+            "category": "Cooking Ingredients",
+            "fodmap_content": "Low",
+            "serving_size": "1/4 cup (60ml)",
+            "fodmap_type": "-",
+            "notes": "Low at up to 1/4 cup. Larger amounts used in rich curries may push into moderate territory.",
             "swap": ""
         },
         {
@@ -3083,7 +3200,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3092,7 +3209,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3101,7 +3218,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "2 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3110,7 +3227,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3119,16 +3236,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
-            "notes": "",
-            "swap": ""
-        },
-        {
-            "name": "Garlic-infused oil (cooking)",
-            "category": "Cooking Ingredients",
-            "fodmap_content": "Low",
-            "serving_size": "1 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3137,7 +3245,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3146,7 +3254,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3155,7 +3263,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3164,7 +3272,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3173,7 +3281,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3182,7 +3290,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3191,7 +3299,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3200,7 +3308,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3209,7 +3317,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3218,7 +3326,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3227,7 +3335,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3236,7 +3344,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3245,7 +3353,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3254,16 +3362,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "1 tbsp",
-            "fodmap_type": "—",
-            "notes": "",
-            "swap": ""
-        },
-        {
-            "name": "Tahini (hulled)",
-            "category": "Cooking Ingredients",
-            "fodmap_content": "Low",
-            "serving_size": "30g",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3272,7 +3371,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         },
@@ -3281,7 +3380,7 @@
             "category": "Cooking Ingredients",
             "fodmap_content": "Low",
             "serving_size": "",
-            "fodmap_type": "—",
+            "fodmap_type": "-",
             "notes": "",
             "swap": ""
         }
