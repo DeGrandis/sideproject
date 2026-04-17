@@ -1,0 +1,29 @@
+# .github/workflows/deploy-fodmap.yml
+name: Deploy FODMAP Static Site
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'fodmap_frontend/**'
+  workflow_dispatch:
+
+jobs:
+  deploy-fodmap:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build FODMAP static site
+        run: cd fodmap_frontend && python build.py
+
+      - name: Copy index.html to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: fodmap_frontend/index.html
+          target: /home/${{ secrets.EC2_USER }}/docker

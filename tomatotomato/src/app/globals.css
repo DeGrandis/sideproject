@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root[data-theme='light'] {
+  --bg-primary: #f4efe7;
+  --bg-secondary: #fdfbf7;
+  --bg-tertiary: #e8dfd3;
+  --text-primary: #3d3125;
+  --text-secondary: #6b5d4f;
+  --text-tertiary: #8f8275;
+  --border: #d4c4b0;
+  --card-bg: #fdfbf7;
+  --card-hover: #f9f5ef;
+  --shadow: rgba(61, 49, 37, 0.08);
+  --shadow-hover: rgba(61, 49, 37, 0.12);
+  --primary: #d97757;
+  --primary-hover: #c2593d;
+  --success: #7a9b6c;
+  --success-hover: #658252;
+  --success-light: #e8f0e4;
+  --danger: #c85a54;
+  --danger-hover: #a84238;
+  --danger-light: #f5e4e3;
+  --warning: #d4a574;
+  --info: #e9ede8;
+  --info-text: #5b7c6d;
+  --timer-warning: #c85a54;
+}
+
+:root[data-theme='dark'] {
+  --bg-primary: #2a241e;
+  --bg-secondary: #3d3529;
+  --bg-tertiary: #1f1a15;
+  --text-primary: #e8dfd3;
+  --text-secondary: #b8ae9f;
+  --text-tertiary: #8f8275;
+  --border: #4d443a;
+  --card-bg: #3d3529;
+  --card-hover: #473f33;
+  --shadow: rgba(0, 0, 0, 0.4);
+  --shadow-hover: rgba(0, 0, 0, 0.6);
+  --primary: #d97757;
+  --primary-hover: #e89478;
+  --success: #8faf7f;
+  --success-hover: #a5c395;
+  --success-light: #3d4538;
+  --danger: #d67873;
+  --danger-hover: #e59691;
+  --danger-light: #4a3432;
+  --warning: #d9b589;
+  --info: #3a3f38;
+  --info-text: #96b3a3;
+  --timer-warning: #d67873;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6,
+strong, b,
+.btn-primary,
+.btn-secondary,
+button {
+  font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

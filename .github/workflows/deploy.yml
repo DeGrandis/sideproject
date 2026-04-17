@@ -42,6 +42,9 @@ jobs:
       #     echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> credentials
 
 
+      - name: Build FODMAP static site
+        run: cd fodmap_frontend && python build.py
+
       - name: Copy docker-compose and .env to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -52,6 +55,7 @@ jobs:
             docker-compose.yaml,
             .env,
             postgres/*,
+            fodmap_frontend/index.html,
           target: /home/${{ secrets.EC2_USER }}/docker
       
 

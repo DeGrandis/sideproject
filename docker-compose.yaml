@@ -60,6 +60,26 @@ services:
     networks:
       - client-side
 
+  tomatotomato:
+    build:
+      context: ./tomatotomato
+    image: degrandis/tomatotomato:latest
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - NEXT_PUBLIC_APP_VERSION=1.1.2
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/tomatotomato"
+        awslogs-stream: "tomatotomato"
+        awslogs-create-group: "true"
+    networks:
+      - client-side
+
   auth_backend:
     build:
       context: ./auth_backend
@@ -113,6 +133,7 @@ services:
       - frontend
       - budget_frontend
       - trivia
+      - tomatotomato
       - auth_backend
     networks:
       - client-side
@@ -120,6 +141,14 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d # Mount your Nginx configuration
       - ./certbot/www:/var/www/certbot:ro # Shared directory for ACME challenge (read-only)
       - ./certbot/conf:/etc/letsencrypt:ro # Shared directory for certificates (read-only)
+      - ./fodmap_frontend:/var/www/fodmap:ro # FODMAP static site (run build.py first)
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/nginx"
+        awslogs-stream: "nginx"
+        awslogs-create-group: "true"
     restart: unless-stopped
 
   certbot:
