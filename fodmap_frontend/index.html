@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FODMAP Search – Find Low &amp; High FODMAP Foods Instantly</title>
+    <meta name="description"
+        content="Search any food to instantly find its FODMAP level and safe serving size. Free, no-signup FODMAP food database for IBS and low-FODMAP diet management.">
+    <meta name="keywords"
+        content="FODMAP search, FODMAP food list, low FODMAP foods, high FODMAP foods, IBS diet, FODMAP checker">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://fodmapfinder.degrand.is">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="FODMAP Search – Find Low &amp; High FODMAP Foods Instantly">
+    <meta property="og:description"
+        content="Search any food to instantly find its FODMAP level and safe serving size. Free FODMAP food database for IBS management.">
+    <meta property="og:url" content="https://fodmapfinder.degrand.is">
+    <meta property="og:site_name" content="FODMAP Search">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="FODMAP Search – Find Low &amp; High FODMAP Foods">
+    <meta name="twitter:description"
+        content="Search any food to instantly find its FODMAP level and safe serving size.">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "FODMAP Search",
+    "url": "https://fodmapfinder.degrand.is",
+    "description": "Search any food to instantly find its FODMAP content level and safe serving size. A free FODMAP food database for people managing IBS or following a low-FODMAP diet.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://fodmapfinder.degrand.is/?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #f5f7f5;
+            --surface: #ffffff;
+            --primary: #2d6a4f;
+            --primary-dark: #1b4332;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --low-bg: #d1fae5;
+            --low-text: #065f46;
+            --high-bg: #fee2e2;
+            --high-text: #991b1b;
+            --med-bg: #fef3c7;
+            --med-text: #92400e;
+            --radius: 8px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: #fff;
+            text-align: center;
+            padding: 2.5rem 1rem 2rem;
+        }
+
+        header h1 {
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+
+        header p {
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            opacity: 0.88;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ── Search bar ── */
+        .search-wrap {
+            max-width: 680px;
+            margin: 1.5rem auto 0;
+            padding: 0 1rem;
+        }
+
+        .search-wrap label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .search-input-row {
+            display: flex;
+            align-items: center;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            transition: border-color 0.15s;
+            overflow: hidden;
+        }
+
+        .search-input-row:focus-within {
+            border-color: var(--primary);
+        }
+
+        .search-icon {
+            flex-shrink: 0;
+            padding: 0 0.8rem 0 1rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+        }
+
+        #search {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            padding: 0.85rem 1rem 0.85rem 0;
+            background: transparent;
+            color: var(--text);
+        }
+
+        #search::placeholder {
+            color: #9ca3af;
+        }
+
+        #search::-webkit-search-cancel-button {
+            display: none;
+        }
+
+        #clear-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 1rem;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            line-height: 1;
+            display: none;
+            align-items: center;
+        }
+
+        #clear-btn:hover {
+            color: var(--text);
+        }
+
+        /* ── Main content ── */
+        main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 3rem;
+        }
+
+        /* ── Filter chips ── */
+        .filter-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+
+        .chip {
+            padding: 0.3rem 0.9rem;
+            border-radius: 999px;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.12s;
+            color: var(--text-muted);
+        }
+
+        .chip:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .chip.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .chip.chip-low.active {
+            background: var(--low-text);
+            border-color: var(--low-text);
+        }
+
+        .chip.chip-high.active {
+            background: var(--high-text);
+            border-color: var(--high-text);
+        }
+
+        .chip.chip-medium.active {
+            background: var(--med-text);
+            border-color: var(--med-text);
+        }
+
+        /* ── Result count ── */
+        #result-count {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        /* ── Table ── */
+        .table-wrap {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f9fafb;
+            border-bottom: 2px solid var(--border);
+        }
+
+        th {
+            padding: 0.75rem 1.1rem;
+            text-align: left;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.1s;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        td {
+            padding: 0.85rem 1.1rem;
+            font-size: 0.97rem;
+            vertical-align: middle;
+        }
+
+        td:first-child {
+            font-weight: 500;
+        }
+
+        /* ── Badges ── */
+        .badge {
+            display: inline-block;
+            padding: 0.22rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .badge-low {
+            background: var(--low-bg);
+            color: var(--low-text);
+        }
+
+        .badge-high {
+            background: var(--high-bg);
+            color: var(--high-text);
+        }
+
+        .badge-medium {
+            background: var(--med-bg);
+            color: var(--med-text);
+        }
+
+        .badge-unknown {
+            background: #f3f4f6;
+            color: var(--text-muted);
+        }
+
+        /* ── Clickable rows ── */
+        .food-row.clickable {
+            cursor: pointer;
+        }
+
+        .food-row.clickable:hover td:first-child {
+            color: var(--primary);
+        }
+
+        .row-hint {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-left: 0.3rem;
+        }
+
+        .detail-row {
+            display: none;
+        }
+
+        .detail-row td {
+            padding: 0;
+            background: #f0faf5;
+        }
+
+        .detail-content {
+            padding: 0.65rem 1.1rem 0.65rem 1.5rem;
+            font-size: 0.87rem;
+            color: var(--text-muted);
+            border-left: 3px solid var(--primary);
+            line-height: 1.75;
+        }
+
+        .detail-label {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ── Empty state ── */
+        #empty-state {
+            display: none;
+            text-align: center;
+            padding: 3rem 1rem;
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            color: var(--text-muted);
+        }
+
+        #empty-state .empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #empty-state h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--text);
+        }
+
+        #empty-state p {
+            font-size: 0.92rem;
+        }
+
+        /* ── Legend ── */
+        .legend {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.25rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            border-top: 1px solid var(--border);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 520px) {
+
+            td:nth-child(3),
+            th:nth-child(3),
+            td:nth-child(4),
+            th:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>FODMAP Search</h1>
+        <p>Instantly look up any food's FODMAP level and safe serving size.</p>
+    </header>
+
+    <div class="search-wrap">
+        <label for="search">Search foods</label>
+        <div class="search-input-row">
+            <span class="search-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+            </span>
+            <input type="search" id="search" placeholder="e.g. apple, garlic, broccoli…" autocomplete="off" autofocus
+                aria-label="Search for a food">
+            <button id="clear-btn" type="button" aria-label="Clear search">&#x2715;</button>
+        </div>
+    </div>
+
+    <main>
+        <div class="filter-row" role="group" aria-label="Filter by FODMAP level">
+            <button class="chip active" data-level="all">All</button>
+            <button class="chip chip-low" data-level="Low">Low</button>
+            <button class="chip chip-medium" data-level="Medium">Medium</button>
+            <button class="chip chip-high" data-level="High">High</button>
+        </div>
+
+        <p id="result-count" aria-live="polite" aria-atomic="true"></p>
+
+        <div class="table-wrap" id="table-wrap">
+            <table id="food-table" aria-label="FODMAP food list">
+                <thead>
+                    <tr>
+                        <th scope="col">Food</th>
+                        <th scope="col">FODMAP Level</th>
+                        <th scope="col">Serving Size</th>
+                        <th scope="col">FODMAP Type</th>
+                    </tr>
+                </thead>
+                <tbody id="food-body"></tbody>
+            </table>
+        </div>
+
+        <div id="empty-state" role="status">
+            <h2>No foods found</h2>
+            <p>Try a different search term or clear the filters.</p>
+        </div>
+
+        <div class="legend" aria-label="Badge colour guide">
+            <span class="legend-item"><span class="badge badge-low">Low</span> Safe in standard serving</span>
+            <span class="legend-item"><span class="badge badge-medium">Medium</span> Moderate — watch portions</span>
+            <span class="legend-item"><span class="badge badge-high">High</span> Avoid or limit strictly</span>
+        </div>
+    </main>
+
+    <footer>
+        <p>FODMAP Search &mdash; a quick reference for low-FODMAP diet management.
+            Always confirm portions with a registered dietitian. &bull;
+            <a href="https://degrand.is">degrand.is</a>
+        </p>
+    </footer>
+
+    <script>
+        const FOODS_VAR = [{"name":"Ackee","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Apple","category":"Fruit","fodmap_content":"High","serving_size":"1 medium (182g)","fodmap_type":"Fructose, Polyols","notes":"Fructose and sorbitol together make apple a strong double trigger.","swap":"Banana or blueberries"},{"name":"Apricot","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Avocado","category":"Fruit","fodmap_content":"Medium","serving_size":"1/8 whole (30g)","fodmap_type":"Polyols","notes":"Limit strictly to 1/8 of a whole; a full avocado is high FODMAP.","swap":"Olive oil or cucumber for healthy fat"},{"name":"Avocado (large serving)","category":"Fruit","fodmap_content":"High","serving_size":"over 1/2 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Banana","category":"Fruit","fodmap_content":"Low","serving_size":"1 medium (unripe)","fodmap_type":"—","notes":"Unripe/green banana is lower FODMAP; very ripe banana may edge into medium.","swap":""},{"name":"Banana (ripe)","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Blackberries","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Blackcurrants","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Blueberries","category":"Fruit","fodmap_content":"Low","serving_size":"1 cup (148g)","fodmap_type":"—","notes":"","swap":""},{"name":"Boysenberry","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Cantaloupe","category":"Fruit","fodmap_content":"Low","serving_size":"3/4 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Cherry","category":"Fruit","fodmap_content":"High","serving_size":"3 cherries (42g)","fodmap_type":"Polyols","notes":"Very high in sorbitol; even the small serving here affects many people.","swap":"Blueberries or raspberries"},{"name":"Clementine","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Coconut flesh","category":"Fruit","fodmap_content":"Low","serving_size":"2/3 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Cranberry juice","category":"Fruit","fodmap_content":"Low","serving_size":"3/4 glass","fodmap_type":"—","notes":"","swap":""},{"name":"Currants","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Dragon fruit","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Figs","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Grapefruit","category":"Fruit","fodmap_content":"High","serving_size":"over 80g","fodmap_type":"—","notes":"","swap":""},{"name":"Grapes","category":"Fruit","fodmap_content":"Low","serving_size":"1 cup (92g)","fodmap_type":"—","notes":"","swap":""},{"name":"Guava (ripe)","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Honeydew melon","category":"Fruit","fodmap_content":"Low","serving_size":"1/2 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Jackfruit","category":"Fruit","fodmap_content":"Low","serving_size":"1/3 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Kiwi","category":"Fruit","fodmap_content":"Low","serving_size":"2 medium (148g)","fodmap_type":"—","notes":"","swap":""},{"name":"Lemon","category":"Fruit","fodmap_content":"Low","serving_size":"juice of 1/2 lemon","fodmap_type":"—","notes":"","swap":""},{"name":"Lime","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Lychee","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Mandarin","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Mango","category":"Fruit","fodmap_content":"High","serving_size":"1 cup diced (165g)","fodmap_type":"Fructose","notes":"","swap":"Pineapple or kiwi"},{"name":"Nectarine","category":"Fruit","fodmap_content":"High","serving_size":"over 1/2 a nectarine","fodmap_type":"—","notes":"","swap":""},{"name":"Orange","category":"Fruit","fodmap_content":"Low","serving_size":"1 medium (131g)","fodmap_type":"—","notes":"","swap":""},{"name":"Papaya","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Passion fruit","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Peach","category":"Fruit","fodmap_content":"High","serving_size":"1 medium (150g)","fodmap_type":"Fructose, Polyols","notes":"","swap":"Banana or strawberries"},{"name":"Pear","category":"Fruit","fodmap_content":"High","serving_size":"1 medium (178g)","fodmap_type":"Fructose, Polyols","notes":"","swap":"Orange or kiwi"},{"name":"Pineapple","category":"Fruit","fodmap_content":"Low","serving_size":"1 cup diced (165g)","fodmap_type":"—","notes":"","swap":""},{"name":"Plantain","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Plums","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Pomegranate","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Prunes","category":"Fruit","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Raisins","category":"Fruit","fodmap_content":"High","serving_size":"over 1 tbsp / 13g","fodmap_type":"—","notes":"","swap":""},{"name":"Raspberries","category":"Fruit","fodmap_content":"Low","serving_size":"1 cup (123g)","fodmap_type":"—","notes":"","swap":""},{"name":"Raspberry","category":"Fruit","fodmap_content":"Low","serving_size":"1/3 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Rhubarb","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Strawberries","category":"Fruit","fodmap_content":"Low","serving_size":"65g / ~5 medium","fodmap_type":"—","notes":"","swap":""},{"name":"Tangelo","category":"Fruit","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Watermelon","category":"Fruit","fodmap_content":"High","serving_size":"1 cup diced (152g)","fodmap_type":"Fructose, Polyols","notes":"One of the highest FODMAP fruits; even small servings affect many people.","swap":"Strawberries or honeydew (small serve)"},{"name":"Alfalfa","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Artichoke","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Asparagus","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"5 spears (100g)","fodmap_type":"Fructans, GOS","notes":"","swap":"Green beans or bok choy"},{"name":"Baked beans","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Bamboo shoots","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Bean sprouts","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Beetroot (canned/pickled)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Beetroot (fresh)","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Bell pepper (green)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/2 cup (74g)","fodmap_type":"—","notes":"","swap":""},{"name":"Bell pepper (red)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/2 cup (74g)","fodmap_type":"—","notes":"","swap":""},{"name":"Black beans","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/4 cup (45g)","fodmap_type":"GOS, Fructans","notes":"Low FODMAP only at 1/4 cup (45g) canned and rinsed. Larger servings quickly become High due to GOS content.","swap":"Chickpeas or lentils (canned, rinsed, 1/4 cup)"},{"name":"Black eyed peas","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Bok choy","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 cup (70g)","fodmap_type":"—","notes":"","swap":""},{"name":"Broad beans","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Broccoli","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"3/4 cup heads (91g)","fodmap_type":"—","notes":"Florets at this serving are fine; stalks may contain slightly more fructans.","swap":""},{"name":"Broccolini","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/4 cup heads","fodmap_type":"—","notes":"","swap":""},{"name":"Brussels sprouts","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"2 sprouts","fodmap_type":"Fructans, GOS","notes":"Low FODMAP at just 2 sprouts. A typical side-dish portion (1/2 cup) is High — serving size matters critically here.","swap":"Broccoli or bok choy"},{"name":"Butter beans","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Butternut squash","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/4 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Cabbage (common)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"up to 3/4 cup","fodmap_type":"Fructans","notes":"Savoy cabbage is higher; bok choy is a safe low-FODMAP swap. Common/red cabbage is safe up to 3/4 cup — beyond that fructan load becomes High.","swap":"Bok choy or spinach"},{"name":"Cabbage (red)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"up to 3/4 cup","fodmap_type":"—","notes":"Safe up to 3/4 cup. Larger portions push fructan content into High territory — serving size matters critically here.","swap":""},{"name":"Callaloo","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Carrot","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 medium (61g)","fodmap_type":"—","notes":"","swap":""},{"name":"Cauliflower","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"1/2 cup (50g)","fodmap_type":"Fructans, Polyols","notes":"Even small amounts bother many IBS sufferers.","swap":"Broccoli (1 cup) or zucchini"},{"name":"Celeriac","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Celery","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"less than 5cm of stalk","fodmap_type":"—","notes":"Low FODMAP only below 5cm of stalk. A full stalk or more contains significant mannitol and becomes High.","swap":""},{"name":"Chickpeas (canned, rinsed)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/4 cup (42g)","fodmap_type":"—","notes":"Rinsing removes much of the GOS. Larger servings or home-cooked become medium or high.","swap":""},{"name":"Chicory leaves","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Chilli","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"if tolerable","fodmap_type":"—","notes":"","swap":""},{"name":"Chinese cabbage","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Chives","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Choy sum","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Collard greens","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Corn","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/2 cob","fodmap_type":"—","notes":"","swap":""},{"name":"Cucumber","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/2 cup sliced (52g)","fodmap_type":"—","notes":"","swap":""},{"name":"Edamame","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/2 cup (75g)","fodmap_type":"—","notes":"","swap":""},{"name":"Eggplant","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 cup (82g)","fodmap_type":"—","notes":"","swap":""},{"name":"Fennel bulb","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"up to 75g","fodmap_type":"—","notes":"","swap":""},{"name":"Fermented cabbage (sauerkraut)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"up to 1/2 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Garlic","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"1 clove (3g)","fodmap_type":"Fructans","notes":"Even 1 clove is high. Use garlic-infused oil instead — FODMAPs do not leach into oil.","swap":"Garlic-infused oil"},{"name":"Ginger","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Green beans","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 cup (100g)","fodmap_type":"—","notes":"","swap":""},{"name":"Haricot beans","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Jerusalem artichoke","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Kale","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 cup (67g)","fodmap_type":"—","notes":"","swap":""},{"name":"Kidney beans","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"1/4 cup (45g)","fodmap_type":"GOS","notes":"","swap":"Chickpeas or lentils (canned, rinsed, 1/4 cup)"},{"name":"Leek (leaves only)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/2 cup (30g)","fodmap_type":"—","notes":"Use only the green leaf portion; the white bulb is high in fructans.","swap":""},{"name":"Leek bulb","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Lentils (canned, rinsed)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/4 cup (46g)","fodmap_type":"—","notes":"Canned and well rinsed only; home-cooked or larger portions are high.","swap":""},{"name":"Lettuce","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 cup (47g)","fodmap_type":"—","notes":"","swap":""},{"name":"Lima beans","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Mange Tout","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Mung beans","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Mushrooms","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"1 cup (70g)","fodmap_type":"Polyols","notes":"Mannitol is very high in most mushroom varieties.","swap":"Zucchini or bell pepper for similar texture"},{"name":"Okra","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Olives","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"15 olives (45g)","fodmap_type":"—","notes":"","swap":""},{"name":"Onion","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"1 medium (110g)","fodmap_type":"Fructans","notes":"One of the most common IBS triggers. Scallion greens are a safe substitute.","swap":"Scallion (green tips) or leek (leaves only)"},{"name":"Parsnip","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Peas (green)","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"1/4 cup (36g)","fodmap_type":"GOS, Fructans","notes":"","swap":"Edamame or corn"},{"name":"Peas (sugar snap)","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Pickled gherkins","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Potato (white)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 medium (150g)","fodmap_type":"—","notes":"","swap":""},{"name":"Pumpkin","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"up to 63g","fodmap_type":"—","notes":"","swap":""},{"name":"Radish","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Red kidney beans","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"over 85g","fodmap_type":"—","notes":"","swap":""},{"name":"Savoy cabbage","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"over 1/2 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Scallion (green tips)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"2 tbsp (6g)","fodmap_type":"—","notes":"Green tops only; the white bulb contains fructans.","swap":""},{"name":"Scallion bulb (white part)","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Seaweed / nori","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Shallots","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Silverbeet","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Snow peas","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"5 pods (25g)","fodmap_type":"Fructans, GOS","notes":"Low at 5 pods (25g) only. A larger handful is High in fructans and GOS. Green beans are a more forgiving alternative.","swap":"Green beans or bok choy"},{"name":"Soy beans","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Spaghetti squash","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Spinach","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 cup (30g)","fodmap_type":"—","notes":"","swap":""},{"name":"Split peas","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Sun-dried tomatoes","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"4 pieces","fodmap_type":"—","notes":"","swap":""},{"name":"Swede","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Sweet potato","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/2 cup (100g)","fodmap_type":"Polyols","notes":"Mannitol content rises with serving size; safe only at 1/2 cup (75g). A full baked sweet potato is High FODMAP.","swap":"White potato or carrot"},{"name":"Taro","category":"Vegetables & Legumes","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Tomatillo","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 cup fresh","fodmap_type":"—","notes":"","swap":""},{"name":"Tomato","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1 medium / up to 65g","fodmap_type":"—","notes":"Cherry tomatoes may be slightly higher per serving due to concentrated fructose.","swap":""},{"name":"Tomato (canned)","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"3/5 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Tomato paste","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Turnip","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"1/2 turnip","fodmap_type":"—","notes":"","swap":""},{"name":"Water chestnuts","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Yam","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Zucchini","category":"Vegetables & Legumes","fodmap_content":"Low","serving_size":"65g","fodmap_type":"—","notes":"","swap":""},{"name":"Almond meal","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Amaranth flour","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Barley","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Basmati rice","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1 cup cooked","fodmap_type":"—","notes":"","swap":""},{"name":"Breadcrumbs","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Brown rice","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1 cup cooked (195g)","fodmap_type":"—","notes":"","swap":""},{"name":"Buckwheat","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Buckwheat noodles","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Bulgur","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1/4 cup cooked (44g)","fodmap_type":"—","notes":"","swap":""},{"name":"Corn bread","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Corn tortilla","category":"Grains & Bread","fodmap_content":"Low","serving_size":"3 tortillas","fodmap_type":"—","notes":"","swap":""},{"name":"Cornflakes","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1/2 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Cornflour (maize)","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Couscous","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Crackers (plain)","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Crispbread","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Croissant","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Crumpets","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Egg noodles","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Freekeh","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Gluten-free bread","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Gluten-free pasta","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1 cup cooked (140g)","fodmap_type":"—","notes":"Check ingredients; pasta made with legume flour may contain GOS.","swap":""},{"name":"Gnocchi","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Millet","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Muesli (cereal)","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Oats (rolled)","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1/2 cup dry (39g)","fodmap_type":"—","notes":"","swap":""},{"name":"Pasta (wheat)","category":"Grains & Bread","fodmap_content":"Low","serving_size":"up to 1/2 cup cooked","fodmap_type":"Fructans","notes":"Low at up to 1/2 cup cooked only. A standard restaurant-sized bowl of wheat pasta is High in fructans — use gluten-free or rice noodles for larger meals.","swap":"Gluten-free pasta or rice noodles"},{"name":"Polenta","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Popcorn","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Potato crisps (plain)","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Quinoa","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1 cup cooked (185g)","fodmap_type":"—","notes":"","swap":""},{"name":"Rice cakes","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Rice crackers","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Rice flour","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Rice noodles","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1 cup cooked (176g)","fodmap_type":"—","notes":"","swap":""},{"name":"Rye","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Semolina","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Sorghum","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Sourdough (white)","category":"Grains & Bread","fodmap_content":"Low","serving_size":"2 slices (109g)","fodmap_type":"—","notes":"Long fermentation breaks down fructans. Must be a traditionally made sourdough.","swap":""},{"name":"Spelt flour","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Spelt sourdough","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Tortilla chips","category":"Grains & Bread","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Udon noodles","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Wheat bran","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Wheat bread","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1 slice","fodmap_type":"Fructans","notes":"Low at 1 slice only due to residual fructans. Two or more slices push it into High — choose sourdough or gluten-free for larger portions.","swap":"Sourdough (properly fermented) or gluten-free bread"},{"name":"Wheat flour","category":"Grains & Bread","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"White rice","category":"Grains & Bread","fodmap_content":"Low","serving_size":"1 cup cooked (186g)","fodmap_type":"—","notes":"","swap":""},{"name":"Wild rice","category":"Grains & Bread","fodmap_content":"Low","serving_size":"up to 1 cup","fodmap_type":"—","notes":"","swap":""},{"name":"Canned tuna","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Cod","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Crab","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Haddock","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Lobster","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Mussels","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Oysters","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Prawns","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Salmon","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Shrimp","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Trout","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Tuna","category":"Fish & Seafood","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Beef","category":"Meat & Protein","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"Plain cooked only; avoid pre-seasoned versions with garlic or onion.","swap":""},{"name":"Chicken","category":"Meat & Protein","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"Plain cooked only; marinades with garlic or onion add FODMAPs.","swap":""},{"name":"Chorizo","category":"Meat & Protein","fodmap_content":"Low","serving_size":"check garlic in ingredients","fodmap_type":"—","notes":"Plain pork chorizo is Low FODMAP, but many brands add garlic or onion powder — always check the ingredient list.","swap":""},{"name":"Chorizo (with garlic)","category":"Meat & Protein","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Cold cuts / deli meat","category":"Meat & Protein","fodmap_content":"Low","serving_size":"check ingredients","fodmap_type":"—","notes":"","swap":""},{"name":"Eggs","category":"Meat & Protein","fodmap_content":"Low","serving_size":"2 large","fodmap_type":"—","notes":"","swap":""},{"name":"Lamb","category":"Meat & Protein","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Pork","category":"Meat & Protein","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Prosciutto","category":"Meat & Protein","fodmap_content":"Low","serving_size":"2–3 slices","fodmap_type":"—","notes":"","swap":""},{"name":"Sausages (check ingredients)","category":"Meat & Protein","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Tempeh","category":"Meat & Protein","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"Fermentation significantly reduces FODMAPs.","swap":""},{"name":"Tofu (firm)","category":"Meat & Protein","fodmap_content":"Low","serving_size":"3.5 oz (100g)","fodmap_type":"—","notes":"Firm tofu only; silken tofu is higher in GOS.","swap":""},{"name":"Turkey","category":"Meat & Protein","fodmap_content":"Low","serving_size":"3 oz (85g)","fodmap_type":"—","notes":"","swap":""},{"name":"Almond milk","category":"Dairy","fodmap_content":"Low","serving_size":"1 cup (244ml)","fodmap_type":"—","notes":"Check label for added inulin or chicory root extract, which add FODMAPs.","swap":""},{"name":"Butter","category":"Dairy","fodmap_content":"Low","serving_size":"1 tbsp (14g)","fodmap_type":"—","notes":"Almost pure fat with negligible lactose; safe for most lactose-sensitive people.","swap":""},{"name":"Buttermilk","category":"Dairy","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Cheddar cheese","category":"Dairy","fodmap_content":"Low","serving_size":"2 slices (40g)","fodmap_type":"—","notes":"Hard aged cheeses are very low in lactose due to the fermentation process.","swap":""},{"name":"Cheese (brie)","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Cheese (camembert)","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Coconut yoghurt","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Cottage cheese","category":"Dairy","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Cream cheese","category":"Dairy","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Custard","category":"Dairy","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Feta cheese","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Gelato","category":"Dairy","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Goat cheese","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Greek yogurt (plain)","category":"Dairy","fodmap_content":"Low","serving_size":"23g","fodmap_type":"—","notes":"Straining reduces lactose; full-fat plain is best. Avoid flavoured varieties.","swap":""},{"name":"Haloumi","category":"Dairy","fodmap_content":"Low","serving_size":"40g","fodmap_type":"—","notes":"","swap":""},{"name":"Ice cream","category":"Dairy","fodmap_content":"High","serving_size":"1/2 cup (66g)","fodmap_type":"Lactose","notes":"","swap":"Lactose-free ice cream or fruit sorbet (check ingredients)"},{"name":"Lactose-free ice cream","category":"Dairy","fodmap_content":"Low","serving_size":"1/2 cup (66g)","fodmap_type":"—","notes":"","swap":""},{"name":"Lactose-free milk","category":"Dairy","fodmap_content":"Low","serving_size":"1 cup (244ml)","fodmap_type":"—","notes":"","swap":""},{"name":"Lactose-free yoghurt","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Milk (cow)","category":"Dairy","fodmap_content":"High","serving_size":"1 cup (244ml)","fodmap_type":"Lactose","notes":"","swap":"Lactose-free milk or almond milk"},{"name":"Milk (evaporated)","category":"Dairy","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Milk (goat)","category":"Dairy","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Mozzarella","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Oat milk","category":"Dairy","fodmap_content":"Low","serving_size":"30ml (for cereal)","fodmap_type":"Fructans","notes":"Many brands add inulin; check ingredients carefully. Low only at 30ml (for cereal); a full glass-sized pour is High in fructans.","swap":"Almond milk or lactose-free milk"},{"name":"Parmesan","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Rice milk","category":"Dairy","fodmap_content":"Low","serving_size":"up to 200ml","fodmap_type":"—","notes":"","swap":""},{"name":"Ricotta cheese","category":"Dairy","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"Low at 2 tbsp only. Ricotta retains significant lactose — a larger serving (e.g. in lasagna) is High.","swap":""},{"name":"Sorbet","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Sour cream","category":"Dairy","fodmap_content":"High","serving_size":"over 2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Swiss cheese","category":"Dairy","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Whipped cream","category":"Dairy","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Yoghurt (regular)","category":"Dairy","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Almonds","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"10 almonds (12g)","fodmap_type":"GOS, Fructans","notes":"Low FODMAP at exactly 10 almonds (12g). Beyond this, GOS and fructan content rises sharply into High territory.","swap":"Macadamia nuts or walnuts"},{"name":"Brazil nuts","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"up to 10 nuts","fodmap_type":"—","notes":"","swap":""},{"name":"Cashews","category":"Nuts & Seeds","fodmap_content":"High","serving_size":"10 cashews (14g)","fodmap_type":"GOS, Fructans","notes":"Even the small serving listed here is high FODMAP; best avoided entirely.","swap":"Macadamia nuts or walnuts"},{"name":"Chestnuts","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Chia seeds","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Flaxseeds","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"up to 1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Hazelnuts","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"24 hazelnuts","fodmap_type":"—","notes":"","swap":""},{"name":"Macadamia nuts","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"up to 15 nuts (40g)","fodmap_type":"—","notes":"","swap":""},{"name":"Mixed nuts","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"small handful","fodmap_type":"—","notes":"","swap":""},{"name":"Peanuts","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"32 pieces (28g)","fodmap_type":"—","notes":"","swap":""},{"name":"Pecans","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"15 halves (20g)","fodmap_type":"—","notes":"","swap":""},{"name":"Pine nuts","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Pistachios","category":"Nuts & Seeds","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Pumpkin seeds","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"2 tbsp (18g)","fodmap_type":"—","notes":"","swap":""},{"name":"Sesame seeds","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Sunflower seeds","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"2 tbsp (18g)","fodmap_type":"—","notes":"","swap":""},{"name":"Walnuts","category":"Nuts & Seeds","fodmap_content":"Low","serving_size":"10–15 halves (29g)","fodmap_type":"—","notes":"","swap":""},{"name":"Apple juice","category":"Drinks","fodmap_content":"High","serving_size":"1/2 cup (120ml)","fodmap_type":"Fructose","notes":"High fructose even in small amounts; best avoided.","swap":"Water with lemon or orange juice (max 1/2 cup)"},{"name":"Beer","category":"Drinks","fodmap_content":"Low","serving_size":"limited to 1 bottle","fodmap_type":"—","notes":"","swap":""},{"name":"Beer (more than one bottle)","category":"Drinks","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Black tea (weak)","category":"Drinks","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Chai tea (weak)","category":"Drinks","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Coconut milk","category":"Drinks","fodmap_content":"Low","serving_size":"125ml","fodmap_type":"—","notes":"","swap":""},{"name":"Coconut water","category":"Drinks","fodmap_content":"Low","serving_size":"100ml","fodmap_type":"—","notes":"","swap":""},{"name":"Coffee (black)","category":"Drinks","fodmap_content":"Low","serving_size":"8 oz (240ml)","fodmap_type":"—","notes":"Black coffee is low FODMAP; milky coffees depend on the milk used.","swap":""},{"name":"Fruit juice (apple/pear/mango)","category":"Drinks","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Fruit juice (safe fruits)","category":"Drinks","fodmap_content":"Low","serving_size":"125ml","fodmap_type":"—","notes":"","swap":""},{"name":"Gin","category":"Drinks","fodmap_content":"Low","serving_size":"1 standard drink","fodmap_type":"—","notes":"","swap":""},{"name":"Green tea","category":"Drinks","fodmap_content":"Low","serving_size":"8 oz (240ml)","fodmap_type":"—","notes":"","swap":""},{"name":"Kombucha","category":"Drinks","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Lemonade","category":"Drinks","fodmap_content":"Low","serving_size":"in low quantities","fodmap_type":"—","notes":"","swap":""},{"name":"Orange juice","category":"Drinks","fodmap_content":"Low","serving_size":"1/2 cup (120ml)","fodmap_type":"Fructose","notes":"Limit to 1/2 cup; a full glass can tip into high fructose territory.","swap":"Water with lemon or eat a whole orange instead"},{"name":"Orange juice (large quantity)","category":"Drinks","fodmap_content":"High","serving_size":"over 100ml","fodmap_type":"—","notes":"","swap":""},{"name":"Peppermint tea","category":"Drinks","fodmap_content":"Low","serving_size":"8 oz (240ml)","fodmap_type":"—","notes":"","swap":""},{"name":"Rum","category":"Drinks","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Soy milk (made with soy beans)","category":"Drinks","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Vodka","category":"Drinks","fodmap_content":"Low","serving_size":"1 standard drink","fodmap_type":"—","notes":"","swap":""},{"name":"Water","category":"Drinks","fodmap_content":"Low","serving_size":"any amount","fodmap_type":"—","notes":"","swap":""},{"name":"Whey protein concentrate (not lactose-free)","category":"Drinks","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Whey protein isolate","category":"Drinks","fodmap_content":"Low","serving_size":"1 serving","fodmap_type":"—","notes":"","swap":""},{"name":"Whiskey","category":"Drinks","fodmap_content":"Low","serving_size":"1 standard drink","fodmap_type":"—","notes":"","swap":""},{"name":"White tea","category":"Drinks","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Wine","category":"Drinks","fodmap_content":"Low","serving_size":"limited to 1 glass","fodmap_type":"—","notes":"","swap":""},{"name":"Wine (more than one glass)","category":"Drinks","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Agave","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Almond butter","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Barbecue sauce","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"check label","fodmap_type":"—","notes":"","swap":""},{"name":"Capers","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Dark chocolate","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"5 squares","fodmap_type":"—","notes":"","swap":""},{"name":"Dijon mustard","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tsp","fodmap_type":"—","notes":"","swap":""},{"name":"Fish sauce","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tbsp (18ml)","fodmap_type":"—","notes":"","swap":""},{"name":"Fructose","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"any amount","fodmap_type":"—","notes":"","swap":""},{"name":"Garlic-infused oil","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tbsp (14g)","fodmap_type":"—","notes":"FODMAPs from garlic are water-soluble and do not leach into oil — safe for all FODMAP types.","swap":""},{"name":"Golden syrup","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tsp","fodmap_type":"—","notes":"","swap":""},{"name":"High-fructose corn syrup","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"any amount","fodmap_type":"Fructose","notes":"Common hidden ingredient; check condiment, sauce, and drink labels carefully.","swap":"Sugar or maple syrup"},{"name":"Honey","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"1 tbsp (21g)","fodmap_type":"Fructose","notes":"","swap":"Maple syrup"},{"name":"Hummus","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Inulin","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"any amount","fodmap_type":"—","notes":"","swap":""},{"name":"Isomalt (E953)","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"any amount","fodmap_type":"—","notes":"","swap":""},{"name":"Jam (strawberry)","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Maltitol (E965)","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"any amount","fodmap_type":"—","notes":"","swap":""},{"name":"Mannitol (E421)","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"any amount","fodmap_type":"—","notes":"","swap":""},{"name":"Maple syrup","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp (40g)","fodmap_type":"—","notes":"","swap":""},{"name":"Marmalade","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Mayonnaise (plain)","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Milk chocolate","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"4 squares","fodmap_type":"—","notes":"","swap":""},{"name":"Miso paste","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Molasses","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Mustard (plain)","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tsp","fodmap_type":"—","notes":"","swap":""},{"name":"Olive oil","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tbsp (14g)","fodmap_type":"—","notes":"","swap":""},{"name":"Oyster sauce","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tbsp (18ml)","fodmap_type":"—","notes":"","swap":""},{"name":"Peanut butter","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp (32g)","fodmap_type":"—","notes":"Check for added high-fructose corn syrup or honey in commercial brands.","swap":""},{"name":"Pesto sauce","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"less than 1 tbsp","fodmap_type":"—","notes":"Low at less than 1 tbsp due to garlic content. A normal pasta-sauce quantity is High — use garlic-infused oil based pesto where possible.","swap":""},{"name":"Pesto sauce (with garlic)","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Sorbitol (E420)","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"any amount","fodmap_type":"—","notes":"","swap":""},{"name":"Soy sauce","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp (30ml)","fodmap_type":"—","notes":"Traditional soy sauce is low FODMAP at this serving; check for added wheat.","swap":""},{"name":"Sriracha","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tsp","fodmap_type":"—","notes":"","swap":""},{"name":"Stevia","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"any amount","fodmap_type":"—","notes":"","swap":""},{"name":"Stock cubes","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Sugar (white)","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tbsp (12g)","fodmap_type":"—","notes":"Balanced glucose-to-fructose ratio makes it low FODMAP at typical servings.","swap":""},{"name":"Tahini","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"30g","fodmap_type":"—","notes":"","swap":""},{"name":"Tamari sauce","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Tamarind paste","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Tomato sauce / ketchup","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 sachets / 1 sachet (US)","fodmap_type":"—","notes":"","swap":""},{"name":"Vinegar (apple cider)","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Vinegar (balsamic)","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Vinegar (white/apple cider)","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"2 tbsp (30ml)","fodmap_type":"—","notes":"","swap":""},{"name":"Worcestershire sauce","category":"Condiments & Sweeteners","fodmap_content":"Low","serving_size":"1 tbsp (low-FODMAP amount)","fodmap_type":"—","notes":"","swap":""},{"name":"Xylitol (E967)","category":"Condiments & Sweeteners","fodmap_content":"High","serving_size":"any amount","fodmap_type":"—","notes":"","swap":""},{"name":"Asafoetida powder","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"pinch (onion substitute)","fodmap_type":"—","notes":"","swap":""},{"name":"Avocado oil","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Baking powder","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Baking soda","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Basil (fresh/dried)","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Bay leaves","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Black pepper","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Cacao / cocoa powder","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Canola oil","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Carob powder","category":"Cooking Ingredients","fodmap_content":"High","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Chili powder","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"check no garlic added","fodmap_type":"—","notes":"","swap":""},{"name":"Cinnamon","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Coconut oil","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Coriander / cilantro","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Cream","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"2 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Cumin","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Curry powder","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Garlic-infused oil (cooking)","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Gelatine","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Ghee","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Lemongrass","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Mint","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Nutmeg","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Nutritional yeast","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Onion-infused oil","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Oregano","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Paprika","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Parsley","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Rosemary","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Sage","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Salt","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Sesame oil","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"1 tbsp","fodmap_type":"—","notes":"","swap":""},{"name":"Tahini (hulled)","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"30g","fodmap_type":"—","notes":"","swap":""},{"name":"Thyme","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""},{"name":"Turmeric","category":"Cooking Ingredients","fodmap_content":"Low","serving_size":"","fodmap_type":"—","notes":"","swap":""}];
+
+        // ── State ───────────────────────────────────────────────────────────────────
+        var activeLevel = 'all';
+
+        // ── Helpers ─────────────────────────────────────────────────────────────────
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function badge(level) {
+            var cls = { High: 'high', Low: 'low', Medium: 'medium' }[level] || 'unknown';
+            return '<span class="badge badge-' + cls + '">' + escapeHtml(level) + '</span>';
+        }
+
+        function applyFilters(query, level) {
+            var q = query.trim().toLowerCase();
+            return FOODS_VAR.filter(function (f) {
+                var matchesQuery = !q || f.name.toLowerCase().indexOf(q) !== -1;
+                var matchesLevel = level === 'all' || f.fodmap_content === level;
+                return matchesQuery && matchesLevel;
+            });
+        }
+
+        function render(foods) {
+            var tbody = document.getElementById('food-body');
+            var count = document.getElementById('result-count');
+            var tableWrap = document.getElementById('table-wrap');
+            var emptyState = document.getElementById('empty-state');
+
+            if (foods.length === 0) {
+                tableWrap.style.display = 'none';
+                emptyState.style.display = 'block';
+                count.textContent = 'No results';
+            } else {
+                tableWrap.style.display = '';
+                emptyState.style.display = 'none';
+                count.textContent = 'Showing ' + foods.length + ' food' + (foods.length !== 1 ? 's' : '');
+                tbody.innerHTML = foods.map(function (f, i) {
+                    var typeHtml = f.fodmap_type ? escapeHtml(f.fodmap_type) : '\u2014';
+                    var hasDetails = (f.notes && f.notes.trim()) || (f.swap && f.swap.trim());
+                    var detailParts = [];
+                    if (f.notes && f.notes.trim()) detailParts.push('<span class="detail-label">Note</span> ' + escapeHtml(f.notes));
+                    if (f.swap && f.swap.trim()) detailParts.push('<span class="detail-label">Low-FODMAP swap</span> ' + escapeHtml(f.swap));
+                    var detailRow = hasDetails
+                        ? '<tr class="detail-row" id="detail-' + i + '"><td colspan="4"><div class="detail-content">' + detailParts.join('<br>') + '</div></td></tr>'
+                        : '';
+                    return '<tr class="food-row' + (hasDetails ? ' clickable' : '') + '"' + (hasDetails ? ' data-detail="detail-' + i + '"' : '') + '>' +
+                        '<td>' + escapeHtml(f.name) + (hasDetails ? ' <span class="row-hint">&#9658;</span>' : '') + '</td>' +
+                        '<td>' + badge(f.fodmap_content) + '</td>' +
+                        '<td>' + escapeHtml(f.serving_size) + '</td>' +
+                        '<td>' + typeHtml + '</td>' +
+                        '</tr>' + detailRow;
+                }).join('');
+            }
+        }
+
+        // ── Search input ─────────────────────────────────────────────────────────────
+        var searchInput = document.getElementById('search');
+        var clearBtn = document.getElementById('clear-btn');
+
+        function updateClearBtn() {
+            clearBtn.style.display = searchInput.value ? 'flex' : 'none';
+        }
+
+        function updateResults() {
+            var q = searchInput.value;
+            updateClearBtn();
+            // Sync URL for shareability / SearchAction
+            var url = new URL(window.location.href);
+            if (q) { url.searchParams.set('q', q); } else { url.searchParams.delete('q'); }
+            if (activeLevel !== 'all') { url.searchParams.set('level', activeLevel); } else { url.searchParams.delete('level'); }
+            window.history.replaceState(null, '', url.toString());
+            render(applyFilters(q, activeLevel));
+        }
+
+        searchInput.addEventListener('input', updateResults);
+
+        clearBtn.addEventListener('click', function () {
+            searchInput.value = '';
+            searchInput.focus();
+            updateResults();
+        });
+
+        // ── Filter chips ─────────────────────────────────────────────────────────────
+        document.querySelectorAll('.chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                activeLevel = chip.dataset.level;
+                document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+                chip.classList.add('active');
+                updateResults();
+            });
+        });
+
+        // ── Row expand ────────────────────────────────────────────────────────────────
+        document.getElementById('food-body').addEventListener('click', function (e) {
+            var row = e.target.closest('tr.food-row.clickable');
+            if (!row) return;
+            var detailRow = document.getElementById(row.dataset.detail);
+            if (!detailRow) return;
+            var open = detailRow.style.display === 'table-row';
+            detailRow.style.display = open ? 'none' : 'table-row';
+            var hint = row.querySelector('.row-hint');
+            if (hint) hint.innerHTML = open ? '&#9658;' : '&#9660;';
+        });
+
+        // ── Initialise from URL params ────────────────────────────────────────────────
+        (function init() {
+            var params = new URLSearchParams(window.location.search);
+            var q = params.get('q') || '';
+            var level = params.get('level') || 'all';
+
+            if (q) {
+                searchInput.value = q;
+                updateClearBtn();
+            }
+
+            var validLevels = ['all', 'Low', 'Medium', 'High'];
+            if (validLevels.indexOf(level) !== -1) {
+                activeLevel = level;
+                document.querySelectorAll('.chip').forEach(function (c) {
+                    c.classList.toggle('active', c.dataset.level === level);
+                });
+            }
+
+            render(applyFilters(q, activeLevel));
+        })();
+    </script>
+
+</body>
+
+</html>
