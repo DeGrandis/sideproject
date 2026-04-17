@@ -16,16 +16,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Copy nginx config to EC2
-        uses: appleboy/scp-action@v0.1.7
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: nginx/*
-          target: /home/${{ secrets.EC2_USER }}/docker
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Rebuild and restart nginx container
+      - name: Build and push nginx image
+        run: |
+          docker compose build nginx
+          docker compose push nginx
+
+      - name: Restart nginx on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -33,5 +35,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/${{ secrets.EC2_USER }}/docker
-            docker compose build nginx
+            docker compose pull nginx
             docker compose up -d nginx
