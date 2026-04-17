@@ -296,6 +296,11 @@
             border-collapse: collapse;
         }
 
+        .col-food { width: 35%; }
+        .col-level { width: 22%; }
+        .col-serving { width: 23%; }
+        .col-type { width: 20%; }
+
         thead {
             background: #f9fafb;
             border-bottom: 2px solid var(--border);
@@ -479,9 +484,14 @@
             td:nth-child(3),
             th:nth-child(3),
             td:nth-child(4),
-            th:nth-child(4) {
+            th:nth-child(4),
+            .col-serving,
+            .col-type {
                 display: none;
             }
+
+            .col-food { width: 55%; }
+            .col-level { width: 45%; }
 
             .serving-sub {
                 display: block;
@@ -547,6 +557,12 @@
 
         <div class="table-wrap" id="table-wrap">
             <table id="food-table" aria-label="FODMAP food list">
+                <colgroup>
+                    <col class="col-food">
+                    <col class="col-level">
+                    <col class="col-serving">
+                    <col class="col-type">
+                </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">Food</th>
