@@ -17,10 +17,12 @@ replace the previously injected data with fresh data from fodmap_data.json.
 import json
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
 # Matches the declaration line whether it contains [] (stub) or injected data.
 MATCH_RE  = re.compile(r'^(\s*)const FOODS_VAR\s*=.*$', re.MULTILINE)
+DATE_RE   = re.compile(r'Last updated: [\w ,]+(?=</p>)')
 DATA_FILE = Path(__file__).parent / "fodmap_data.json"
 HTML_FILE = Path(__file__).parent / "index.html"
 
@@ -53,6 +55,10 @@ def inject(check_only: bool = False) -> None:
         return f"{indent}const FOODS_VAR = {json_array};"
 
     output = MATCH_RE.sub(replacement, template, count=1)
+
+    # Inject build date
+    build_date = date.today().strftime("%B %d, %Y")
+    output = DATE_RE.sub(f"Last updated: {build_date}", output, count=1)
 
     # Restore trailing newline if original had one
     if template.endswith("\n") and not output.endswith("\n"):
