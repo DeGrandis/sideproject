@@ -3,6 +3,7 @@ const ASSETS = [
   '/',
   '/index.html',
   '/favicon.svg',
+  '/apple-touch-icon.png',
   '/Flag_of_the_United_States.svg',
   '/manifest.json'
 ];
