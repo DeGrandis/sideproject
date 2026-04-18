@@ -17,7 +17,7 @@ replace the previously injected data with fresh data from fodmap_data.json.
 import json
 import re
 import sys
-from datetime import date
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 # Matches the declaration line whether it contains [] (stub) or injected data.
@@ -56,8 +56,9 @@ def inject(check_only: bool = False) -> None:
 
     output = MATCH_RE.sub(replacement, template, count=1)
 
-    # Inject build date
-    build_date = date.today().strftime("%B %d, %Y")
+    # Inject build date (EST)
+    est = timezone(timedelta(hours=-5))
+    build_date = datetime.now(est).strftime("%B %d, %Y")
     output = DATE_RE.sub(f"Last updated: {build_date}", output, count=1)
 
     # Restore trailing newline if original had one
