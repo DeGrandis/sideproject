@@ -1,0 +1,17 @@
+{
+  "name": "FODMAP Finder",
+  "short_name": "FODMAP Finder",
+  "description": "Free FODMAP search and reference database. Look up any food's FODMAP level and safe serving size.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7f5",
+  "theme_color": "#1b4332",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
