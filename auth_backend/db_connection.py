@@ -6,7 +6,8 @@ import os
 
 from .UserModel import User  # Import the User model from UserModel.py
 
-DATABASE_URL = f"postgresql://postgres:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST', 'localhost')}:5432/postgres"
+# The driver is named explicitly: newer SQLAlchemy maps plain "postgresql://" to psycopg 3, and the image installs psycopg2.
+DATABASE_URL = f"postgresql+psycopg2://postgres:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST', 'localhost')}:5432/postgres"
 engine = create_engine(DATABASE_URL)
 
 # Create a configured "Session" class
