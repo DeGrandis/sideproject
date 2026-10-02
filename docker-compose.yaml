@@ -30,16 +30,6 @@ services:
     networks:
       - client-side
 
-  budget_frontend:
-    build:
-      context: ./budget_frontend
-    image: degrandis/budget_frontend:${IMAGE_TAG:-latest}
-    ports:
-      - "3001:3001"
-    environment:
-      - REACT_APP_API_BASE_URL=https://api.degrand.is
-    networks:
-      - client-side
 
   trivia:
     build:
@@ -131,7 +121,6 @@ services:
       - "443:443"
     depends_on:
       - frontend
-      - budget_frontend
       - trivia
       - tomatotomato
       - auth_backend

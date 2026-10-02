@@ -10,12 +10,6 @@ services:
       cache_from: ["type=gha,scope=frontend"]
       cache_to: ["type=gha,scope=frontend,mode=max"]
 
-  budget_frontend:
-    build:
-      tags: ["degrandis/budget_frontend:${IMAGE_TAG:-latest}", "degrandis/budget_frontend:latest"]
-      cache_from: ["type=gha,scope=budget_frontend"]
-      cache_to: ["type=gha,scope=budget_frontend,mode=max"]
-
   trivia:
     build:
       tags: ["degrandis/trivia:${IMAGE_TAG:-latest}", "degrandis/trivia:latest"]
