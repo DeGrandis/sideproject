@@ -86,16 +86,11 @@
 - Before changing environment variables, Docker config, or database schema, update all affected services (auth backend, frontends, and Postgres init scripts) to keep them in sync.
 
 ## GitHub Actions / CI-CD
-- The main workflow is [ .github/workflows/deploy.yml ](.github/workflows/deploy.yml), triggered on pushes to `master`.
+- The only workflow is [ .github/workflows/deploy.yml ](.github/workflows/deploy.yml), triggered on pushes to `master` (one deploy at a time, in order).
 - Steps:
-	- Check out the repository with `actions/checkout@v4`.
-	- Log in to Docker Hub using `docker/login-action@v3` and the `DOCKERHUB_USERNAME`/`DOCKERHUB_TOKEN` secrets.
-	- Build all images defined in [docker-compose.yaml](docker-compose.yaml) with `docker compose build --no-cache`.
-	- Push all built images to Docker Hub via `docker compose push`.
-	- Create a `.env` file in the workspace using `POSTGRES_PASSWORD`, `JWT_SECRET`, `JWT_PUBLIC_KEY`, and `RUNNING_ENV=production` from GitHub Secrets.
-	- Copy `docker-compose.yaml`, the generated `.env`, and the [postgres](postgres) directory to the EC2 instance under `/home/${EC2_USER}/docker` using `appleboy/scp-action`.
-	- Connect to the EC2 instance via `appleboy/ssh-action` and run:
-		- `docker-compose down`
-		- `docker image prune -f`
-		- `docker-compose up --pull always -d`
+	- Build all images in [docker-compose.yaml](docker-compose.yaml) with `docker/bake-action`, layered with [docker-compose.ci.yaml](docker-compose.ci.yaml), which adds the GitHub Actions layer cache per service (unchanged services rebuild in seconds).
+	- Push every image as `:<commit SHA>` and `:latest`. Service images in docker-compose.yaml are `degrandis/<name>:${IMAGE_TAG:-latest}`.
+	- Create `.env` from GitHub Secrets (`POSTGRES_PASSWORD`, `JWT_SECRET`, `JWT_PUBLIC_KEY`, `RUNNING_ENV=production`) plus `IMAGE_TAG=<commit SHA>`.
+	- Build the FODMAP static site, then copy `docker-compose.yaml`, `.env`, [postgres](postgres) and `fodmap_frontend` to `/home/${EC2_USER}/docker` on EC2.
+	- On EC2: `docker compose pull`, `docker compose up -d --remove-orphans` (recreates only containers whose image or config changed), prune unused images older than 24 h, then fail the run unless every container is running and every `degrandis/*` container is on the commit's tag.
 - Any structural changes to services, image names, or required env vars should be mirrored in both [docker-compose.yaml](docker-compose.yaml) and the deploy workflow to keep local/dev and CI/CD behavior aligned.

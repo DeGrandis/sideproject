@@ -2069,6 +2069,25 @@
                         "swap": "Lactose-free ice cream or fruit sorbet (check ingredients)"
                 },
                 {
+                        "name": "Kefir",
+                        "category": "Dairy",
+                        "fodmap_content": "High",
+                        "serving_size": "1 cup (250ml)",
+                        "fodmap_type": "Lactose, GOS",
+                        "notes": "Fermentation reduces some lactose but not enough. Low only at about 2 tbsp.",
+                        "swap": "Lactose-free yoghurt or coconut yoghurt",
+                        "low_serving": "2 tbsp"
+                },
+                {
+                        "name": "Kefir (lactose-free)",
+                        "category": "Dairy",
+                        "fodmap_content": "Low",
+                        "serving_size": "1 cup (250ml)",
+                        "fodmap_type": "-",
+                        "notes": "Lactose-free kefir is safe at normal servings. Check for added high-FODMAP ingredients like inulin or honey.",
+                        "swap": ""
+                },
+                {
                         "name": "Lactose-free ice cream",
                         "category": "Dairy",
                         "fodmap_content": "Low",
@@ -2912,6 +2931,33 @@
                         "swap": ""
                 },
                 {
+                        "name": "Beef tallow (beef fat)",
+                        "category": "Condiments & Sweeteners",
+                        "fodmap_content": "Low",
+                        "serving_size": "",
+                        "fodmap_type": "-",
+                        "notes": "Pure rendered fat, no FODMAPs.",
+                        "swap": ""
+                },
+                {
+                        "name": "Pork lard (pork fat / tallow)",
+                        "category": "Condiments & Sweeteners",
+                        "fodmap_content": "Low",
+                        "serving_size": "",
+                        "fodmap_type": "-",
+                        "notes": "Pure rendered fat, no FODMAPs.",
+                        "swap": ""
+                },
+                {
+                        "name": "Duck fat (duck tallow)",
+                        "category": "Condiments & Sweeteners",
+                        "fodmap_content": "Low",
+                        "serving_size": "",
+                        "fodmap_type": "-",
+                        "notes": "Pure rendered fat, no FODMAPs.",
+                        "swap": ""
+                },
+                {
                         "name": "Oyster sauce",
                         "category": "Condiments & Sweeteners",
                         "fodmap_content": "Low",
@@ -3206,6 +3252,15 @@
                         "serving_size": "1 tbsp",
                         "fodmap_type": "-",
                         "notes": "",
+                        "swap": ""
+                },
+                {
+                        "name": "Corn starch (cornflour)",
+                        "category": "Cooking Ingredients",
+                        "fodmap_content": "Low",
+                        "serving_size": "2 tbsp",
+                        "fodmap_type": "-",
+                        "notes": "Pure starch, no FODMAPs. Safe as a thickener.",
                         "swap": ""
                 },
                 {
