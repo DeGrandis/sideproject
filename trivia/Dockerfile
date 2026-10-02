@@ -1,27 +1,31 @@
-# Use official Node.js LTS
-FROM node:22
+# Two stages: the build stage has every dependency and the sources; the final image only what the server runs.
 
-# Set the working directory
-WORKDIR /trivia
-
-# Copy package files
+# Build: install everything, build the Next.js app, and bundle the custom server (server.ts and src/lib, which
+# Socket.IO and the game logic live in) into one JavaScript file, so the image needs no tsx/TypeScript at runtime.
+FROM node:22-slim AS build
+WORKDIR /app
 COPY package.json package-lock.json ./
-
-# Clean install dependencies
 RUN npm ci
-
-# Copy the rest of the application code
 COPY . .
-
-# Build the Next.js application
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+RUN npm run build \
+ && npx esbuild server.ts --bundle --platform=node --target=node22 --format=cjs --packages=external --outfile=dist/server.js \
+ && rm -rf .next/cache .next/standalone \
+ && mkdir -p public
 
-# Expose the port the app runs on
+# Runtime: production dependencies only. The SWC compiler binaries are only needed to build, so they are removed.
+FROM node:22-slim
+WORKDIR /app
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev \
+ && npm cache clean --force \
+ && rm -rf node_modules/@next/swc-*
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/public ./public
+COPY --from=build /app/dist/server.js ./server.js
+COPY next.config.js ./
+
 EXPOSE 3002
-
-# Set production environment
-ENV NODE_ENV=production
-
-# Start the custom server (which includes Socket.IO)
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]
