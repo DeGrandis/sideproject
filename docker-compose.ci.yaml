@@ -1,0 +1,47 @@
+# CI-only build settings, layered on docker-compose.yaml by the deploy workflow (docker/bake-action):
+# - cache_from / cache_to keep each service's build layers in the GitHub Actions cache, so services whose files did not
+#   change rebuild in seconds instead of from scratch;
+# - tags pushes each image as :<commit SHA> (IMAGE_TAG, what the server runs) and as :latest (for local use).
+# Not used for local builds: `docker compose up --build` reads only docker-compose.yaml.
+services:
+  frontend:
+    build:
+      tags: ["degrandis/auth_frontend:${IMAGE_TAG:-latest}", "degrandis/auth_frontend:latest"]
+      cache_from: ["type=gha,scope=frontend"]
+      cache_to: ["type=gha,scope=frontend,mode=max"]
+
+  budget_frontend:
+    build:
+      tags: ["degrandis/budget_frontend:${IMAGE_TAG:-latest}", "degrandis/budget_frontend:latest"]
+      cache_from: ["type=gha,scope=budget_frontend"]
+      cache_to: ["type=gha,scope=budget_frontend,mode=max"]
+
+  trivia:
+    build:
+      tags: ["degrandis/trivia:${IMAGE_TAG:-latest}", "degrandis/trivia:latest"]
+      cache_from: ["type=gha,scope=trivia"]
+      cache_to: ["type=gha,scope=trivia,mode=max"]
+
+  tomatotomato:
+    build:
+      tags: ["degrandis/tomatotomato:${IMAGE_TAG:-latest}", "degrandis/tomatotomato:latest"]
+      cache_from: ["type=gha,scope=tomatotomato"]
+      cache_to: ["type=gha,scope=tomatotomato,mode=max"]
+
+  auth_backend:
+    build:
+      tags: ["degrandis/auth_backend:${IMAGE_TAG:-latest}", "degrandis/auth_backend:latest"]
+      cache_from: ["type=gha,scope=auth_backend"]
+      cache_to: ["type=gha,scope=auth_backend,mode=max"]
+
+  nginx:
+    build:
+      tags: ["degrandis/nginx:${IMAGE_TAG:-latest}", "degrandis/nginx:latest"]
+      cache_from: ["type=gha,scope=nginx"]
+      cache_to: ["type=gha,scope=nginx,mode=max"]
+
+  academy_relay:
+    build:
+      tags: ["degrandis/academy-relay:${IMAGE_TAG:-latest}", "degrandis/academy-relay:latest"]
+      cache_from: ["type=gha,scope=academy_relay"]
+      cache_to: ["type=gha,scope=academy_relay,mode=max"]

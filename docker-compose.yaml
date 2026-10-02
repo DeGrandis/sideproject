@@ -22,7 +22,7 @@ services:
   frontend:
     build:
       context: ./auth_frontend
-    image: degrandis/auth_frontend:latest
+    image: degrandis/auth_frontend:${IMAGE_TAG:-latest}
     ports:
       - "3000:3000"
     environment:
@@ -33,7 +33,7 @@ services:
   budget_frontend:
     build:
       context: ./budget_frontend
-    image: degrandis/budget_frontend:latest
+    image: degrandis/budget_frontend:${IMAGE_TAG:-latest}
     ports:
       - "3001:3001"
     environment:
@@ -44,7 +44,7 @@ services:
   trivia:
     build:
       context: ./trivia
-    image: degrandis/trivia:latest
+    image: degrandis/trivia:${IMAGE_TAG:-latest}
     ports:
       - "3002:3002"
     environment:
@@ -63,7 +63,7 @@ services:
   tomatotomato:
     build:
       context: ./tomatotomato
-    image: degrandis/tomatotomato:latest
+    image: degrandis/tomatotomato:${IMAGE_TAG:-latest}
     ports:
       - "3003:3003"
     environment:
@@ -83,7 +83,7 @@ services:
   auth_backend:
     build:
       context: ./auth_backend
-    image: degrandis/auth_backend:latest
+    image: degrandis/auth_backend:${IMAGE_TAG:-latest}
     ports:
       - "8000:8000"
     environment:
@@ -125,7 +125,7 @@ services:
   nginx:
     build:
       context: ./nginx
-    image: degrandis/nginx:latest
+    image: degrandis/nginx:${IMAGE_TAG:-latest}
     ports:
       - "80:80"
       - "443:443"
@@ -165,7 +165,7 @@ services:
   academy_relay:
     build:
       context: https://github.com/DeGrandis/academy-launcher.git#main:server/relay
-    image: degrandis/academy-relay:latest
+    image: degrandis/academy-relay:${IMAGE_TAG:-latest}
     ports:
       - "3074:3074/udp"
     environment:
