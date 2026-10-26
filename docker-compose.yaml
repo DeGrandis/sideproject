@@ -70,6 +70,25 @@ services:
     networks:
       - client-side
 
+  # Proof of Basis public demo (proofofbasis.degrand.is): invented data, a private copy per visitor, no login. The
+  # image is built by github.com/DeGrandis/proof-of-basis's own workflow, so it has no build section and isn't tied to
+  # IMAGE_TAG; set POB_DEMO_TAG to a commit SHA to pin one. Its assistant uses Claude in Amazon Bedrock through the
+  # instance role (needs bedrock-mantle:CreateInference); without that it runs with the assistant off.
+  proof_of_basis_demo:
+    image: ghcr.io/degrandis/proof-of-basis-demo:${POB_DEMO_TAG:-latest}
+    environment:
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+    restart: unless-stopped
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/proof-of-basis-demo"
+        awslogs-stream: "proof-of-basis-demo"
+        awslogs-create-group: "true"
+    networks:
+      - client-side
+
   auth_backend:
     build:
       context: ./auth_backend
@@ -124,6 +143,7 @@ services:
       - trivia
       - tomatotomato
       - auth_backend
+      - proof_of_basis_demo
     networks:
       - client-side
     volumes:
