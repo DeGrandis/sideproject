@@ -75,7 +75,22 @@ services:
     networks:
       - client-side
 
-  # Proof of Basis public demo (proofofbasis.degrand.is): invented data, a private copy per visitor, no login. The
+  # Proof of Basis landing page (proofofbasis.degrand.is): a static page, built like the demo by
+  # github.com/DeGrandis/proof-of-basis's workflow; set POB_SITE_TAG to a commit SHA to pin one.
+  proof_of_basis_site:
+    image: ghcr.io/degrandis/proof-of-basis-site:${POB_SITE_TAG:-latest}
+    restart: unless-stopped
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/proof-of-basis-site"
+        awslogs-stream: "proof-of-basis-site"
+        awslogs-create-group: "true"
+    networks:
+      - client-side
+
+  # Proof of Basis public demo (demo.proofofbasis.degrand.is): invented data, a private copy per visitor, no login. The
   # image is built by github.com/DeGrandis/proof-of-basis's own workflow, so it has no build section and isn't tied to
   # IMAGE_TAG; set POB_DEMO_TAG to a commit SHA to pin one. Its assistant uses Llama 3.3 70B in Amazon Bedrock through
   # the instance role (bedrock:InvokeModel, like trivia); without that it runs with the assistant off.
@@ -154,6 +169,7 @@ services:
       - tomatotomato
       - auth_backend
       - proof_of_basis_demo
+      - proof_of_basis_site
     networks:
       - client-side
     volumes:

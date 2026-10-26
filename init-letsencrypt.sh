@@ -6,7 +6,7 @@
 
 set -e
 
-domains=(degrand.is "*.degrand.is")
+domains=(degrand.is "*.degrand.is" demo.proofofbasis.degrand.is)
 rsa_key_size=4096
 data_path="./certbot"
 email="rtdegrandis@gmail.com" # Update this with your email address
