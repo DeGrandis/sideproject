@@ -72,8 +72,8 @@ services:
 
   # Proof of Basis public demo (proofofbasis.degrand.is): invented data, a private copy per visitor, no login. The
   # image is built by github.com/DeGrandis/proof-of-basis's own workflow, so it has no build section and isn't tied to
-  # IMAGE_TAG; set POB_DEMO_TAG to a commit SHA to pin one. Its assistant uses Claude in Amazon Bedrock through the
-  # instance role (needs bedrock-mantle:CreateInference); without that it runs with the assistant off.
+  # IMAGE_TAG; set POB_DEMO_TAG to a commit SHA to pin one. Its assistant uses Llama 3.3 70B in Amazon Bedrock through
+  # the instance role (bedrock:InvokeModel, like trivia); without that it runs with the assistant off.
   proof_of_basis_demo:
     image: ghcr.io/degrandis/proof-of-basis-demo:${POB_DEMO_TAG:-latest}
     environment:
