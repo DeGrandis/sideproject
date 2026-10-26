@@ -83,11 +83,21 @@ jobs:
             cd /home/${{ secrets.EC2_USER }}/docker
             if docker compose version >/dev/null 2>&1; then DC="docker compose"; else DC="docker-compose"; fi
 
+            # Make room before pulling: a full disk fails the pull, and with it the whole deploy, before anything
+            # changes. Stopped containers, images no container uses (older commits) and leftover build cache go;
+            # running containers keep their images, and volumes (the database) are never touched.
+            echo "Disk before cleanup: $(df -h / | awk 'NR==2 {print $4 " free of " $2}')"
+            docker container prune -f >/dev/null
+            docker image prune -af >/dev/null
+            docker builder prune -af >/dev/null 2>&1 || true
+            echo "Disk after cleanup:  $(df -h / | awk 'NR==2 {print $4 " free of " $2}')"
+
             # Pull this commit's images, then recreate only the containers whose image or config changed.
             $DC pull
             $DC up -d --remove-orphans
-            # Remove images no container uses any more (older commits); images in use are kept.
-            docker image prune -af --filter "until=24h"
+            # Remove the images the old containers used; images in use are kept.
+            docker image prune -af >/dev/null
+            echo "Disk after deploy:   $(df -h / | awk 'NR==2 {print $4 " free of " $2}')"
 
             # Verify: every container running, and every image we build on this commit's tag. The pause lets a container
             # that crashes on start show up as restarting/exited instead of passing.

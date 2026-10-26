@@ -29,6 +29,11 @@ services:
       - REACT_APP_API_BASE_URL=https://api.degrand.is
     networks:
       - client-side
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: 3
 
 
   trivia:
@@ -120,6 +125,11 @@ services:
   db:
     image: postgres:12-alpine
     restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: 3
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -168,6 +178,11 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --dns-route53 --quiet; sleep 12h & wait $${!}; done;'"
     networks:
       - client-side
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: 3
 
   # Academy Launcher relay (relay.degrand.is): forwards Clone Wars online games between players. Plain UDP, not behind
   # nginx; the EC2 security group must allow inbound UDP 3074. Source: github.com/DeGrandis/academy-launcher.
