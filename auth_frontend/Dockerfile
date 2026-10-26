@@ -1,32 +1,16 @@
-
-
-
-
-FROM node:22
-
-# Set the working directory
+# Build the site with Node, then serve the built files from a small nginx
+# image on the same port 3000. The running image holds only the site (tens
+# of MB), not Node, every dependency and npm's cache (over a GB on disk).
+FROM node:22-slim AS build
 WORKDIR /auth_frontend
-
-RUN ls -la
-# Copy package.json and package-lock.json
+# Install from package.json alone, as before: the lockfile was made on
+# another OS and lacks Linux's build of Rollup (npm's optional-deps bug).
 COPY package.json ./
-
-RUN rm -rf node_modules dist
-
-# Install dependencies
-RUN npm i
-
-# Copy the rest of the application code
+RUN npm i --no-audit --no-fund
 COPY . .
-RUN ls -la 
-# ARG ENV_FILE=.env.prod
-# COPY ${ENV_FILE} .env
-
-
-# Build the application
 RUN npm run build
 
-# Expose the port the app runs on
+FROM nginx:alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /auth_frontend/dist /usr/share/nginx/html
 EXPOSE 3000
-# Start the application
-CMD ["npm", "run", "start"]    
