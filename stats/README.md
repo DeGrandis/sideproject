@@ -1,20 +1,31 @@
-# Proof of Basis visit reports
+# stats.degrand.is
 
-`stats.degrand.is` shows how often the Proof of Basis landing page (`proofofbasis.degrand.is`) and the demo
-(`demo.proofofbasis.degrand.is`) are loaded, from where, and how many assistant questions the demo gets.
+One page with everything on this box: visits and errors for every site, the containers and the host's health, and
+the Proof of Basis numbers on GitHub. It updates every 5 minutes (GitHub's numbers hourly).
 
 How it works:
 
-- nginx writes one line per page load to its own log (`nginx/nginx.conf`, `log_format pob`), with the visitor's
-  address shortened first (`1.2.3.4` becomes `1.2.3.0`). Images, scripts and API calls aren't logged, except the
-  demo's assistant questions and Start over.
-- The `pob_stats` service (`docker-compose.yaml`, script `run.sh`) runs GoAccess every hour, adds the new lines to its
-  running totals and rewrites the reports. The raw logs are emptied once a day; only the totals are kept.
+- nginx writes one line per page load to `/var/log/nginx/visits/visits.log` (`nginx/nginx.conf`, `log_format
+  visits`), for every site. A page load is what a browser sends when it opens a page (`Sec-Fetch-Dest: document`);
+  images, scripts and API calls aren't logged. Server errors (5xx) are always logged, and so are the Proof of Basis
+  demo's assistant questions and Start over. The address is shortened first (`1.2.3.4` becomes `1.2.3.0`), and the
+  path is written without its query string.
+- The `stats` service runs `stats.py` on Python's own image (standard library only). It adds the new lines to running
+  totals in its `stats_data` volume and writes `index.html` to `stats_page`, which nginx serves. The raw log is
+  emptied once a day.
+- Visitors are counted from a hash of the shortened address and the browser, salted with a secret that changes every
+  month. The hashes are kept 35 days (for the 30-day count); daily totals are kept, and the country, referrer and
+  page lists for 90 days. Bots that say so in their user agent aren't counted.
+- Containers come from `docker_status`, a read-only window onto Docker (it can list containers and nothing else),
+  reachable only by the stats service. Load, memory and disk come from the host's `/proc` and filesystem, and the
+  certificate's expiry from `certbot/conf`.
 - Countries come from DB-IP's free country database, downloaded once a month and looked up on the server.
+- GitHub: stars, forks, issues and release downloads from its public API, and the container images' "Total
+  downloads" from their package pages (the API doesn't have it). No token needed.
 - Nothing is added to the sites themselves: no cookies, no scripts, no third party.
 
-"Hits" counts every load, refreshes included. "Visitors" counts each shortened address and browser once per day, so
-someone refreshing fifty times is one visitor.
+Settings (in `docker-compose.yaml`): `STATS_IGNORE_SITES` (not shown: the stats page and the sign-in),
+`STATS_PROJECT` (whose containers are listed), `STATS_GITHUB_REPOS`, `STATS_GITHUB_PACKAGES`.
 
 ## Who can see it
 

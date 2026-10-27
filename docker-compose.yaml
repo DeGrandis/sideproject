@@ -163,27 +163,54 @@ services:
     networks:
       - client-side
 
-  # Proof of Basis visit reports (stats.degrand.is, behind a passkey sign-in): GoAccess turns nginx's visit logs for the
-  # landing page and the demo into two reports every hour. The script comes from stats/ (copied by the deploy); the
-  # image is GoAccess's own, pinned. See stats/README.md.
-  pob_stats:
-    image: allinurl/goaccess:1.11
-    entrypoint: ["/bin/sh", "/stats/run.sh"]
+  # The page at stats.degrand.is (behind a passkey sign-in): every 5 minutes stats/stats.py adds nginx's new visit-log
+  # lines for every site to its totals, checks the containers (through docker_status, read-only), the host's load,
+  # memory and disk and the certificate, once an hour reads GitHub's public numbers, and rewrites the page. Python's own
+  # image, pinned; the script comes from stats/ (copied by the deploy). See stats/README.md.
+  stats:
+    image: python:3.12.16-alpine
+    command: ["python", "-u", "/stats/stats.py"]
     restart: unless-stopped
+    environment:
+      - DEPLOYED_COMMIT=${IMAGE_TAG:-unknown}
+      - DOCKER_STATUS=docker_status:2375
+      - STATS_IGNORE_SITES=stats.degrand.is id.degrand.is
+      - STATS_PROJECT=docker # this compose project (named after its folder, ~/docker); its containers are listed
     volumes:
       - ./stats:/stats:ro
-      - pob_logs:/logs
-      - pob_stats_data:/data
-      - pob_stats_report:/report
+      - ./certbot/conf:/certs:ro
+      - visit_logs:/logs
+      - stats_data:/data
+      - stats_page:/page
     logging:
       driver: "awslogs"
       options:
         awslogs-region: "us-east-1"
-        awslogs-group: "/containers/pob-stats"
-        awslogs-stream: "pob-stats"
+        awslogs-group: "/containers/stats"
+        awslogs-stream: "stats"
         awslogs-create-group: "true"
     networks:
       - client-side
+      - status
+
+  # A read-only window onto Docker for the stats page: it lists containers and their state, nothing else (no
+  # starting, stopping or creating; POST is off). Only the stats service can reach it, on its own internal network.
+  docker_status:
+    image: tecnativa/docker-socket-proxy:v0.5.0
+    restart: unless-stopped
+    environment:
+      - CONTAINERS=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/docker-status"
+        awslogs-stream: "docker-status"
+        awslogs-create-group: "true"
+    networks:
+      - status
 
   # Proof of Basis public demo (demo.proofofbasis.degrand.is): invented data, a private copy per visitor, no login. The
   # image is built by github.com/DeGrandis/proof-of-basis's own workflow, so it has no build section and isn't tied to
@@ -276,8 +303,8 @@ services:
       - ./certbot/www:/var/www/certbot:ro # Shared directory for ACME challenge (read-only)
       - ./certbot/conf:/etc/letsencrypt:ro # Shared directory for certificates (read-only)
       - ./fodmap_frontend:/var/www/fodmap:ro # FODMAP static site (run build.py first)
-      - pob_logs:/var/log/nginx/pob # Proof of Basis visit logs, read by pob_stats
-      - pob_stats_report:/var/www/stats:ro # the reports pob_stats writes, served at stats.degrand.is
+      - visit_logs:/var/log/nginx/visits # every site's visit log, read by the stats service
+      - stats_page:/var/www/stats:ro # the page the stats service writes, served at stats.degrand.is
     logging:
       driver: "awslogs"
       options:
@@ -326,10 +353,12 @@ networks:
   client-side:
     driver: bridge
   server-side: {}
+  status:
+    internal: true
 
 volumes:
   postgres_data:
-  pob_logs:
-  pob_stats_data:
-  pob_stats_report:
+  visit_logs:
+  stats_data:
+  stats_page:
   pocket_id_data:
