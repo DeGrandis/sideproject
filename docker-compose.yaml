@@ -139,6 +139,9 @@ services:
       - OAUTH2_PROXY_CODE_CHALLENGE_METHOD=S256
       - OAUTH2_PROXY_SCOPE=openid email profile
       - OAUTH2_PROXY_EMAIL_DOMAINS=*  # whoever can sign in to Pocket ID: only Rob, sign-ups are off
+      # Pocket ID marks emails unverified unless it can send email (it can't here). The email decides nothing:
+      # Pocket ID's own group rule on the "stats" client decides who gets a token.
+      - OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
       - OAUTH2_PROXY_HTTP_ADDRESS=0.0.0.0:4180
       - OAUTH2_PROXY_REVERSE_PROXY=true
       - OAUTH2_PROXY_TRUSTED_PROXY_IPS=172.16.0.0/12 # Docker's networks: only nginx reaches it
