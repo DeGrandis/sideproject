@@ -193,6 +193,29 @@ services:
       - client-side
       - status
 
+  # GoAccess's detailed report for each site, linked at the bottom of stats.degrand.is: every 5 minutes stats/goaccess.sh
+  # adds the visit log's new page loads to each site's running GoAccess totals. GoAccess's own image, pinned.
+  goaccess:
+    image: allinurl/goaccess:1.11
+    entrypoint: ["/bin/sh", "/stats/goaccess.sh"]
+    restart: unless-stopped
+    environment:
+      - STATS_IGNORE_SITES=stats.degrand.is id.degrand.is
+    volumes:
+      - ./stats:/stats:ro
+      - visit_logs:/logs:ro
+      - goaccess_data:/data
+      - stats_page:/page
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/goaccess"
+        awslogs-stream: "goaccess"
+        awslogs-create-group: "true"
+    networks:
+      - client-side
+
   # A read-only window onto Docker for the stats page: it lists containers, their state and their logs (the games'
   # lobby events), nothing else (no starting, stopping or creating; POST is off). Only the stats service can reach it,
   # on its own internal network.
@@ -362,4 +385,5 @@ volumes:
   visit_logs:
   stats_data:
   stats_page:
+  goaccess_data:
   pocket_id_data:

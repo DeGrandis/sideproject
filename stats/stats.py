@@ -36,6 +36,7 @@ LOG = "/logs/visits.log"
 QUESTIONS = "/logs/questions.log"
 DATA = "/data"
 PAGE = "/page/index.html"
+REPORTS = "/page/goaccess"  # written by the goaccess service (stats/goaccess.sh)
 CERT = "/certs/live/degrand.is/fullchain.pem"
 EVERY = int(os.environ.get("STATS_EVERY", "300"))
 GITHUB_EVERY = 3600
@@ -680,6 +681,13 @@ def render(db, box, gh):
                      f'<tbody>{repo_rows}</tbody></table></div><p>Image downloads (all time): {pkg}</p>'
                      f'<p class="muted">Read {esc(gh["at"])} UTC.</p></section>')
 
+    # The goaccess service's detailed report for each site
+    reports = sorted(n for n in os.listdir(REPORTS) if n.endswith(".html")) if os.path.isdir(REPORTS) else []
+    if reports:
+        links = "".join(f'<li><a href="goaccess/{urllib.parse.quote(n)}">{esc(n[:-5])}</a></li>' for n in reports)
+        parts.append(f'<section><h2>Detailed reports</h2><p class="muted">GoAccess\'s full report for each site: '
+                     f'every panel, from the same page loads, kept 400 days.</p><ul class="reports">{links}</ul></section>')
+
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex"><meta http-equiv="refresh" content="300">
@@ -707,7 +715,7 @@ summary{{cursor:pointer;font-weight:600}}.lists{{display:grid;grid-template-colu
 ol{{list-style:none;margin:0;padding:0}}li{{display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-bottom:1px solid var(--line)}}
 li span{{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}footer{{color:var(--muted);font-size:12px}}
 h3{{font-size:16px;margin:0 0 10px}}.game{{margin:0 0 26px}}.game .cards{{margin-bottom:12px}}
-table.left td,table.left th{{text-align:left}}td.q{{white-space:normal;min-width:280px;max-width:560px}}
+table.left td,table.left th{{text-align:left}}.reports{{columns:2 220px;padding-left:18px}}.reports li{{display:list-item;border:0;margin:4px 0}}td.q{{white-space:normal;min-width:280px;max-width:560px}}
 </style></head><body><main>
 <header><h1>degrand.is stats</h1><span class="muted">Updated {now}, every 5 minutes · days are UTC</span></header>
 {"".join(parts)}

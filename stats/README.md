@@ -28,6 +28,9 @@ How it works:
   their container logs, read through `docker_status`. Docker keeps a container's log only until it's recreated (every
   deploy), so they're collected as they happen; lobbies are kept 400 days. A lobby's players are its creator plus
   everyone who joined.
+- The `goaccess` service (`goaccess.sh`, GoAccess's own image) also keeps GoAccess's full report for each site, linked
+  at the bottom of the page. It adds the visit log's new page loads to each site's file in its `goaccess_data` volume
+  (until 20 MB, then a new file starts) and GoAccess's running totals (kept 400 days).
 - GitHub: stars, forks, issues and release downloads from its public API, and the container images' "Total
   downloads" from their package pages (the API doesn't have it). No token needed.
 - Nothing is added to the sites themselves: no cookies, no scripts, no third party.
