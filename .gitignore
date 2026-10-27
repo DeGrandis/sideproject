@@ -1,1 +1,2 @@
 postgres/data/*nginx/stats-auth/
+auth/*.env

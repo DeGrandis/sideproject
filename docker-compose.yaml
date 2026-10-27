@@ -90,6 +90,31 @@ services:
     networks:
       - client-side
 
+  # Pocket ID (id.degrand.is): a passkey-only sign-in for Rob's private pages, starting with stats.degrand.is. One
+  # account, sign-ups off. Its encryption key lives only on the server (auth/pocket-id.env, see auth/README.md); its
+  # data (a SQLite file) is in the pocket_id_data volume.
+  pocket_id:
+    image: ghcr.io/pocket-id/pocket-id:v2.19.1
+    restart: unless-stopped
+    env_file: ./auth/pocket-id.env
+    environment:
+      - APP_URL=https://id.degrand.is
+      - TRUST_PROXY=true # only nginx can reach it
+      - ANALYTICS_DISABLED=true # no daily "instance is running" ping
+      - ALLOW_INSECURE_CALLBACK_URLS=false
+      - ALLOW_USER_SIGNUPS=disabled
+    volumes:
+      - pocket_id_data:/app/data
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/pocket-id"
+        awslogs-stream: "pocket-id"
+        awslogs-create-group: "true"
+    networks:
+      - client-side
+
   # Proof of Basis visit reports (stats.degrand.is, behind a password): GoAccess turns nginx's visit logs for the
   # landing page and the demo into two reports every hour. The script comes from stats/ (copied by the deploy); the
   # image is GoAccess's own, pinned. See stats/README.md.
@@ -192,6 +217,7 @@ services:
       - auth_backend
       - proof_of_basis_demo
       - proof_of_basis_site
+      - pocket_id
     networks:
       - client-side
     volumes:
@@ -256,3 +282,4 @@ volumes:
   pob_logs:
   pob_stats_data:
   pob_stats_report:
+  pocket_id_data:
