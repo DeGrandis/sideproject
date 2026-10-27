@@ -90,6 +90,28 @@ services:
     networks:
       - client-side
 
+  # Proof of Basis visit reports (stats.degrand.is, behind a password): GoAccess turns nginx's visit logs for the
+  # landing page and the demo into two reports every hour. The script comes from stats/ (copied by the deploy); the
+  # image is GoAccess's own, pinned. See stats/README.md.
+  pob_stats:
+    image: allinurl/goaccess:1.11
+    entrypoint: ["/bin/sh", "/stats/run.sh"]
+    restart: unless-stopped
+    volumes:
+      - ./stats:/stats:ro
+      - pob_logs:/logs
+      - pob_stats_data:/data
+      - pob_stats_report:/report
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/pob-stats"
+        awslogs-stream: "pob-stats"
+        awslogs-create-group: "true"
+    networks:
+      - client-side
+
   # Proof of Basis public demo (demo.proofofbasis.degrand.is): invented data, a private copy per visitor, no login. The
   # image is built by github.com/DeGrandis/proof-of-basis's own workflow, so it has no build section and isn't tied to
   # IMAGE_TAG; set POB_DEMO_TAG to a commit SHA to pin one. Its assistant uses Llama 3.3 70B in Amazon Bedrock through
@@ -177,6 +199,9 @@ services:
       - ./certbot/www:/var/www/certbot:ro # Shared directory for ACME challenge (read-only)
       - ./certbot/conf:/etc/letsencrypt:ro # Shared directory for certificates (read-only)
       - ./fodmap_frontend:/var/www/fodmap:ro # FODMAP static site (run build.py first)
+      - pob_logs:/var/log/nginx/pob # Proof of Basis visit logs, read by pob_stats
+      - pob_stats_report:/var/www/stats:ro # the reports pob_stats writes, served at stats.degrand.is
+      - ./nginx/stats-auth:/etc/nginx/stats-auth:ro # its password file, made on the server (stats/README.md)
     logging:
       driver: "awslogs"
       options:
@@ -228,3 +253,6 @@ networks:
 
 volumes:
   postgres_data:
+  pob_logs:
+  pob_stats_data:
+  pob_stats_report:
