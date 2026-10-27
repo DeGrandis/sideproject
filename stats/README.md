@@ -1,7 +1,7 @@
 # stats.degrand.is
 
-One page with everything on this box: visits and errors for every site, the containers and the host's health, and
-the Proof of Basis numbers on GitHub. It updates every 5 minutes (GitHub's numbers hourly).
+One page with everything on this box: visits and errors for every site, the containers and the host's health, game
+lobbies and players, the Proof of Basis demo's assistant questions, and the Proof of Basis numbers on GitHub. It updates every 5 minutes (GitHub's numbers hourly).
 
 How it works:
 
@@ -20,12 +20,20 @@ How it works:
   reachable only by the stats service. Load, memory and disk come from the host's `/proc` and filesystem, and the
   certificate's expiry from `certbot/conf`.
 - Countries come from DB-IP's free country database, downloaded once a month and looked up on the server.
+- The Proof of Basis demo's assistant questions are written with their text to `/var/log/nginx/visits/questions.log`
+  (nginx logs the request body for that one endpoint). The page lists the last 50, with the page and language they
+  were asked from; questions are kept 90 days.
+- Trivia and tomatotomato lobbies and players come from the games' own `lobby_created` and `player_joined` events in
+  their container logs, read through `docker_status`. Docker keeps a container's log only until it's recreated (every
+  deploy), so they're collected as they happen; lobbies are kept 400 days. A lobby's players are its creator plus
+  everyone who joined.
 - GitHub: stars, forks, issues and release downloads from its public API, and the container images' "Total
   downloads" from their package pages (the API doesn't have it). No token needed.
 - Nothing is added to the sites themselves: no cookies, no scripts, no third party.
 
 Settings (in `docker-compose.yaml`): `STATS_IGNORE_SITES` (not shown: the stats page and the sign-in),
-`STATS_PROJECT` (whose containers are listed), `STATS_GITHUB_REPOS`, `STATS_GITHUB_PACKAGES`.
+`STATS_PROJECT` (whose containers are listed), `STATS_GAMES` (site=service for the games),
+`STATS_GITHUB_REPOS`, `STATS_GITHUB_PACKAGES`.
 
 ## Who can see it
 

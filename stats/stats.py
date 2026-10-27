@@ -33,6 +33,7 @@ import urllib.parse
 import urllib.request
 
 LOG = "/logs/visits.log"
+QUESTIONS = "/logs/questions.log"
 DATA = "/data"
 PAGE = "/page/index.html"
 CERT = "/certs/live/degrand.is/fullchain.pem"
@@ -52,9 +53,14 @@ PACKAGES = os.environ.get(
     "DeGrandis/proof-of-basis/proof-of-basis DeGrandis/proof-of-basis/proof-of-basis-demo",
 ).split()
 DEPLOY_REPO = "DeGrandis/sideproject"
+# site=compose service for the games whose lobby_created / player_joined events (in their container logs) are counted.
+GAMES = dict(g.split("=", 1) for g in os.environ.get(
+    "STATS_GAMES", "trivia.degrand.is=trivia tomatotomato.degrand.is=tomatotomato").split())
+QUESTIONS_SITE = "demo.proofofbasis.degrand.is"
 BOTS = re.compile(r"bot|crawl|spider|slurp|preview|headless|monitor|curl|wget|python|go-http|scan", re.I)
 KEEP_HASHES_DAYS = 35
 KEEP_DETAIL_DAYS = 90
+KEEP_LOBBIES_DAYS = 400
 
 
 def log(*args):
@@ -203,6 +209,9 @@ def open_db():
         CREATE TABLE IF NOT EXISTS seen (site TEXT, day TEXT, hash TEXT, PRIMARY KEY (site, day, hash));
         CREATE TABLE IF NOT EXISTS detail (site TEXT, day TEXT, kind TEXT, name TEXT, n INT,
             PRIMARY KEY (site, day, kind, name));
+        CREATE TABLE IF NOT EXISTS questions (day TEXT, time TEXT, text TEXT, page TEXT, lang TEXT, status TEXT);
+        CREATE TABLE IF NOT EXISTS lobbies (site TEXT, id TEXT, day TEXT, time TEXT, name TEXT, theme TEXT,
+            difficulty TEXT, players INT DEFAULT 1, PRIMARY KEY (site, id));
     """)
     return db
 
@@ -235,19 +244,127 @@ def bump_detail(db, site, day, kind, name):
                (site, day, kind, name))
 
 
-def read_log(db, geo):
-    """Adds the log's new complete lines to the totals; returns how many lines were read."""
-    if not os.path.exists(LOG):
-        return 0
-    size = os.path.getsize(LOG)
-    offset = int(state(db, "offset", "0"))
+def tail(db, path):
+    """The log's complete lines added since the last read; the read position is saved with the next commit."""
+    if not os.path.exists(path):
+        return []
+    size = os.path.getsize(path)
+    offset = int(state(db, f"offset:{path}", "0"))
     if size < offset:  # emptied since
         offset = 0
-    with open(LOG, "rb") as f:
+    with open(path, "rb") as f:
         f.seek(offset)
         chunk = f.read(size - offset)
     end = chunk.rfind(b"\n") + 1
-    lines = chunk[:end].decode("utf-8", "replace").splitlines()
+    set_state(db, f"offset:{path}", offset + end)
+    return chunk[:end].decode("utf-8", "replace").splitlines()
+
+
+def empty_daily(db):
+    """Once a day, right after reading, empty the raw logs (whatever was written in between is lost: milliseconds)."""
+    if state(db, "emptied") == str(today()):
+        return
+    for path in (LOG, QUESTIONS):
+        if os.path.exists(path) and os.path.getsize(path) == int(state(db, f"offset:{path}", "0")):
+            with open(path, "r+b") as f:
+                f.truncate(0)
+            set_state(db, f"offset:{path}", 0)
+    set_state(db, "emptied", today())
+    db.commit()
+
+
+def read_questions(db):
+    """Adds the demo's new assistant questions (their text, page and language) from nginx's questions log."""
+    for line in tail(db, QUESTIONS):
+        try:
+            entry = json.loads(line)
+            body = json.loads(entry.get("body") or "{}")
+        except ValueError:
+            continue
+        text = str(body.get("content") or "").strip()
+        if not text:
+            continue
+        page = body.get("page") or {}
+        when = entry.get("time", "")
+        db.execute("INSERT INTO questions VALUES (?, ?, ?, ?, ?, ?)",
+                   (when[:10], when[11:16], text[:2000], str(page.get("hash") or "")[:60],
+                    str(page.get("lang") or "")[:8], str(entry.get("status", ""))))
+    db.execute("DELETE FROM questions WHERE day < ?", (str(today() - dt.timedelta(days=KEEP_DETAIL_DAYS)),))
+    db.commit()
+
+
+def docker_logs(container, since):
+    """A container's log lines since a Unix time, as (timestamp, text), through docker_status."""
+    host, port = DOCKER.rsplit(":", 1)
+    c = http.client.HTTPConnection(host, int(port), timeout=20)
+    c.request("GET", f"/containers/{container}/logs?stdout=1&stderr=1&timestamps=1&since={since}")
+    r = c.getresponse()
+    raw = r.read()
+    if r.status != 200:
+        raise RuntimeError(f"logs: {r.status}")
+    chunks, i = [], 0
+    while i + 8 <= len(raw):  # Docker's stream format: an 8-byte header (stream, 0, 0, 0, size) before each chunk
+        n = int.from_bytes(raw[i + 4:i + 8], "big")
+        chunks.append(raw[i + 8:i + 8 + n])
+        i += 8 + n
+    out = []
+    for line in b"".join(chunks).decode("utf-8", "replace").splitlines():
+        ts, _, text = line.partition(" ")
+        out.append((ts, text))
+    return out
+
+
+def ts_key(ts):
+    """Docker's RFC 3339 timestamps (it trims the fraction's trailing zeros), made comparable as strings."""
+    base, _, frac = ts.rstrip("Z").partition(".")
+    return f"{base}.{(frac + '000000000')[:9]}"
+
+
+def read_games(db):
+    """Adds the games' new lobby_created and player_joined events from their container logs. Docker keeps a
+    container's log only until it's recreated (every deploy), so events are collected as they happen."""
+    for site, service in GAMES.items():
+        try:
+            only = urllib.parse.quote(json.dumps({"label": [f"com.docker.compose.project={PROJECT}",
+                                                            f"com.docker.compose.service={service}"]}))
+            found = docker_get(f"/containers/json?filters={only}")
+            if not found:
+                continue
+            cid = found[0]["Id"]
+            last = state(db, f"game:{service}:last", "") if state(db, f"game:{service}:cid") == cid else ""
+            since = 0
+            if last:
+                since = int(dt.datetime.fromisoformat(last[:19]).replace(tzinfo=dt.timezone.utc).timestamp())
+            for ts, text in docker_logs(cid, since):
+                key = ts_key(ts)
+                if key <= last:
+                    continue
+                last = key
+                if not text.startswith("{"):
+                    continue
+                try:
+                    e = json.loads(text)
+                except ValueError:
+                    continue
+                if e.get("event") == "lobby_created":
+                    db.execute("INSERT OR IGNORE INTO lobbies (site, id, day, time, name, theme, difficulty) "
+                               "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                               (site, str(e.get("lobbyId")), ts[:10], ts[11:16], str(e.get("lobbyName") or "")[:80],
+                                str(e.get("theme") or "")[:80], str(e.get("difficulty") or "")[:20]))
+                elif e.get("event") == "player_joined":
+                    db.execute("UPDATE lobbies SET players = players + 1 WHERE site = ? AND id = ?",
+                               (site, str(e.get("lobbyId"))))
+            set_state(db, f"game:{service}:cid", cid)
+            set_state(db, f"game:{service}:last", last)
+        except Exception as e:
+            log("game", service, e)
+    db.execute("DELETE FROM lobbies WHERE day < ?", (str(today() - dt.timedelta(days=KEEP_LOBBIES_DAYS)),))
+    db.commit()
+
+
+def read_log(db, geo):
+    """Adds the visit log's new lines to the totals; returns how many lines were read."""
+    lines = tail(db, LOG)
     key = salt(db)
     touched = set()
     for line in lines:
@@ -288,13 +405,6 @@ def read_log(db, geo):
     for site, day in touched:
         n = db.execute("SELECT count(*) FROM seen WHERE site = ? AND day = ?", (site, day)).fetchone()[0]
         db.execute("UPDATE daily SET visitors = ? WHERE site = ? AND day = ?", (n, site, day))
-    set_state(db, "offset", offset + end)
-    # Once a day, right after reading, empty the raw log.
-    if state(db, "emptied") != str(today()) and offset + end == size:
-        with open(LOG, "r+b") as f:
-            f.truncate(0)
-        set_state(db, "offset", 0)
-        set_state(db, "emptied", today())
     oldest_hash = str(today() - dt.timedelta(days=KEEP_HASHES_DAYS))
     oldest_detail = str(today() - dt.timedelta(days=KEEP_DETAIL_DAYS))
     db.execute("DELETE FROM seen WHERE day < ?", (oldest_hash,))
@@ -508,6 +618,44 @@ def render(db, box, gh):
                  f'(today, or across the period). Refreshes count as page loads, not visitors. Errors are server '
                  f'errors (5xx).</p><div class="scroll">{table}</div>{"".join(details)}</section>')
 
+    # Games and the demo's assistant
+    t = today()
+    since7, since30 = str(t - dt.timedelta(days=6)), str(t - dt.timedelta(days=29))
+    blocks = []
+    for site in GAMES:
+        def lobbies(since):
+            return db.execute("SELECT count(*), coalesce(sum(players), 0) FROM lobbies WHERE site = ? AND day >= ?",
+                              (site, since)).fetchone()
+        (l1, p1), (l7, p7), (l30, p30) = lobbies(str(t)), lobbies(since7), lobbies(since30)
+        recent = db.execute("SELECT day, time, name, theme, difficulty, players FROM lobbies WHERE site = ? "
+                            "ORDER BY day DESC, time DESC LIMIT 10", (site,)).fetchall()
+        rows = "".join(f'<tr><td>{esc(d)} {esc(tm)}</td><td>{esc(n)}</td><td>{esc(th)}</td><td>{esc(df)}</td>'
+                       f'<td>{num(pl)}</td></tr>' for d, tm, n, th, df, pl in recent)
+        avg = f"{p30 / l30:.1f}" if l30 else "–"
+        blocks.append(
+            f'<div class="game"><h3>{esc(site)}</h3><div class="cards">'
+            f'{card("Lobbies", num(l1), f"today · {num(l7)} in 7 days · {num(l30)} in 30 days")}'
+            f'{card("Players", num(p1), f"today · {num(p7)} in 7 days · {num(p30)} in 30 days")}'
+            f'{card("Per lobby", avg, "players on average, 30 days")}</div>'
+            + (f'<div class="scroll"><table class="left"><thead><tr><th>Created (UTC)</th><th>Lobby</th><th>Theme</th>'
+               f'<th>Difficulty</th><th>Players</th></tr></thead><tbody>{rows}</tbody></table></div>' if rows
+               else '<p class="muted">No lobbies yet.</p>') + "</div>")
+    q = [db.execute("SELECT count(*) FROM questions WHERE day >= ?", (d,)).fetchone()[0] for d in (str(t), since7, since30)]
+    recent = db.execute("SELECT day, time, text, page, lang, status FROM questions ORDER BY rowid DESC LIMIT 50").fetchall()
+    rows = "".join(
+        f'<tr><td>{esc(d)} {esc(tm)}</td><td class="q">{esc(tx)}</td><td>{esc(pg or "–")}</td><td>{esc(lg or "–")}</td>'
+        f'<td class="{"" if st == "200" else "bad"}">{esc(st)}</td></tr>' for d, tm, tx, pg, lg, st in recent)
+    blocks.append(
+        f'<div class="game"><h3>{esc(QUESTIONS_SITE)}: assistant questions</h3><div class="cards">'
+        f'{card("Questions", num(q[0]), f"today · {num(q[1])} in 7 days · {num(q[2])} in 30 days")}</div>'
+        + (f'<div class="scroll"><table class="left"><thead><tr><th>Asked (UTC)</th><th>Question</th><th>Page</th>'
+           f'<th>Language</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table></div>'
+           f'<p class="muted">The last 50; questions are kept {KEEP_DETAIL_DAYS} days.</p>' if rows
+           else '<p class="muted">No questions yet.</p>') + "</div>")
+    parts.append(f'<section><h2>Games and the demo</h2><p class="muted">Lobbies and players from the games\' own '
+                 f'logs (a lobby\'s players: its creator plus everyone who joined); questions from nginx.</p>'
+                 f'{"".join(blocks)}</section>')
+
     # GitHub
     if gh:
         repo_rows = "".join(
@@ -547,6 +695,8 @@ details{{background:var(--bg2);border:1px solid var(--line);border-radius:14px;p
 summary{{cursor:pointer;font-weight:600}}.lists{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:12px}}
 ol{{list-style:none;margin:0;padding:0}}li{{display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-bottom:1px solid var(--line)}}
 li span{{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}footer{{color:var(--muted);font-size:12px}}
+h3{{font-size:16px;margin:0 0 10px}}.game{{margin:0 0 26px}}.game .cards{{margin-bottom:12px}}
+table.left td,table.left th{{text-align:left}}td.q{{white-space:normal;min-width:280px;max-width:560px}}
 </style></head><body><main>
 <header><h1>degrand.is stats</h1><span class="muted">Updated {now}, every 5 minutes · days are UTC</span></header>
 {"".join(parts)}
@@ -575,6 +725,10 @@ def main():
             if geo_month != month:
                 geo, geo_month = country_db(), month
             n = read_log(db, geo)
+            read_questions(db)
+            if DOCKER:
+                read_games(db)
+            empty_daily(db)
             box = {}
             try:
                 box["containers"] = containers() if DOCKER else None
