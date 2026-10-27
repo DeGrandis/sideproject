@@ -193,8 +193,9 @@ services:
       - client-side
       - status
 
-  # A read-only window onto Docker for the stats page: it lists containers and their state, nothing else (no
-  # starting, stopping or creating; POST is off). Only the stats service can reach it, on its own internal network.
+  # A read-only window onto Docker for the stats page: it lists containers, their state and their logs (the games'
+  # lobby events), nothing else (no starting, stopping or creating; POST is off). Only the stats service can reach it,
+  # on its own internal network.
   docker_status:
     image: tecnativa/docker-socket-proxy:v0.5.0
     restart: unless-stopped

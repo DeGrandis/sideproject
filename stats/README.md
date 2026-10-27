@@ -1,7 +1,8 @@
 # stats.degrand.is
 
 One page with everything on this box: visits and errors for every site, the containers and the host's health, game
-lobbies and players, the Proof of Basis demo's assistant questions, and the Proof of Basis numbers on GitHub. It updates every 5 minutes (GitHub's numbers hourly).
+lobbies and players, the Proof of Basis demo's assistant questions, and the Proof of Basis numbers on GitHub. It
+updates every 5 minutes (GitHub's numbers hourly).
 
 How it works:
 
@@ -16,8 +17,8 @@ How it works:
 - Visitors are counted from a hash of the shortened address and the browser, salted with a secret that changes every
   month. The hashes are kept 35 days (for the 30-day count); daily totals are kept, and the country, referrer and
   page lists for 90 days. Bots that say so in their user agent aren't counted.
-- Containers come from `docker_status`, a read-only window onto Docker (it can list containers and nothing else),
-  reachable only by the stats service. Load, memory and disk come from the host's `/proc` and filesystem, and the
+- Containers come from `docker_status`, a read-only window onto Docker (it can list containers and read their logs;
+  it can't start, stop or change anything), reachable only by the stats service. Load, memory and disk come from the host's `/proc` and filesystem, and the
   certificate's expiry from `certbot/conf`.
 - Countries come from DB-IP's free country database, downloaded once a month and looked up on the server.
 - The Proof of Basis demo's assistant questions are written with their text to `/var/log/nginx/visits/questions.log`
