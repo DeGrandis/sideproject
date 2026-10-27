@@ -61,6 +61,9 @@ BOTS = re.compile(r"bot|crawl|spider|slurp|preview|headless|monitor|curl|wget|py
 KEEP_HASHES_DAYS = 35
 KEEP_DETAIL_DAYS = 90
 KEEP_LOBBIES_DAYS = 400
+# A visitor's page loads counted per site and day. Past this it isn't a person browsing but a scanner walking paths
+# (they send browser headers too); it still counts as one visitor.
+MAX_LOADS = int(os.environ.get("STATS_MAX_LOADS", "20"))
 
 
 def log(*args):
@@ -213,6 +216,10 @@ def open_db():
         CREATE TABLE IF NOT EXISTS lobbies (site TEXT, id TEXT, day TEXT, time TEXT, name TEXT, theme TEXT,
             difficulty TEXT, players INT DEFAULT 1, PRIMARY KEY (site, id));
     """)
+    try:
+        db.execute("ALTER TABLE seen ADD COLUMN n INT DEFAULT 0")  # page loads per visitor, for MAX_LOADS
+    except sqlite3.OperationalError:
+        pass  # already there
     return db
 
 
@@ -383,10 +390,14 @@ def read_log(db, geo):
         elif kind == "reset":
             bump(db, site, day, resets=1)
         elif kind == "page" and (200 <= code < 300 or code == 304) and not BOTS.search(agent):
-            bump(db, site, day, loads=1, phones=1 if "Mobi" in agent else 0)
             h = hashlib.sha256(f"{key}|{ip}|{agent}".encode()).hexdigest()[:20]
-            db.execute("INSERT OR IGNORE INTO seen VALUES (?, ?, ?)", (site, day, h))
+            db.execute("INSERT INTO seen (site, day, hash, n) VALUES (?, ?, ?, 1) "
+                       "ON CONFLICT DO UPDATE SET n = n + 1", (site, day, h))
             touched.add((site, day))
+            if db.execute("SELECT n FROM seen WHERE site = ? AND day = ? AND hash = ?",
+                          (site, day, h)).fetchone()[0] > MAX_LOADS:
+                continue
+            bump(db, site, day, loads=1, phones=1 if "Mobi" in agent else 0)
             bump_detail(db, site, day, "page", path[:120])
             host = urllib.parse.urlsplit(ref).hostname if ref not in ("", "-") else None
             if host:
