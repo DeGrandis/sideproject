@@ -9,10 +9,13 @@ The secrets live only on the server, in this folder (`~/docker/auth/`), never in
 
 | File | Holds | Made by |
 |---|---|---|
-| `pocket-id.env` | `ENCRYPTION_KEY`, which encrypts Pocket ID's stored keys | `openssl rand` on the server |
-| `oauth2-proxy.env` | `OAUTH2_PROXY_COOKIE_SECRET` (random), plus `OAUTH2_PROXY_CLIENT_ID` and `OAUTH2_PROXY_CLIENT_SECRET` from Pocket ID's "stats" client | `openssl rand`, then Rob from Pocket ID's admin page |
+| `pocket-id.key` | The encryption key for Pocket ID's stored keys | `openssl rand` on the server |
+| `oauth2-proxy.cfg` | The cookie secret (random), plus the client ID and secret of Pocket ID's "stats" client | `openssl rand`, then Rob from Pocket ID's admin page |
 
-Keep `pocket-id.env`: without its key, Pocket ID can't read its own data. Pocket ID's data (accounts, passkeys,
+They're mounted as files, not passed with `env_file`, because the CI build reads `docker-compose.yaml` and would fail
+on a file that exists only here. Both containers run as uid 1000 (`ec2-user`), so the files can stay `chmod 600`.
+
+Keep `pocket-id.key`: without its key, Pocket ID can't read its own data. Pocket ID's data (accounts, passkeys,
 clients, audit log) is the `pocket_id_data` Docker volume.
 
 ## Lost passkey

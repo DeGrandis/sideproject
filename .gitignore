@@ -1,2 +1,4 @@
-postgres/data/*nginx/stats-auth/
-auth/*.env
+postgres/data/*
+nginx/stats-auth/
+auth/*.key
+auth/*.cfg

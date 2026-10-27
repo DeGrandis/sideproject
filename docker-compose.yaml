@@ -91,20 +91,22 @@ services:
       - client-side
 
   # Pocket ID (id.degrand.is): a passkey-only sign-in for Rob's private pages, starting with stats.degrand.is. One
-  # account, sign-ups off. Its encryption key lives only on the server (auth/pocket-id.env, see auth/README.md); its
-  # data (a SQLite file) is in the pocket_id_data volume.
+  # account, sign-ups off. Its encryption key lives only on the server (auth/pocket-id.key, see auth/README.md; a
+  # mounted file rather than env_file, so the CI build, which reads this file, doesn't need it); its data (a SQLite
+  # file) is in the pocket_id_data volume.
   pocket_id:
     image: ghcr.io/pocket-id/pocket-id:v2.19.1
     restart: unless-stopped
-    env_file: ./auth/pocket-id.env
     environment:
       - APP_URL=https://id.degrand.is
+      - ENCRYPTION_KEY_FILE=/run/secrets/pocket-id.key
       - TRUST_PROXY=true # only nginx can reach it
       - ANALYTICS_DISABLED=true # no daily "instance is running" ping
       - ALLOW_INSECURE_CALLBACK_URLS=false
       - ALLOW_USER_SIGNUPS=disabled
     volumes:
       - pocket_id_data:/app/data
+      - ./auth/pocket-id.key:/run/secrets/pocket-id.key:ro
     logging:
       driver: "awslogs"
       options:
