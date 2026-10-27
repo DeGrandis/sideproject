@@ -16,18 +16,10 @@ How it works:
 "Hits" counts every load, refreshes included. "Visitors" counts each shortened address and browser once per day, so
 someone refreshing fifty times is one visitor.
 
-## One-time setup on the server
+## Who can see it
 
-The reports are behind a password, and the password file lives only on the server. Until it exists, every request
-to `stats.degrand.is` is refused. To make it, SSH to the server and run (it asks for the password twice and doesn't
-echo it or save it in your shell history):
-
-```sh
-mkdir -p ~/docker/nginx/stats-auth && echo "rob:$(openssl passwd -apr1)" > ~/docker/nginx/stats-auth/htpasswd
-```
-
-To change the password later, run the same command again. nginx reads the file on each request, so there's no
-restart needed.
+`stats.degrand.is` is behind a passkey sign-in: Pocket ID at `id.degrand.is`, with oauth2-proxy as the gatekeeper
+nginx asks first. See `auth/README.md`.
 
 nginx's main logs (all sites, full addresses) also go to CloudWatch, group `/containers/nginx`. To keep them only for
 30 days: CloudWatch → Log groups → `/containers/nginx` → Actions → Edit retention setting → 30 days.

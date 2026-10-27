@@ -117,7 +117,50 @@ services:
     networks:
       - client-side
 
-  # Proof of Basis visit reports (stats.degrand.is, behind a password): GoAccess turns nginx's visit logs for the
+  # The gatekeeper for stats.degrand.is: nginx asks it (auth_request) whether the visitor has signed in with Pocket ID,
+  # and sends them to sign in if not. Its secrets (cookie secret, client ID and secret) are in auth/oauth2-proxy.cfg,
+  # only on the server. Pocket ID's addresses are given outright, so it starts without reaching Pocket ID; it reaches
+  # id.degrand.is through nginx's network alias below.
+  oauth2_proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.5
+    restart: unless-stopped
+    user: "1000:1000" # ec2-user, the owner of the config file
+    command: ["--config=/run/secrets/oauth2-proxy.cfg"]
+    environment:
+      - OAUTH2_PROXY_PROVIDER=oidc
+      - OAUTH2_PROXY_PROVIDER_DISPLAY_NAME=Pocket ID
+      - OAUTH2_PROXY_OIDC_ISSUER_URL=https://id.degrand.is
+      - OAUTH2_PROXY_SKIP_OIDC_DISCOVERY=true
+      - OAUTH2_PROXY_LOGIN_URL=https://id.degrand.is/authorize
+      - OAUTH2_PROXY_REDEEM_URL=https://id.degrand.is/api/oidc/token
+      - OAUTH2_PROXY_PROFILE_URL=https://id.degrand.is/api/oidc/userinfo
+      - OAUTH2_PROXY_OIDC_JWKS_URL=https://id.degrand.is/.well-known/jwks.json
+      - OAUTH2_PROXY_REDIRECT_URL=https://stats.degrand.is/oauth2/callback
+      - OAUTH2_PROXY_CODE_CHALLENGE_METHOD=S256
+      - OAUTH2_PROXY_SCOPE=openid email profile
+      - OAUTH2_PROXY_EMAIL_DOMAINS=*  # whoever can sign in to Pocket ID: only Rob, sign-ups are off
+      - OAUTH2_PROXY_HTTP_ADDRESS=0.0.0.0:4180
+      - OAUTH2_PROXY_REVERSE_PROXY=true
+      - OAUTH2_PROXY_TRUSTED_PROXY_IPS=172.16.0.0/12 # Docker's networks: only nginx reaches it
+      - OAUTH2_PROXY_UPSTREAMS=static://202
+      - OAUTH2_PROXY_SKIP_PROVIDER_BUTTON=true
+      - OAUTH2_PROXY_COOKIE_NAME=__Host-stats
+      - OAUTH2_PROXY_COOKIE_SECURE=true
+      - OAUTH2_PROXY_COOKIE_SAMESITE=lax
+      - OAUTH2_PROXY_COOKIE_EXPIRE=168h
+    volumes:
+      - ./auth/oauth2-proxy.cfg:/run/secrets/oauth2-proxy.cfg:ro
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "/containers/oauth2-proxy"
+        awslogs-stream: "oauth2-proxy"
+        awslogs-create-group: "true"
+    networks:
+      - client-side
+
+  # Proof of Basis visit reports (stats.degrand.is, behind a passkey sign-in): GoAccess turns nginx's visit logs for the
   # landing page and the demo into two reports every hour. The script comes from stats/ (copied by the deploy); the
   # image is GoAccess's own, pinned. See stats/README.md.
   pob_stats:
@@ -220,8 +263,11 @@ services:
       - proof_of_basis_demo
       - proof_of_basis_site
       - pocket_id
+      - oauth2_proxy
     networks:
-      - client-side
+      client-side:
+        aliases:
+          - id.degrand.is # so oauth2_proxy reaches Pocket ID through nginx, not out and back through the internet
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d # Mount your Nginx configuration
       - ./certbot/www:/var/www/certbot:ro # Shared directory for ACME challenge (read-only)
@@ -229,7 +275,6 @@ services:
       - ./fodmap_frontend:/var/www/fodmap:ro # FODMAP static site (run build.py first)
       - pob_logs:/var/log/nginx/pob # Proof of Basis visit logs, read by pob_stats
       - pob_stats_report:/var/www/stats:ro # the reports pob_stats writes, served at stats.degrand.is
-      - ./nginx/stats-auth:/etc/nginx/stats-auth:ro # its password file, made on the server (stats/README.md)
     logging:
       driver: "awslogs"
       options:

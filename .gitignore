@@ -1,4 +1,3 @@
 postgres/data/*
-nginx/stats-auth/
 auth/*.key
 auth/*.cfg
